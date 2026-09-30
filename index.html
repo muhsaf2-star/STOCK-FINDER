@@ -2193,91 +2193,181 @@ function renderAllStock(){
 
 
 /* =====================================================
-   REGION / SERIES / OVERVIEW STOCK
+   REGION / SERIES / OVERVIEW STOCK — PRO DASHBOARD
 ===================================================== */
 
-.allStockTop,.overviewTop{
-  margin-bottom:14px;
-}
+.allStockTop,.overviewTop{margin-bottom:14px;}
 
 .pageHero{
-  background:#fff;
-  border:1px solid #e7ebf0;
-  border-radius:16px;
-  padding:15px;
-  box-shadow:0 6px 18px rgba(16,24,40,.05);
+  background:linear-gradient(135deg,#ffffff 0%,#f8fbff 100%);
+  border:1px solid #e4eaf2;
+  border-radius:20px;
+  padding:18px 20px;
+  box-shadow:0 8px 28px rgba(16,24,40,.06);
 }
 
-.pageHeroTitle{font-size:18px;font-weight:900;color:#172033;}
-.pageHeroSub{font-size:11px;color:#667085;margin-top:4px;}
+.pageHeroTitle{font-size:19px;font-weight:950;color:#101828;letter-spacing:-.3px;}
+.pageHeroSub{font-size:11px;color:#667085;margin-top:5px;}
+
+.overviewFilterBox{
+  background:#fff;
+  border:1px solid #e5eaf1;
+  border-radius:18px;
+  padding:13px 14px;
+  margin-bottom:13px;
+  box-shadow:0 5px 18px rgba(16,24,40,.04);
+}
+
+.filterLabel{
+  font-size:9px;font-weight:950;color:#667085;margin:9px 0 6px;
+  text-transform:uppercase;letter-spacing:.45px;
+}
+.filterRow{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+.filterRow::-webkit-scrollbar{display:none;}
+.filterBtn{
+  flex:0 0 auto;height:34px;padding:0 13px;border:1px solid #dfe5ec;
+  border-radius:17px;background:#fff;color:#667085;font-size:10px;font-weight:900;
+}
+.filterBtn.active{background:#0b57d0;color:#fff;border-color:#0b57d0;box-shadow:0 5px 12px rgba(11,87,208,.18);}
 
 .stockStats{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:8px;
-  margin:12px 0;
+  gap:10px;
+  margin:13px 0;
 }
-
 .stockStat{
+  position:relative;
+  overflow:hidden;
+  min-height:82px;
   background:#fff;
-  border:1px solid #e7ebf0;
-  border-radius:14px;
-  padding:11px 8px;
-  text-align:center;
+  border:1px solid #e5eaf1;
+  border-radius:18px;
+  padding:13px 14px;
+  text-align:left;
+  box-shadow:0 6px 20px rgba(16,24,40,.045);
 }
-.stockStatNumber{font-size:20px;font-weight:900;color:#172033;line-height:1.1;}
-.stockStatLabel{font-size:9px;color:#667085;font-weight:800;margin-top:4px;}
+.stockStat:after{
+  content:"";
+  position:absolute;
+  right:-25px;
+  bottom:-28px;
+  width:100px;height:70px;
+  border-radius:50%;
+  background:#eef5ff;
+}
+.stockStat.available:after{background:#e9f9ef;}
+.stockStat.empty:after{background:#fff0f0;}
+.stockStatNumber{position:relative;z-index:1;font-size:25px;font-weight:950;color:#172033;line-height:1.05;}
+.stockStatLabel{position:relative;z-index:1;font-size:9px;color:#667085;font-weight:850;margin-top:6px;text-transform:uppercase;letter-spacing:.3px;}
 .stockStat.available .stockStatNumber{color:#16a34a;}
 .stockStat.empty .stockStatNumber{color:#d92d20;}
 
-.filterLabel{font-size:10px;font-weight:900;color:#667085;margin:12px 0 7px;text-transform:uppercase;letter-spacing:.3px;}
-.filterRow{display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none;}
-.filterRow::-webkit-scrollbar{display:none;}
-.filterBtn{flex:0 0 auto;height:36px;padding:0 13px;border:1px solid #dfe5ec;border-radius:18px;background:#fff;color:#667085;font-size:11px;font-weight:900;}
-.filterBtn.active{background:#0b57d0;color:#fff;border-color:#0b57d0;}
-
-.allStockList{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
-.allStockCard{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  min-height:76px;padding:12px 13px;background:#fff;border:1px solid #e7ebf0;border-radius:14px;
-  box-shadow:0 4px 12px rgba(16,24,40,.04);
+.overviewGrid{
+  display:grid;
+  grid-template-columns:1.12fr 1fr 1fr;
+  gap:12px;
 }
-.allStockCard.is-empty{background:#fffafa;border-color:#f4d2d2;}
-.allStockInfo{min-width:0;flex:1;}
-.allStockName{font-size:13px;font-weight:900;color:#172033;line-height:1.3;}
-.allStockCode{font-size:10px;color:#98a2b3;margin-top:4px;}
-.seriesBadge{display:inline-flex;margin-top:6px;padding:3px 7px;border-radius:8px;background:#edf4ff;color:#0b57d0;font-size:8px;font-weight:900;}
-.allStockQty{text-align:right;min-width:52px;}
-.allStockQty strong{display:block;font-size:22px;font-weight:900;color:#16a34a;line-height:1;}
-.allStockQty span{display:block;font-size:8px;font-weight:900;color:#16a34a;margin-top:4px;}
-.allStockCard.is-empty .allStockQty strong,.allStockCard.is-empty .allStockQty span{color:#d92d20;}
+.overviewCard{
+  background:#fff;
+  border:1px solid #e5eaf1;
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 7px 22px rgba(16,24,40,.045);
+}
+.overviewCard.wide{grid-column:span 2;}
+.overviewCardTitle{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-size:13px;font-weight:950;color:#172033;
+}
+.overviewCardSub{font-size:9px;color:#98a2b3;margin-top:4px;margin-bottom:13px;}
+.chartBadge{
+  display:inline-flex;align-items:center;height:25px;padding:0 9px;border:1px solid #e2e8f0;
+  border-radius:13px;background:#fff;color:#667085;font-size:9px;font-weight:900;
+}
 
-.overviewFilterBox{margin-bottom:12px;}
-.overviewChart,.overviewSection{margin-top:14px;}
-.sectionTitle{font-size:13px;font-weight:900;color:#172033;margin-bottom:8px;}
-.regionRow,.seriesRow,.categoryRow2{background:#fff;border:1px solid #e7ebf0;border-radius:12px;padding:10px 11px;margin-bottom:7px;}
-.regionRowTop,.seriesRowTop{display:flex;justify-content:space-between;gap:8px;align-items:center;}
-.regionName,.seriesName{font-size:11px;font-weight:900;color:#172033;}
-.regionStock,.seriesStock{font-size:11px;font-weight:900;color:#0b57d0;}
-.barTrack{height:8px;background:#edf0f4;border-radius:8px;overflow:hidden;margin-top:8px;}
-.barFill{height:100%;background:#0b57d0;border-radius:8px;min-width:2px;}
-.regionMeta{font-size:9px;color:#98a2b3;margin-top:5px;}
+.regionPro{
+  display:flex;flex-direction:column;gap:13px;
+}
+.regionProItem{min-width:0;}
+.regionProTop{display:flex;justify-content:space-between;align-items:end;gap:8px;}
+.regionProName{font-size:12px;font-weight:950;color:#172033;}
+.regionProQty{font-size:16px;font-weight:950;color:#0b57d0;}
+.regionProPct{font-size:9px;color:#667085;font-weight:850;margin-left:4px;}
+.regionProTrack{height:9px;background:#edf1f6;border-radius:10px;overflow:hidden;margin-top:7px;}
+.regionProFill{height:100%;border-radius:10px;background:linear-gradient(90deg,#0b57d0,#4f8df7);}
+.regionProMeta{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px;font-size:8px;color:#98a2b3;font-weight:750;}
+.dotGreen,.dotRed{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;}
+.dotGreen{background:#16a34a}.dotRed{background:#ef4444}
 
-.compareTable{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid #e7ebf0;border-radius:12px;background:#fff;font-size:10px;}
-.compareTable th{background:#f5f7fa;color:#667085;text-align:left;font-size:9px;padding:9px 8px;}
-.compareTable td{padding:9px 8px;border-top:1px solid #eef1f4;color:#344054;font-weight:700;}
-.compareTable td:last-child{text-align:right;font-weight:900;color:#0b57d0;}
+.donutWrap{display:flex;align-items:center;gap:15px;min-height:175px;}
+.donut{
+  width:145px;height:145px;border-radius:50%;flex:0 0 145px;
+  position:relative;display:grid;place-items:center;
+}
+.donut:after{content:"";width:83px;height:83px;background:#fff;border-radius:50%;box-shadow:0 2px 8px rgba(16,24,40,.04);}
+.donutCenter{position:absolute;z-index:2;text-align:center;}
+.donutTotal{font-size:17px;font-weight:950;color:#172033;}
+.donutLabel{font-size:8px;font-weight:850;color:#98a2b3;margin-top:2px;}
+.legendList{display:flex;flex-direction:column;gap:9px;min-width:0;flex:1;}
+.legendItem{display:grid;grid-template-columns:9px 1fr auto;gap:7px;align-items:center;font-size:9px;}
+.legendDot{width:9px;height:9px;border-radius:3px;}
+.legendName{font-weight:850;color:#344054;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.legendValue{font-weight:950;color:#172033;text-align:right;}
+.legendPct{font-size:8px;color:#98a2b3;font-weight:800;margin-left:3px;}
+
+.compareChart{width:100%;overflow:hidden;}
+.compareLegend{display:flex;gap:13px;justify-content:flex-end;margin-bottom:8px;font-size:9px;font-weight:850;color:#667085;}
+.compareLegend span{display:inline-flex;align-items:center;gap:5px;}
+.legendSquare{width:8px;height:8px;border-radius:3px;}
+.compareRows{display:flex;flex-direction:column;gap:14px;}
+.compareGroup{display:grid;grid-template-columns:75px 1fr;gap:9px;align-items:center;}
+.compareGroupName{font-size:10px;font-weight:900;color:#344054;}
+.compareBars{display:flex;flex-direction:column;gap:5px;}
+.compareBarLine{display:grid;grid-template-columns:52px 1fr 43px;gap:6px;align-items:center;}
+.compareBarLabel{font-size:8px;color:#98a2b3;font-weight:800;}
+.compareBarTrack{height:10px;background:#eef1f5;border-radius:8px;overflow:hidden;}
+.compareBarFill{height:100%;border-radius:8px;}
+.compareBarValue{font-size:9px;font-weight:950;text-align:right;color:#344054;}
+
+.proTable{width:100%;border-collapse:collapse;font-size:9px;}
+.proTable th{padding:7px 5px;text-align:left;color:#98a2b3;font-size:8px;font-weight:900;border-bottom:1px solid #edf0f4;text-transform:uppercase;}
+.proTable td{padding:9px 5px;border-bottom:1px solid #f0f2f5;color:#344054;font-weight:750;vertical-align:middle;}
+.proTable tr:last-child td{border-bottom:0;}
+.rank{width:22px;color:#98a2b3;font-weight:950;}
+.productCell{font-weight:900;color:#172033!important;max-width:240px;}
+.seriesMini{display:inline-flex;padding:3px 6px;border-radius:7px;background:#edf4ff;color:#0b57d0;font-size:7px;font-weight:950;}
+.stockCell{text-align:right!important;font-weight:950!important;color:#0b57d0!important;white-space:nowrap;}
+.stockPctBar{height:5px;width:70px;background:#edf1f5;border-radius:6px;overflow:hidden;margin-top:4px;}
+.stockPctFill{height:100%;background:#0b57d0;border-radius:6px;}
+.viewAll{
+  display:flex;justify-content:flex-end;margin-top:7px;
+  color:#0b57d0;font-size:9px;font-weight:950;
+}
+
+.overviewSection{margin-top:13px;}
+.sectionTitle{font-size:13px;font-weight:950;color:#172033;margin-bottom:8px;}
+.sectionSub{margin:-4px 0 10px;color:#98a2b3;font-size:9px;}
 
 @media(max-width:699px){
   .main{width:100%;max-width:520px;margin:0 auto;padding-left:12px;padding-right:12px;}
+  .overviewGrid{grid-template-columns:1fr;}
+  .overviewCard.wide{grid-column:auto;}
+  .stockStats{gap:7px;}
+  .stockStat{min-height:75px;padding:11px 10px;}
+  .stockStatNumber{font-size:21px;}
+  .donutWrap{min-height:160px;gap:10px;}
+  .donut{width:125px;height:125px;flex-basis:125px;}
+  .donut:after{width:72px;height:72px;}
+  .donutTotal{font-size:15px;}
+  .compareGroup{grid-template-columns:55px 1fr;gap:6px;}
+  .compareBarLine{grid-template-columns:46px 1fr 38px;gap:4px;}
+  .productCell{max-width:160px;}
+  .proTable{font-size:8px;}
 }
-
 @media(min-width:700px){
-  .main{max-width:1100px;margin:0 auto;}
+  .main{max-width:1120px;margin:0 auto;}
 }
-
-
-
 /* =====================================================
    HISTORY
 ===================================================== */
@@ -2948,7 +3038,7 @@ function renderAllStock(){
         <div class="overviewTop">
           <div class="pageHero">
             <div class="pageHeroTitle">📊 Overview Stock</div>
-            <div class="pageHeroSub">Compare stock berdasarkan region, category dan series</div>
+            <div class="pageHeroSub">Monitoring stock NASA berdasarkan region, category dan series</div>
           </div>
         </div>
 
@@ -2979,30 +3069,73 @@ function renderAllStock(){
         </div>
 
         <div class="stockStats">
-          <div class="stockStat"><div id="overviewSku" class="stockStatNumber">0</div><div class="stockStatLabel">TOTAL SKU</div></div>
-          <div class="stockStat available"><div id="overviewStock" class="stockStatNumber">0</div><div class="stockStatLabel">TOTAL STOCK</div></div>
-          <div class="stockStat empty"><div id="overviewEmpty" class="stockStatNumber">0</div><div class="stockStatLabel">EMPTY SKU</div></div>
+          <div class="stockStat">
+            <div id="overviewSku" class="stockStatNumber">0</div>
+            <div class="stockStatLabel">TOTAL SKU</div>
+          </div>
+          <div class="stockStat available">
+            <div id="overviewStock" class="stockStatNumber">0</div>
+            <div class="stockStatLabel">TOTAL STOCK</div>
+          </div>
+          <div class="stockStat empty">
+            <div id="overviewEmpty" class="stockStatNumber">0</div>
+            <div class="stockStatLabel">EMPTY SKU</div>
+          </div>
         </div>
 
-        <div class="overviewSection">
-          <div class="sectionTitle">Stock by Region</div>
-          <div id="overviewRegions"><div class="state"><div class="loading"></div><div class="stateTitle">Memuat overview...</div></div></div>
-        </div>
+        <div class="overviewGrid">
 
-        <div class="overviewSection">
-          <div class="sectionTitle">Compare Series Antar Region</div>
-          <div class="sectionSub">% = kontribusi series terhadap total stock di masing-masing region</div>
-          <div id="overviewCompareSeries"><div class="state"><div class="stateText">Belum ada data.</div></div></div>
-        </div>
+          <div class="overviewCard">
+            <div class="overviewCardTitle">
+              <span>📦 Stock by Region</span>
+              <span class="chartBadge">Unit</span>
+            </div>
+            <div class="overviewCardSub">Total stock dan kontribusi setiap region</div>
+            <div id="overviewRegions" class="regionPro">
+              <div class="state"><div class="loading"></div><div class="stateTitle">Memuat overview...</div></div>
+            </div>
+          </div>
 
-        <div class="overviewSection">
-          <div class="sectionTitle">Stock by Series</div>
-          <div id="overviewSeries"><div class="state"><div class="stateText">Belum ada data.</div></div></div>
-        </div>
+          <div class="overviewCard">
+            <div class="overviewCardTitle">
+              <span>🥧 Contribution by Series</span>
+              <span class="chartBadge">Unit</span>
+            </div>
+            <div class="overviewCardSub">Komposisi stock berdasarkan series</div>
+            <div id="overviewSeriesDonut"></div>
+          </div>
 
-        <div class="overviewSection">
-          <div class="sectionTitle">Top Product Stock</div>
-          <div id="overviewProducts"><div class="state"><div class="stateText">Belum ada data.</div></div></div>
+          <div class="overviewCard">
+            <div class="overviewCardTitle">
+              <span>📈 Stock by Series</span>
+              <span class="chartBadge">Unit</span>
+            </div>
+            <div class="overviewCardSub">Ranking stock per series</div>
+            <div id="overviewSeries"></div>
+          </div>
+
+          <div class="overviewCard wide">
+            <div class="overviewCardTitle">
+              <span>📊 Compare Series Antar Region</span>
+              <span class="chartBadge">Unit</span>
+            </div>
+            <div class="overviewCardSub">Perbandingan total stock setiap series di masing-masing region</div>
+            <div id="overviewCompareSeries">
+              <div class="state"><div class="stateText">Belum ada data.</div></div>
+            </div>
+          </div>
+
+          <div class="overviewCard">
+            <div class="overviewCardTitle">
+              <span>🏆 Top 10 Product</span>
+              <span class="chartBadge">Qty</span>
+            </div>
+            <div class="overviewCardSub">Produk dengan stock terbanyak</div>
+            <div id="overviewProducts">
+              <div class="state"><div class="stateText">Belum ada data.</div></div>
+            </div>
+          </div>
+
         </div>
 
       </section>
@@ -4312,8 +4445,10 @@ function setOverviewSeries(series){
 function renderOverview(data){
   data=data||{};
   const summary=data.summary||{};
+  const total=Number(summary.totalStock)||0;
+
   document.getElementById('overviewSku').textContent=formatNumber(summary.sku||0);
-  document.getElementById('overviewStock').textContent=formatNumber(summary.totalStock||0);
+  document.getElementById('overviewStock').textContent=formatNumber(total);
   document.getElementById('overviewEmpty').textContent=formatNumber(summary.emptySku||0);
 
   const regionFilters=document.getElementById('overviewRegionFilters');
@@ -4324,43 +4459,131 @@ function renderOverview(data){
       return '<button class="filterBtn '+(active?'active':'')+'" data-region="'+escapeHtml(r.region)+'" onclick="setOverviewRegion(\''+escapeJs(r.region)+'\')">'+escapeHtml(r.region)+'</button>';
     }).join('');
 
+  /* REGION */
   const maxRegion=Math.max.apply(null,regions.map(function(r){return Number(r.stock)||0;}).concat([1]));
   document.getElementById('overviewRegions').innerHTML=regions.length?regions.map(function(r){
-    const pct=Math.max(2,Math.round((Number(r.stock)||0)/maxRegion*100));
-    return '<div class="regionRow"><div class="regionRowTop"><div class="regionName">'+escapeHtml(r.region)+'</div><div class="regionStock">'+formatNumber(r.stock)+' unit</div></div><div class="barTrack"><div class="barFill" style="width:'+pct+'%"></div></div><div class="regionMeta">Available SKU: '+formatNumber(r.availableSku||0)+' • Empty SKU: '+formatNumber(r.emptySku||0)+'</div></div>';
+    const stock=Number(r.stock)||0;
+    const pctTotal=total>0?(stock/total*100):0;
+    const pctBar=Math.max(2,Math.round(stock/maxRegion*100));
+    return '<div class="regionProItem">'+
+      '<div class="regionProTop">'+
+        '<div class="regionProName">'+escapeHtml(r.region)+'</div>'+
+        '<div><span class="regionProQty">'+formatNumber(stock)+'</span><span class="regionProPct">unit • '+pctTotal.toFixed(1)+'%</span></div>'+
+      '</div>'+
+      '<div class="regionProTrack"><div class="regionProFill" style="width:'+pctBar+'%"></div></div>'+
+      '<div class="regionProMeta">'+
+        '<span><i class="dotGreen"></i>Available SKU: '+formatNumber(r.availableSku||0)+'</span>'+
+        '<span><i class="dotRed"></i>Empty SKU: '+formatNumber(r.emptySku||0)+'</span>'+
+        '<span>Store: '+formatNumber(r.storeCount||0)+'</span>'+
+      '</div>'+
+    '</div>';
   }).join(''):'<div class="state"><div class="stateIcon">📊</div><div class="stateTitle">Belum ada data</div></div>';
 
-  const compareBox=document.getElementById('overviewCompareSeries');
-  const compare=Array.isArray(data.compareSeries)?data.compareSeries:[];
-  const compareRegions=Array.isArray(data.regions)?data.regions.map(function(r){return r.region;}):[];
-  const compareSeriesNames=Array.isArray(data.series)?data.series.map(function(x){return x.series;}):[];
-  if(compareBox){
-    if(!compare.length || !compareSeriesNames.length){
-      compareBox.innerHTML='<div class="state"><div class="stateText">Belum ada data compare series antar region.</div></div>';
-    }else{
-      let html='<div class="compareScroll"><table class="compareTable compareSeriesTable"><thead><tr><th>REGION</th>'+compareSeriesNames.map(function(sn){return '<th>'+escapeHtml(sn)+'</th>';}).join('')+'<th>TOTAL</th></tr></thead><tbody>';
-      compare.forEach(function(r){
-        html+='<tr><td><strong>'+escapeHtml(r.region)+'</strong></td>';
-        compareSeriesNames.forEach(function(sn){
-          const c=(r.series&&r.series[sn])?r.series[sn]:{stock:0,pct:0};
-          html+='<td><div class="compareQty">'+formatNumber(c.stock)+'</div><div class="comparePct">'+Number(c.pct||0).toFixed(1)+'%</div></td>';
-        });
-        html+='<td><strong>'+formatNumber(r.totalStock||0)+'</strong></td></tr>';
-      });
-      html+='</tbody></table></div>';
-      compareBox.innerHTML=html;
-    }
+  /* SERIES DATA */
+  const series=Array.isArray(data.series)?data.series.filter(function(x){return Number(x.stock)||0; }):[];
+  const seriesColors=['#7c3aed','#1683f7','#20a95a','#f59e0b','#ef4444','#06b6d4'];
+  const seriesTotal=series.reduce(function(a,x){return a+(Number(x.stock)||0);},0);
+
+  /* DONUT */
+  let acc=0, stops=[];
+  series.forEach(function(x,i){
+    const pct=seriesTotal>0?(Number(x.stock)||0)/seriesTotal*100:0;
+    const color=seriesColors[i%seriesColors.length];
+    stops.push(color+' '+acc+'% '+(acc+pct)+'%');
+    acc+=pct;
+  });
+  const donut=document.getElementById('overviewSeriesDonut');
+  if(donut && series.length){
+    let legend=series.map(function(x,i){
+      const q=Number(x.stock)||0, pct=seriesTotal>0?q/seriesTotal*100:0;
+      return '<div class="legendItem"><span class="legendDot" style="background:'+seriesColors[i%seriesColors.length]+'"></span><span class="legendName">'+escapeHtml(x.series)+'</span><span class="legendValue">'+pct.toFixed(1)+'% <span class="legendPct">'+formatNumber(q)+'</span></span></div>';
+    }).join('');
+    donut.innerHTML='<div class="donutWrap">'+
+      '<div class="donut" style="background:conic-gradient('+stops.join(',')+')">'+
+        '<div class="donutCenter"><div class="donutTotal">'+formatNumber(seriesTotal)+'</div><div class="donutLabel">Device Stock</div></div>'+
+      '</div>'+
+      '<div class="legendList">'+legend+'</div>'+
+    '</div>';
+  }else if(donut){
+    donut.innerHTML='<div class="state"><div class="stateText">Belum ada data series.</div></div>';
   }
 
-  const series=Array.isArray(data.series)?data.series:[];
+  /* SERIES RANKING */
   const maxSeries=Math.max.apply(null,series.map(function(x){return Number(x.stock)||0;}).concat([1]));
-  document.getElementById('overviewSeries').innerHTML=series.length?series.map(function(x){
-    const pct=Math.max(2,Math.round((Number(x.stock)||0)/maxSeries*100));
-    return '<div class="seriesRow"><div class="seriesRowTop"><div class="seriesName">'+escapeHtml(x.series)+'</div><div class="seriesStock">'+formatNumber(x.stock)+' unit</div></div><div class="barTrack"><div class="barFill" style="width:'+pct+'%"></div></div><div class="regionMeta">SKU: '+formatNumber(x.sku||0)+'</div></div>';
+  document.getElementById('overviewSeries').innerHTML=series.length?series.map(function(x,i){
+    const q=Number(x.stock)||0;
+    const pct=seriesTotal>0?q/seriesTotal*100:0;
+    const width=Math.max(2,Math.round(q/maxSeries*100));
+    return '<div class="regionProItem" style="margin-bottom:11px">'+
+      '<div class="regionProTop"><div class="regionProName">'+escapeHtml(x.series)+'</div><div><span class="regionProQty">'+formatNumber(q)+'</span><span class="regionProPct">'+pct.toFixed(1)+'%</span></div></div>'+
+      '<div class="regionProTrack"><div class="regionProFill" style="width:'+width+'%;background:'+seriesColors[i%seriesColors.length]+'"></div></div>'+
+      '<div class="regionProMeta"><span>SKU: '+formatNumber(x.sku||0)+'</span></div>'+
+    '</div>';
   }).join(''):'<div class="state"><div class="stateText">Belum ada data series.</div></div>';
 
+  /* COMPARE SERIES */
+  const compare=Array.isArray(data.compareSeries)?data.compareSeries:[];
+  const compareSeriesNames=['SERIES A','SERIES S','SERIES Z','SERIES TAB'];
+  const compareValues=[];
+  compare.forEach(function(r){
+    compareSeriesNames.forEach(function(sn){
+      const c=(r.series&&r.series[sn])?r.series[sn]:{stock:0};
+      compareValues.push(Number(c.stock)||0);
+    });
+  });
+  const compareMax=Math.max.apply(null,compareValues.concat([1]));
+  const compareBox=document.getElementById('overviewCompareSeries');
+
+  if(compareBox && compare.length){
+    let html='<div class="compareChart">';
+    html+='<div class="compareLegend">'+
+      compare.map(function(r,i){
+        const color=seriesColors[i%seriesColors.length];
+        return '<span><i class="legendSquare" style="background:'+color+'"></i>'+escapeHtml(r.region)+'</span>';
+      }).join('')+
+      '</div>';
+    html+='<div class="compareRows">';
+    compareSeriesNames.forEach(function(sn){
+      const rows=compare.map(function(r,i){
+        const c=(r.series&&r.series[sn])?r.series[sn]:{stock:0};
+        const q=Number(c.stock)||0;
+        const color=seriesColors[i%seriesColors.length];
+        return '<div class="compareBarLine">'+
+          '<span class="compareBarLabel">'+escapeHtml(r.region)+'</span>'+
+          '<div class="compareBarTrack"><div class="compareBarFill" style="width:'+Math.max(q?2:0,Math.round(q/compareMax*100))+'%;background:'+color+'"></div></div>'+
+          '<span class="compareBarValue">'+formatNumber(q)+'</span>'+
+        '</div>';
+      }).join('');
+      html+='<div class="compareGroup"><div class="compareGroupName">'+escapeHtml(sn)+'</div><div class="compareBars">'+rows+'</div></div>';
+    });
+    html+='</div></div>';
+    compareBox.innerHTML=html;
+  }else if(compareBox){
+    compareBox.innerHTML='<div class="state"><div class="stateText">Belum ada data compare series antar region.</div></div>';
+  }
+
+  /* TOP PRODUCTS */
   const products=Array.isArray(data.products)?data.products.slice(0,10):[];
-  document.getElementById('overviewProducts').innerHTML=products.length?'<table class="compareTable"><thead><tr><th>PRODUCT</th><th>CATEGORY</th><th>STOCK</th></tr></thead><tbody>'+products.map(function(x){return '<tr><td>'+escapeHtml(x.description||'-')+'</td><td>'+escapeHtml(x.category||'-')+'</td><td>'+formatNumber(x.stock||0)+'</td></tr>';}).join('')+'</tbody></table>':'<div class="state"><div class="stateText">Belum ada produk.</div></div>';
+  const maxProduct=Math.max.apply(null,products.map(function(x){return Number(x.stock)||0;}).concat([1]));
+  const productBox=document.getElementById('overviewProducts');
+
+  if(productBox && products.length){
+    let html='<table class="proTable"><thead><tr><th>#</th><th>PRODUCT</th><th>SERIES</th><th style="text-align:right">STOCK</th></tr></thead><tbody>';
+    products.forEach(function(x,i){
+      const q=Number(x.stock)||0;
+      const pct=q/maxProduct*100;
+      html+='<tr>'+
+        '<td class="rank">'+(i+1)+'</td>'+
+        '<td class="productCell">'+escapeHtml(x.description||'-')+'</td>'+
+        '<td><span class="seriesMini">'+escapeHtml(x.series||x.category||'-')+'</span></td>'+
+        '<td class="stockCell">'+formatNumber(q)+'<div class="stockPctBar"><div class="stockPctFill" style="width:'+Math.max(q?3:0,pct)+'%"></div></div></td>'+
+      '</tr>';
+    });
+    html+='</tbody></table><div class="viewAll">Top 10 • Stock terbanyak →</div>';
+    productBox.innerHTML=html;
+  }else if(productBox){
+    productBox.innerHTML='<div class="state"><div class="stateText">Belum ada produk.</div></div>';
+  }
 }
 
 /* =====================================================
