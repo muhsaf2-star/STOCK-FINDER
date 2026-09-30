@@ -1609,46 +1609,6 @@ button{
 
 
 /* =====================================================
-   GITHUB API BRIDGE
-   GitHub Pages -> Apps Script Web App (JSONP)
-===================================================== */
-const API_URL = 'https://script.google.com/macros/s/AKfycbzrJs3cePjG8Ta67C8CSFoXclH9b-QLMSA0ojQ4fHhHE5WvVteTguST9pajHfCHXjLW/exec';
-
-function apiCall(action, params, onSuccess, onFailure){
-  if(!API_URL || API_URL.indexOf('PASTE_APPS_SCRIPT') === 0){
-    if(onFailure) onFailure({message:'API_URL belum diisi. Masukkan URL Web App Apps Script pada index.html.'});
-    return;
-  }
-  const cb = '__sf_cb_' + Date.now() + '_' + Math.floor(Math.random()*100000);
-  const query = new URLSearchParams();
-  query.set('api', action);
-  query.set('callback', cb);
-  query.set('data', JSON.stringify(params || {}));
-  const script = document.createElement('script');
-  let done = false;
-  const cleanup = function(){
-    if(done) return;
-    done = true;
-    try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
-    if(script.parentNode) script.parentNode.removeChild(script);
-  };
-  window[cb] = function(payload){
-    cleanup();
-    if(payload && payload.ok === false){
-      if(onFailure) onFailure({message: payload.error || 'Terjadi kesalahan pada server.'});
-      return;
-    }
-    if(onSuccess) onSuccess(payload ? payload.data : null);
-  };
-  script.onerror = function(){
-    cleanup();
-    if(onFailure) onFailure({message:'Tidak dapat terhubung ke Apps Script API.'});
-  };
-  script.src = API_URL + (API_URL.indexOf('?') >= 0 ? '&' : '?') + query.toString();
-  document.head.appendChild(script);
-}
-
-/* =====================================================
    ALL STOCK - STORE
 ===================================================== */
 
@@ -3114,6 +3074,48 @@ let loginMode = 'STORE';
 let currentCategory = 'ALL';
 
 let searchTimer = null;
+
+/* =====================================================
+   GITHUB API BRIDGE
+   GitHub Pages -> Apps Script Web App (JSONP)
+===================================================== */
+const API_URL = 'https://script.google.com/macros/s/AKfycbzrJs3cePjG8Ta67C8CSFoXclH9b-QLMSA0ojQ4fHhHE5WvVteTguST9pajHfCHXjLW/exec';
+
+function apiCall(action, params, onSuccess, onFailure){
+  if(!API_URL || API_URL.indexOf('PASTE_APPS_SCRIPT') === 0){
+    if(onFailure) onFailure({message:'API_URL belum diisi. Masukkan URL Web App Apps Script pada index.html.'});
+    return;
+  }
+  const cb = '__sf_cb_' + Date.now() + '_' + Math.floor(Math.random()*100000);
+  const query = new URLSearchParams();
+  query.set('api', action);
+  query.set('callback', cb);
+  query.set('data', JSON.stringify(params || {}));
+  const script = document.createElement('script');
+  let done = false;
+  const cleanup = function(){
+    if(done) return;
+    done = true;
+    try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
+    if(script.parentNode) script.parentNode.removeChild(script);
+  };
+  window[cb] = function(payload){
+    cleanup();
+    if(payload && payload.ok === false){
+      if(onFailure) onFailure({message: payload.error || 'Terjadi kesalahan pada server.'});
+      return;
+    }
+    if(onSuccess) onSuccess(payload ? payload.data : null);
+  };
+  script.onerror = function(){
+    cleanup();
+    if(onFailure) onFailure({message:'Tidak dapat terhubung ke Apps Script API.'});
+  };
+  script.src = API_URL + (API_URL.indexOf('?') >= 0 ? '&' : '?') + query.toString();
+  document.head.appendChild(script);
+}
+
+
 
 
 /* =====================================================
