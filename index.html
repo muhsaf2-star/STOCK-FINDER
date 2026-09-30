@@ -1240,15 +1240,21 @@ button{
 
 .back{
 
+  position:relative;
+  z-index:100;
+  pointer-events:auto !important;
+  cursor:pointer;
+  touch-action:manipulation;
+
   display:inline-flex;
 
   align-items:center;
 
-  min-height:42px;
+  min-height:48px;
 
   padding:
     0
-    3px;
+    8px;
 
   margin-bottom:7px;
 
@@ -1262,6 +1268,11 @@ button{
 
   font-weight:900;
 
+}
+
+.back:active{
+  transform:scale(.97);
+  opacity:.7;
 }
 
 
@@ -2369,7 +2380,23 @@ function renderAllStock(){
 
 function backToSearch(){
 
+  const detail = document.getElementById('detailView');
+  const search = document.getElementById('searchView');
+
+  if(detail){
+    detail.style.display = 'none';
+  }
+
+  if(search){
+    search.style.display = 'block';
+  }
+
   showView('search');
+
+  window.scrollTo({
+    top:0,
+    behavior:'instant'
+  });
 
 }
 
@@ -2808,8 +2835,10 @@ function backToSearch(){
 
 
         <button
+          type="button"
           class="back"
-          onclick="backToSearch()">
+          id="backButton"
+          onclick="event.preventDefault(); event.stopPropagation(); backToSearch();">
 
           ← Kembali
 
