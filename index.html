@@ -2230,6 +2230,36 @@ function renderAllStock(){
 }
 .filterBtn.active{background:#0b57d0;color:#fff;border-color:#0b57d0;box-shadow:0 5px 12px rgba(11,87,208,.18);}
 
+.overviewFilterBar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid #e5eaf1;border-radius:18px;padding:11px 13px;margin-bottom:13px;box-shadow:0 5px 18px rgba(16,24,40,.04);}
+.overviewFilterTitle{font-size:10px;font-weight:950;color:#172033;}
+.overviewFilterSummary{font-size:9px;color:#98a2b3;font-weight:800;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw;}
+.overviewFilterOpen{height:36px;padding:0 13px;border:1px solid #dfe6ef;border-radius:18px;background:#f7faff;color:#0b57d0;font-size:10px;font-weight:950;white-space:nowrap;box-shadow:0 4px 12px rgba(11,87,208,.08);}
+.overviewFilterOpen span{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 4px;margin-left:4px;border-radius:9px;background:#0b57d0;color:#fff;font-size:8px;}
+.overviewFilterModal{position:fixed;inset:0;z-index:9999;display:none;}
+.overviewFilterModal.open{display:block;}
+.overviewFilterBackdrop{position:absolute;inset:0;background:rgba(15,23,42,.42);backdrop-filter:blur(2px);}
+.overviewFilterPanel{position:absolute;right:0;top:0;width:min(390px,92vw);height:100%;background:#fff;box-shadow:-15px 0 45px rgba(16,24,40,.18);padding:18px;display:flex;flex-direction:column;overflow:auto;}
+.overviewFilterPanelHead{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:15px;border-bottom:1px solid #edf0f4;}
+.overviewFilterPanelTitle{font-size:18px;font-weight:950;color:#172033;}
+.overviewFilterPanelSub{font-size:10px;color:#98a2b3;margin-top:4px;font-weight:700;}
+.overviewFilterClose{width:34px;height:34px;border:0;border-radius:50%;background:#f2f5f9;color:#667085;font-size:22px;line-height:1;}
+.multiFilterSection{padding:16px 0 2px;}
+.multiFilterLabel{font-size:9px;font-weight:950;color:#667085;letter-spacing:.5px;margin-bottom:9px;}
+.multiFilterLabel span{font-size:8px;color:#98a2b3;letter-spacing:0;}
+.multiFilterGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.categoryGrid,.seriesGrid{grid-template-columns:repeat(2,minmax(0,1fr));}
+.checkChip{position:relative;cursor:pointer;}
+.checkChip input{position:absolute;opacity:0;pointer-events:none;}
+.checkChip span{display:flex;align-items:center;justify-content:center;min-height:42px;padding:0 9px;border:1px solid #dfe5ec;border-radius:12px;background:#fff;color:#667085;font-size:10px;font-weight:900;transition:.15s;}
+.checkChip input:checked+span{background:#eaf2ff;border-color:#0b57d0;color:#0b57d0;box-shadow:0 3px 10px rgba(11,87,208,.1);}
+.checkChip input:checked+span:before{content:'✓';margin-right:5px;font-weight:950;}
+.checkChip.disabled{opacity:.42;pointer-events:none;}
+.overviewFilterActions{display:grid;grid-template-columns:1fr 1.5fr;gap:9px;margin-top:auto;padding-top:18px;border-top:1px solid #edf0f4;}
+.filterResetBtn,.filterApplyBtn{height:44px;border-radius:12px;font-size:10px;font-weight:950;}
+.filterResetBtn{border:1px solid #dfe5ec;background:#fff;color:#667085;}
+.filterApplyBtn{border:0;background:#0b57d0;color:#fff;box-shadow:0 6px 16px rgba(11,87,208,.2);}
+@media(max-width:699px){.overviewFilterPanel{width:100%;max-width:none;border-radius:22px 22px 0 0;top:auto;bottom:0;height:auto;max-height:88vh;padding:17px 14px 16px;}.overviewFilterBackdrop{background:rgba(15,23,42,.35)}.overviewFilterBar{padding:10px 11px}.overviewFilterSummary{max-width:55vw;}.multiFilterGrid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+
 .stockStats{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -3042,28 +3072,54 @@ function renderAllStock(){
           </div>
         </div>
 
-        <div class="overviewFilterBox">
-          <div class="filterLabel">Region</div>
-          <div id="overviewRegionFilters" class="filterRow">
-            <button class="filterBtn active" data-region="ALL" onclick="setOverviewRegion('ALL')">ALL REGION</button>
+        <div class="overviewFilterBar">
+          <div>
+            <div class="overviewFilterTitle">Filter Overview</div>
+            <div id="overviewFilterSummary" class="overviewFilterSummary">DEVICE • REGION 1 + REGION 5</div>
           </div>
+          <button type="button" class="overviewFilterOpen" onclick="openOverviewFilter()">⚙ Filter <span id="overviewFilterCount">3</span></button>
+        </div>
 
-          <div class="filterLabel">Category</div>
-          <div id="overviewCategoryFilters" class="filterRow">
-            <button class="filterBtn active" data-category="ALL" onclick="setOverviewCategory('ALL')">ALL</button>
-            <button class="filterBtn" data-category="DEVICE" onclick="setOverviewCategory('DEVICE')">DEVICE</button>
-            <button class="filterBtn" data-category="ACC" onclick="setOverviewCategory('ACC')">ACC</button>
-            <button class="filterBtn" data-category="OTHER" onclick="setOverviewCategory('OTHER')">OTHER</button>
-          </div>
+        <div id="overviewFilterModal" class="overviewFilterModal" aria-hidden="true">
+          <div class="overviewFilterBackdrop" onclick="closeOverviewFilter()"></div>
+          <div class="overviewFilterPanel">
+            <div class="overviewFilterPanelHead">
+              <div>
+                <div class="overviewFilterPanelTitle">Filter Stock</div>
+                <div class="overviewFilterPanelSub">Pilih satu atau beberapa pilihan</div>
+              </div>
+              <button type="button" class="overviewFilterClose" onclick="closeOverviewFilter()">×</button>
+            </div>
 
-          <div id="overviewSeriesWrap">
-            <div class="filterLabel">Series</div>
-            <div id="overviewSeriesFilters" class="filterRow">
-              <button class="filterBtn active" data-series="ALL" onclick="setOverviewSeries('ALL')">ALL</button>
-              <button class="filterBtn" data-series="SERIES A" onclick="setOverviewSeries('SERIES A')">SERIES A</button>
-              <button class="filterBtn" data-series="SERIES S" onclick="setOverviewSeries('SERIES S')">SERIES S</button>
-              <button class="filterBtn" data-series="SERIES Z" onclick="setOverviewSeries('SERIES Z')">SERIES Z</button>
-              <button class="filterBtn" data-series="SERIES TAB" onclick="setOverviewSeries('SERIES TAB')">SERIES TAB</button>
+            <div class="multiFilterSection">
+              <div class="multiFilterLabel">REGION</div>
+              <div id="overviewRegionChecks" class="multiFilterGrid"></div>
+            </div>
+
+            <div class="multiFilterSection">
+              <div class="multiFilterLabel">CATEGORY</div>
+              <div id="overviewCategoryChecks" class="multiFilterGrid categoryGrid">
+                <label class="checkChip"><input type="checkbox" value="DEVICE"><span>DEVICE</span></label>
+                <label class="checkChip"><input type="checkbox" value="ACC"><span>ACC</span></label>
+                <label class="checkChip"><input type="checkbox" value="OTHER"><span>OTHER</span></label>
+              </div>
+            </div>
+
+            <div id="overviewSeriesWrap">
+              <div class="multiFilterSection">
+                <div class="multiFilterLabel">SERIES <span id="overviewSeriesHint">• DEVICE ONLY</span></div>
+                <div id="overviewSeriesChecks" class="multiFilterGrid seriesGrid">
+                  <label class="checkChip"><input type="checkbox" value="SERIES A"><span>SERIES A</span></label>
+                  <label class="checkChip"><input type="checkbox" value="SERIES S"><span>SERIES S</span></label>
+                  <label class="checkChip"><input type="checkbox" value="SERIES Z"><span>SERIES Z</span></label>
+                  <label class="checkChip"><input type="checkbox" value="SERIES TAB"><span>SERIES TAB</span></label>
+                </div>
+              </div>
+            </div>
+
+            <div class="overviewFilterActions">
+              <button type="button" class="filterResetBtn" onclick="resetOverviewFilters()">Reset</button>
+              <button type="button" class="filterApplyBtn" onclick="applyOverviewFilters()">Terapkan</button>
             </div>
           </div>
         </div>
@@ -4392,58 +4448,133 @@ function renderStore(store){
    OVERVIEW STOCK - NASA
 ===================================================== */
 
-let overviewRegion='ALL';
-let overviewCategory='ALL';
-let overviewSeries='ALL';
+let overviewRegionsSelected=['REGION 1','REGION 5'];
+let overviewCategoriesSelected=['DEVICE'];
+let overviewSeriesSelected=[];
+let overviewAvailableRegions=[];
+
+function normalizeFilterValue(v){ return String(v||'').trim().toUpperCase(); }
+
+function openOverviewFilter(){
+  const modal=document.getElementById('overviewFilterModal');
+  if(!modal) return;
+  syncOverviewFilterChecks();
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+}
+
+function closeOverviewFilter(){
+  const modal=document.getElementById('overviewFilterModal');
+  if(!modal) return;
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+}
+
+function getCheckedValues(containerId){
+  return Array.from(document.querySelectorAll('#'+containerId+' input[type="checkbox"]:checked')).map(function(i){return normalizeFilterValue(i.value);});
+}
+
+function setCheckedValues(containerId, values){
+  const set={};
+  (values||[]).forEach(function(v){set[normalizeFilterValue(v)]=true;});
+  document.querySelectorAll('#'+containerId+' input[type="checkbox"]').forEach(function(i){i.checked=!!set[normalizeFilterValue(i.value)];});
+}
+
+function syncOverviewFilterChecks(){
+  setCheckedValues('overviewRegionChecks',overviewRegionsSelected);
+  setCheckedValues('overviewCategoryChecks',overviewCategoriesSelected);
+  setCheckedValues('overviewSeriesChecks',overviewSeriesSelected);
+  updateOverviewSeriesState();
+}
+
+function updateOverviewSeriesState(){
+  const deviceOnly=overviewCategoriesSelected.length===1 && overviewCategoriesSelected[0]==='DEVICE';
+  const wrap=document.getElementById('overviewSeriesWrap');
+  if(wrap) wrap.style.opacity=deviceOnly?'1':'.55';
+  document.querySelectorAll('#overviewSeriesChecks input').forEach(function(i){i.disabled=!deviceOnly;});
+  if(!deviceOnly){
+    overviewSeriesSelected=[];
+    document.querySelectorAll('#overviewSeriesChecks input').forEach(function(i){i.checked=false;});
+  }
+}
+
+function updateOverviewFilterSummary(){
+  const cat=overviewCategoriesSelected.length===3?'ALL CATEGORY':overviewCategoriesSelected.join(' + ');
+  const reg=overviewRegionsSelected.length===0?'ALL REGION':overviewRegionsSelected.join(' + ');
+  const ser=overviewSeriesSelected.length ? ' • '+overviewSeriesSelected.join(' + ') : '';
+  const summary=document.getElementById('overviewFilterSummary');
+  if(summary) summary.textContent=cat+' • '+reg+ser;
+  const count=document.getElementById('overviewFilterCount');
+  if(count){
+    const n=(overviewCategoriesSelected.length||0)+(overviewRegionsSelected.length||0)+(overviewSeriesSelected.length||0);
+    count.textContent=n||'0';
+  }
+}
+
+function renderOverviewRegionChecks(){
+  const box=document.getElementById('overviewRegionChecks');
+  if(!box) return;
+  const regions=overviewAvailableRegions.length?overviewAvailableRegions:overviewRegionsSelected;
+  box.innerHTML=regions.map(function(region){
+    const val=normalizeFilterValue(region);
+    return '<label class="checkChip"><input type="checkbox" value="'+escapeHtml(val)+'"><span>'+escapeHtml(region)+'</span></label>';
+  }).join('');
+  setCheckedValues('overviewRegionChecks',overviewRegionsSelected);
+}
 
 function loadOverview(){
   const box=document.getElementById('overviewRegions');
   if(box){
     box.innerHTML='<div class="state"><div class="loading"></div><div class="stateTitle">Memuat overview...</div><div class="stateText">Mengambil data stok NASA...</div></div>';
   }
-
+  updateOverviewFilterSummary();
   let finished=false;
-
   const timer=setTimeout(function(){
     if(finished) return;
-    if(box){
-      box.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Overview belum merespons</div><div class="stateText">Server belum mengembalikan data. Coba tekan Overview lagi.</div></div>';
-    }
+    if(box) box.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Overview belum merespons</div><div class="stateText">Server belum mengembalikan data. Coba tekan Overview lagi.</div></div>';
   },12000);
-
-  apiCall('getNASAOverview', {user: currentUser, filters:{region:overviewRegion, category:overviewCategory, series:overviewSeries}}, function(data){
-    finished=true;
-    clearTimeout(timer);
+  apiCall('getNASAOverview',{user:currentUser,filters:{regions:overviewRegionsSelected,categories:overviewCategoriesSelected,series:overviewSeriesSelected}},function(data){
+    finished=true; clearTimeout(timer);
     try { renderOverview(data); } catch(e) {
-      if(box) box.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Overview gagal ditampilkan</div><div class="stateText">'+escapeHtml(e && e.message ? e.message : 'Error saat render data.')+'</div></div>';
+      if(box) box.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Overview gagal ditampilkan</div><div class="stateText">'+escapeHtml(e&&e.message?e.message:'Error saat render data.')+'</div></div>';
     }
-  }, function(error){
-    finished=true;
-    clearTimeout(timer);
-    if(box) box.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Gagal mengambil overview</div><div class="stateText">'+escapeHtml(error && error.message ? error.message : 'Terjadi kesalahan pada server.')+'</div></div>';
+  },function(error){
+    finished=true; clearTimeout(timer);
+    if(box) box.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Gagal mengambil overview</div><div class="stateText">'+escapeHtml(error&&error.message?error.message:'Terjadi kesalahan pada server.')+'</div></div>';
   });
 }
 
-function setOverviewRegion(region){
-  overviewRegion=region;
-  document.querySelectorAll('#overviewRegionFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.region===region);});
+function applyOverviewFilters(){
+  const regions=getCheckedValues('overviewRegionChecks');
+  const cats=getCheckedValues('overviewCategoryChecks');
+  let series=getCheckedValues('overviewSeriesChecks');
+  if(!cats.length){ alert('Pilih minimal 1 kategori.'); return; }
+  if(!regions.length){ alert('Pilih minimal 1 region.'); return; }
+  if(!(cats.length===1 && cats[0]==='DEVICE')) series=[];
+  overviewRegionsSelected=regions;
+  overviewCategoriesSelected=cats;
+  overviewSeriesSelected=series;
+  updateOverviewFilterSummary();
+  closeOverviewFilter();
   loadOverview();
 }
-function setOverviewCategory(category){
-  overviewCategory=category;
-  if(category!=='DEVICE') overviewSeries='ALL';
-  document.querySelectorAll('#overviewCategoryFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.category===category);});
-  document.querySelectorAll('#overviewSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===overviewSeries);});
-  loadOverview();
-}
-function setOverviewSeries(series){
-  overviewSeries=series;
-  document.querySelectorAll('#overviewSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===series);});
-  loadOverview();
+
+function resetOverviewFilters(){
+  overviewRegionsSelected=['REGION 1','REGION 5'];
+  overviewCategoriesSelected=['DEVICE'];
+  overviewSeriesSelected=[];
+  syncOverviewFilterChecks();
+  updateOverviewFilterSummary();
 }
 
 function renderOverview(data){
   data=data||{};
+  overviewAvailableRegions=Array.isArray(data.availableRegions)?data.availableRegions:overviewAvailableRegions;
+  renderOverviewRegionChecks();
+  syncOverviewFilterChecks();
+  updateOverviewFilterSummary();
   const summary=data.summary||{};
   const total=Number(summary.totalStock)||0;
 
@@ -4451,13 +4582,7 @@ function renderOverview(data){
   document.getElementById('overviewStock').textContent=formatNumber(total);
   document.getElementById('overviewEmpty').textContent=formatNumber(summary.emptySku||0);
 
-  const regionFilters=document.getElementById('overviewRegionFilters');
   const regions=Array.isArray(data.regions)?data.regions:[];
-  regionFilters.innerHTML='<button class="filterBtn '+(overviewRegion==='ALL'?'active':'')+'" data-region="ALL" onclick="setOverviewRegion(\'ALL\')">ALL REGION</button>'+
-    regions.map(function(r){
-      const active=String(r.region).toUpperCase()===String(overviewRegion).toUpperCase();
-      return '<button class="filterBtn '+(active?'active':'')+'" data-region="'+escapeHtml(r.region)+'" onclick="setOverviewRegion(\''+escapeJs(r.region)+'\')">'+escapeHtml(r.region)+'</button>';
-    }).join('');
 
   /* REGION */
   const maxRegion=Math.max.apply(null,regions.map(function(r){return Number(r.stock)||0;}).concat([1]));
