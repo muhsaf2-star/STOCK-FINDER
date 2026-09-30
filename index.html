@@ -1,0 +1,4703 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<base target="_top">
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
+
+<meta
+  name="theme-color"
+  content="#0b57d0"
+>
+
+<title>Samsung Stock Finder</title>
+
+
+<style>
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html{
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+  background:#f5f7fb;
+  color:#172033;
+  font-family:Arial,Helvetica,sans-serif;
+  overflow-x:hidden;
+}
+
+button,
+input{
+  font-family:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+
+/* =====================================================
+   LOGIN PAGE
+===================================================== */
+
+#loginPage{
+
+  min-height:100vh;
+  min-height:100dvh;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eef5ff 0%,
+      #ffffff 72%
+    );
+
+}
+
+
+/* =====================================================
+   LOGIN BOX
+===================================================== */
+
+.loginBox{
+
+  width:100%;
+
+  max-width:400px;
+
+  padding:
+    28px
+    20px
+    25px;
+
+  background:#ffffff;
+
+  border-radius:24px;
+
+  box-shadow:
+    0 18px 50px
+    rgba(0,0,0,.10);
+
+}
+
+
+/* =====================================================
+   LOGO
+===================================================== */
+
+.logo{
+
+  width:58px;
+  height:58px;
+
+  margin:
+    0
+    auto
+    14px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  border-radius:18px;
+
+  background:#0b57d0;
+
+  color:#ffffff;
+
+  font-size:25px;
+
+  font-weight:900;
+
+  box-shadow:
+    0 8px 20px
+    rgba(11,87,208,.20);
+
+}
+
+
+/* =====================================================
+   LOGIN TITLE
+===================================================== */
+
+.loginTitle{
+
+  text-align:center;
+
+  color:#172033;
+
+  font-size:22px;
+
+  font-weight:900;
+
+  letter-spacing:-.5px;
+
+}
+
+
+.loginSubtitle{
+
+  margin-top:5px;
+
+  text-align:center;
+
+  color:#98a2b3;
+
+  font-size:12px;
+
+}
+
+
+/* =====================================================
+   PREMIUM RUNNING TEXT
+===================================================== */
+
+.loginMarquee{
+
+  position:relative;
+
+  width:100%;
+
+  height:34px;
+
+  margin-top:14px;
+
+  overflow:hidden;
+
+  border:
+    1px solid
+    #dbe8ff;
+
+  border-radius:10px;
+
+  background:#f4f8ff;
+
+}
+
+
+/* TRACK */
+
+.loginMarqueeTrack{
+
+  display:flex;
+
+  align-items:center;
+
+  width:max-content;
+
+  height:100%;
+
+  white-space:nowrap;
+
+  animation:
+    loginMarqueeMove
+    18s
+    linear
+    infinite;
+
+  will-change:transform;
+
+}
+
+
+/* TEXT */
+
+.loginMarqueeTrack span{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  height:100%;
+
+  padding-right:65px;
+
+  color:#0b57d0;
+
+  font-size:10px;
+
+  font-weight:900;
+
+  letter-spacing:.75px;
+
+}
+
+
+/* FADE */
+
+.marqueeFade{
+
+  position:absolute;
+
+  top:0;
+  bottom:0;
+
+  width:32px;
+
+  z-index:3;
+
+  pointer-events:none;
+
+}
+
+
+.marqueeFadeLeft{
+
+  left:0;
+
+  background:
+    linear-gradient(
+      to right,
+      #f4f8ff,
+      rgba(244,248,255,0)
+    );
+
+}
+
+
+.marqueeFadeRight{
+
+  right:0;
+
+  background:
+    linear-gradient(
+      to left,
+      #f4f8ff,
+      rgba(244,248,255,0)
+    );
+
+}
+
+
+/* ANIMATION */
+
+@keyframes loginMarqueeMove{
+
+  from{
+
+    transform:
+      translateX(0);
+
+  }
+
+  to{
+
+    transform:
+      translateX(-33.333%);
+
+  }
+
+}
+
+
+/* =====================================================
+   LOGIN TABS
+===================================================== */
+
+.loginTabs{
+
+  display:flex;
+
+  gap:5px;
+
+  padding:5px;
+
+  margin:
+    24px
+    0
+    18px;
+
+  background:#f2f4f7;
+
+  border-radius:13px;
+
+}
+
+
+.loginTab{
+
+  flex:1;
+
+  height:42px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:transparent;
+
+  color:#667085;
+
+  font-size:12px;
+
+  font-weight:900;
+
+}
+
+
+.loginTab.active{
+
+  background:#ffffff;
+
+  color:#0b57d0;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0,0,0,.07);
+
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.field{
+
+  margin-bottom:15px;
+
+}
+
+
+.fieldLabel{
+
+  display:block;
+
+  margin-bottom:7px;
+
+  color:#344054;
+
+  font-size:12px;
+
+  font-weight:900;
+
+}
+
+
+.input{
+
+  width:100%;
+
+  height:52px;
+
+  padding:
+    0
+    14px;
+
+  border:
+    1px solid
+    #dfe4eb;
+
+  border-radius:13px;
+
+  outline:none;
+
+  background:#ffffff;
+
+  color:#101828;
+
+  font-size:16px;
+
+}
+
+
+.input::placeholder{
+
+  color:#98a2b3;
+
+}
+
+
+.input:focus{
+
+  border-color:#0b57d0;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(11,87,208,.10);
+
+}
+
+
+/* PASSWORD */
+
+.passwordBox{
+
+  position:relative;
+
+}
+
+
+.passwordBox .input{
+
+  padding-right:50px;
+
+}
+
+
+.eye{
+
+  position:absolute;
+
+  right:5px;
+  top:6px;
+
+  width:40px;
+  height:40px;
+
+  border:0;
+
+  background:transparent;
+
+  color:#667085;
+
+  font-size:18px;
+
+}
+
+
+/* LOGIN BUTTON */
+
+.loginButton{
+
+  width:100%;
+
+  height:52px;
+
+  margin-top:3px;
+
+  border:0;
+
+  border-radius:13px;
+
+  background:#0b57d0;
+
+  color:#ffffff;
+
+  font-size:13px;
+
+  font-weight:900;
+
+  box-shadow:
+    0 6px 15px
+    rgba(11,87,208,.18);
+
+}
+
+
+.loginButton:active{
+
+  transform:scale(.98);
+
+}
+
+
+.loginButton:disabled{
+
+  opacity:.6;
+
+}
+
+
+/* ERROR */
+
+.loginError{
+
+  display:none;
+
+  margin-top:12px;
+
+  padding:12px;
+
+  border-radius:10px;
+
+  background:#fff1f2;
+
+  color:#be123c;
+
+  font-size:11px;
+
+  line-height:1.5;
+
+}
+
+
+/* =====================================================
+   APP
+===================================================== */
+
+#appPage{
+
+  display:none;
+
+}
+
+
+.app{
+
+  min-height:100vh;
+
+  min-height:100dvh;
+
+  display:flex;
+
+  flex-direction:column;
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header{
+
+  position:sticky;
+
+  top:0;
+
+  z-index:50;
+
+  padding:
+    13px
+    14px
+    14px;
+
+  background:#0b57d0;
+
+  color:#ffffff;
+
+  box-shadow:
+    0 4px 16px
+    rgba(0,0,0,.14);
+
+}
+
+
+.headerRow{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:12px;
+
+}
+
+
+.headerTitle{
+
+  font-size:18px;
+
+  font-weight:900;
+
+  letter-spacing:-.5px;
+
+}
+
+
+.headerSub{
+
+  margin-top:4px;
+
+  max-width:240px;
+
+  color:#ffffff;
+
+  opacity:.80;
+
+  font-size:11px;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+}
+
+
+.badge{
+
+  flex-shrink:0;
+
+  padding:
+    8px
+    11px;
+
+  border-radius:20px;
+
+  background:
+    rgba(255,255,255,.18);
+
+  font-size:10px;
+
+  font-weight:900;
+
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main{
+
+  width:100%;
+
+  max-width:960px;
+
+  margin:0 auto;
+
+  flex:1;
+
+  padding:
+    13px
+    12px
+    88px;
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.searchWrap{
+
+  position:relative;
+
+  margin-bottom:12px;
+
+}
+
+
+.searchIcon{
+
+  position:absolute;
+
+  left:14px;
+
+  top:50%;
+
+  transform:
+    translateY(-50%);
+
+  color:#667085;
+
+  font-size:21px;
+
+  pointer-events:none;
+
+}
+
+
+#searchInput{
+
+  width:100%;
+
+  height:54px;
+
+  padding:
+    0
+    50px
+    0
+    43px;
+
+  border:
+    1px solid
+    #dfe4eb;
+
+  border-radius:16px;
+
+  outline:none;
+
+  background:#ffffff;
+
+  color:#101828;
+
+  font-size:16px;
+
+  box-shadow:
+    0 3px 13px
+    rgba(16,24,40,.05);
+
+}
+
+
+#searchInput::placeholder{
+
+  color:#98a2b3;
+
+}
+
+
+#searchInput:focus{
+
+  border-color:#0b57d0;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(11,87,208,.10);
+
+}
+
+
+.clearButton{
+
+  display:none;
+
+  position:absolute;
+
+  top:7px;
+
+  right:7px;
+
+  width:40px;
+  height:40px;
+
+  border:0;
+
+  border-radius:11px;
+
+  background:#f2f4f7;
+
+  color:#667085;
+
+  font-size:23px;
+
+}
+
+
+/* =====================================================
+   CATEGORY
+===================================================== */
+
+.category{
+
+  display:flex;
+
+  gap:7px;
+
+  overflow-x:auto;
+
+  scrollbar-width:none;
+
+  padding:
+    1px
+    0
+    4px;
+
+}
+
+
+.category::-webkit-scrollbar{
+
+  display:none;
+
+}
+
+
+.categoryBtn{
+
+  flex-shrink:0;
+
+  min-width:70px;
+
+  height:40px;
+
+  padding:
+    0
+    15px;
+
+  border:
+    1px solid
+    #dfe4eb;
+
+  border-radius:21px;
+
+  background:#ffffff;
+
+  color:#667085;
+
+  font-size:11px;
+
+  font-weight:900;
+
+}
+
+
+.categoryBtn.active{
+
+  border-color:#0b57d0;
+
+  background:#0b57d0;
+
+  color:#ffffff;
+
+}
+
+
+/* =====================================================
+   QUICK SEARCH
+===================================================== */
+
+.quick{
+
+  margin-top:13px;
+
+}
+
+
+.label{
+
+  margin-bottom:7px;
+
+  color:#667085;
+
+  font-size:10px;
+
+  font-weight:900;
+
+  letter-spacing:.2px;
+
+}
+
+
+.quickList{
+
+  display:flex;
+
+  gap:7px;
+
+  overflow-x:auto;
+
+  scrollbar-width:none;
+
+  padding-bottom:2px;
+
+}
+
+
+.quickList::-webkit-scrollbar{
+
+  display:none;
+
+}
+
+
+.quickBtn{
+
+  flex-shrink:0;
+
+  min-height:37px;
+
+  padding:
+    0
+    13px;
+
+  border:
+    1px solid
+    #dfe4eb;
+
+  border-radius:10px;
+
+  background:#ffffff;
+
+  color:#344054;
+
+  font-size:11px;
+
+  font-weight:800;
+
+}
+
+
+/* =====================================================
+   RESULT HEADER
+===================================================== */
+
+.resultHeader{
+
+  display:none;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  margin:
+    20px
+    2px
+    9px;
+
+}
+
+
+.resultTitle{
+
+  font-size:15px;
+
+  font-weight:900;
+
+}
+
+
+.resultCount{
+
+  color:#667085;
+
+  font-size:10px;
+
+  font-weight:900;
+
+}
+
+
+/* =====================================================
+   PRODUCT LIST
+===================================================== */
+
+.productList{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+
+}
+
+
+/* =====================================================
+   PRODUCT CARD
+===================================================== */
+
+.product{
+
+  width:100%;
+
+  padding:15px;
+
+  background:#ffffff;
+
+  border:
+    1px solid
+    #e5e9ef;
+
+  border-radius:16px;
+
+  box-shadow:
+    0 3px 12px
+    rgba(16,24,40,.045);
+
+}
+
+
+.product:active{
+
+  transform:scale(.995);
+
+}
+
+
+.productTop{
+
+  display:flex;
+
+  align-items:flex-start;
+
+  justify-content:space-between;
+
+  gap:13px;
+
+}
+
+
+.productInfo{
+
+  flex:1;
+
+  min-width:0;
+
+}
+
+
+.productName{
+
+  color:#172033;
+
+  font-size:15px;
+
+  line-height:1.42;
+
+  font-weight:900;
+
+  word-break:break-word;
+
+}
+
+
+.meta{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:6px;
+
+  margin-top:8px;
+
+}
+
+
+.tag{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  min-height:23px;
+
+  padding:
+    0
+    8px;
+
+  border-radius:7px;
+
+  background:#edf4ff;
+
+  color:#0b57d0;
+
+  font-size:9px;
+
+  font-weight:900;
+
+}
+
+
+.code{
+
+  margin-top:8px;
+
+  color:#98a2b3;
+
+  font-size:10px;
+
+  line-height:1.35;
+
+  word-break:break-all;
+
+}
+
+
+/* =====================================================
+   STOCK
+===================================================== */
+
+.stock{
+
+  flex-shrink:0;
+
+  min-width:67px;
+
+  text-align:right;
+
+}
+
+
+.stockLabel{
+
+  color:#98a2b3;
+
+  font-size:8px;
+
+  font-weight:900;
+
+  letter-spacing:.8px;
+
+}
+
+
+.stockNumber{
+
+  margin-top:3px;
+
+  color:#067647;
+
+  font-size:29px;
+
+  line-height:1;
+
+  font-weight:900;
+
+}
+
+
+.stockNumber.empty{
+
+  color:#d92d20;
+
+}
+
+
+/* =====================================================
+   UPDATE
+===================================================== */
+
+.update{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  margin-top:13px;
+
+  padding-top:10px;
+
+  border-top:
+    1px solid
+    #eef0f3;
+
+  color:#667085;
+
+  font-size:10px;
+
+  line-height:1.3;
+
+}
+
+
+.update strong{
+
+  color:#344054;
+
+  font-weight:900;
+
+}
+
+
+/* =====================================================
+   NASA ARROW
+===================================================== */
+
+.arrow{
+
+  flex-shrink:0;
+
+  padding-top:3px;
+
+  color:#98a2b3;
+
+  font-size:23px;
+
+}
+
+
+/* =====================================================
+   DETAIL
+===================================================== */
+
+#detailView{
+
+  display:none;
+
+}
+
+
+.back{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  min-height:42px;
+
+  padding:
+    0
+    3px;
+
+  margin-bottom:7px;
+
+  border:0;
+
+  background:transparent;
+
+  color:#0b57d0;
+
+  font-size:13px;
+
+  font-weight:900;
+
+}
+
+
+.detailProduct{
+
+  padding:16px;
+
+  background:#ffffff;
+
+  border:
+    1px solid
+    #e5e9ef;
+
+  border-radius:16px;
+
+  box-shadow:
+    0 3px 12px
+    rgba(16,24,40,.045);
+
+}
+
+
+.detailName{
+
+  color:#172033;
+
+  font-size:16px;
+
+  line-height:1.45;
+
+  font-weight:900;
+
+}
+
+
+.detailCode{
+
+  margin-top:7px;
+
+  color:#98a2b3;
+
+  font-size:10px;
+
+  word-break:break-all;
+
+}
+
+
+/* =====================================================
+   STORE LIST
+===================================================== */
+
+.storeList{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+
+}
+
+
+.storeCard{
+
+  padding:14px;
+
+  background:#ffffff;
+
+  border:
+    1px solid
+    #e5e9ef;
+
+  border-radius:15px;
+
+  box-shadow:
+    0 3px 11px
+    rgba(16,24,40,.04);
+
+}
+
+
+.storeTop{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:11px;
+
+}
+
+
+.storeIcon{
+
+  width:43px;
+  height:43px;
+
+  flex-shrink:0;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:12px;
+
+  background:#edf4ff;
+
+  color:#0b57d0;
+
+  font-size:16px;
+
+  font-weight:900;
+
+}
+
+
+.storeInfo{
+
+  flex:1;
+
+  min-width:0;
+
+}
+
+
+.storeName{
+
+  color:#172033;
+
+  font-size:13px;
+
+  line-height:1.4;
+
+  font-weight:900;
+
+}
+
+
+.storeCode{
+
+  margin-top:3px;
+
+  color:#98a2b3;
+
+  font-size:9px;
+
+}
+
+
+.storeStock{
+
+  flex-shrink:0;
+
+  text-align:right;
+
+}
+
+
+.storeStockNumber{
+
+  color:#067647;
+
+  font-size:25px;
+
+  line-height:1;
+
+  font-weight:900;
+
+}
+
+
+.storeStockLabel{
+
+  margin-top:3px;
+
+  color:#98a2b3;
+
+  font-size:8px;
+
+  font-weight:900;
+
+}
+
+
+.storeBottom{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  margin-top:12px;
+
+  padding-top:10px;
+
+  border-top:
+    1px solid
+    #eef0f3;
+
+}
+
+
+.storeInfoBottom{
+
+  min-width:0;
+
+  color:#667085;
+
+  font-size:10px;
+
+  line-height:1.55;
+
+}
+
+
+.storeInfoBottom strong{
+
+  color:#344054;
+
+}
+
+
+.wa{
+
+  flex-shrink:0;
+
+  min-width:92px;
+
+  min-height:39px;
+
+  padding:
+    0
+    13px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:10px;
+
+  background:#128c7e;
+
+  color:#ffffff;
+
+  text-decoration:none;
+
+  font-size:10px;
+
+  font-weight:900;
+
+}
+
+
+/* =====================================================
+   STATES
+===================================================== */
+
+.state{
+
+  padding:
+    55px
+    15px;
+
+  text-align:center;
+
+}
+
+
+.stateIcon{
+
+  margin-bottom:10px;
+
+  font-size:34px;
+
+}
+
+
+.stateTitle{
+
+  color:#475467;
+
+  font-size:15px;
+
+  font-weight:900;
+
+}
+
+
+.stateText{
+
+  margin-top:6px;
+
+  color:#98a2b3;
+
+  font-size:11px;
+
+  line-height:1.55;
+
+}
+
+
+.loading{
+
+  width:31px;
+  height:31px;
+
+  margin:
+    0
+    auto
+    12px;
+
+  border:
+    3px solid
+    #e5e7eb;
+
+  border-top-color:#0b57d0;
+
+  border-radius:50%;
+
+  animation:
+    spin
+    .8s
+    linear
+    infinite;
+
+}
+
+
+@keyframes spin{
+
+  to{
+    transform:rotate(360deg);
+  }
+
+}
+
+
+
+/* =====================================================
+   GITHUB API BRIDGE
+   GitHub Pages -> Apps Script Web App (JSONP)
+===================================================== */
+const API_URL = 'PASTE_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+function apiCall(action, params, onSuccess, onFailure){
+  if(!API_URL || API_URL.indexOf('PASTE_APPS_SCRIPT') === 0){
+    if(onFailure) onFailure({message:'API_URL belum diisi. Masukkan URL Web App Apps Script pada index.html.'});
+    return;
+  }
+  const cb = '__sf_cb_' + Date.now() + '_' + Math.floor(Math.random()*100000);
+  const query = new URLSearchParams();
+  query.set('api', action);
+  query.set('callback', cb);
+  query.set('data', JSON.stringify(params || {}));
+  const script = document.createElement('script');
+  let done = false;
+  const cleanup = function(){
+    if(done) return;
+    done = true;
+    try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
+    if(script.parentNode) script.parentNode.removeChild(script);
+  };
+  window[cb] = function(payload){
+    cleanup();
+    if(payload && payload.ok === false){
+      if(onFailure) onFailure({message: payload.error || 'Terjadi kesalahan pada server.'});
+      return;
+    }
+    if(onSuccess) onSuccess(payload ? payload.data : null);
+  };
+  script.onerror = function(){
+    cleanup();
+    if(onFailure) onFailure({message:'Tidak dapat terhubung ke Apps Script API.'});
+  };
+  script.src = API_URL + (API_URL.indexOf('?') >= 0 ? '&' : '?') + query.toString();
+  document.head.appendChild(script);
+}
+
+/* =====================================================
+   ALL STOCK - STORE
+===================================================== */
+
+let allStoreStockData = [];
+let allStockCategory = 'ALL';
+let allStockSeries = 'ALL';
+let allStockStatus = 'ALL';
+
+function loadAllStock(){
+  const list = document.getElementById('allStockList');
+  if(!list) return;
+
+  const region = currentUser && currentUser.region ? currentUser.region : 'Region belum tersedia';
+  const info = document.getElementById('allStockStoreInfo');
+  if(info) info.textContent = (currentUser.storeCode || '-') + ' • ' + (currentUser.storeName || '-') + ' • ' + region;
+
+  list.innerHTML = '<div class="state"><div class="loading"></div><div class="stateTitle">Memuat semua stock...</div><div class="stateText">Mengambil data store Anda.</div></div>';
+
+  apiCall('getAllStoreStock', {user: currentUser}, function(data){
+    allStoreStockData = Array.isArray(data) ? data : [];
+    if(allStoreStockData.length && allStoreStockData[0].region){
+      currentUser.region = allStoreStockData[0].region;
+      document.getElementById('headerSub').textContent = (currentUser.storeName || '-') + ' • ' + currentUser.region;
+    }
+    updateAllStockSummary();
+    renderAllStock();
+  }, function(error){
+    list.innerHTML = '<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Gagal mengambil stock</div><div class="stateText">'+escapeHtml(error && error.message ? error.message : 'Terjadi kesalahan.')+'</div></div>';
+  });
+}
+
+function updateAllStockSummary(){
+  const total=allStoreStockData.length;
+  const available=allStoreStockData.filter(function(x){return Number(x.stock)>0;}).length;
+  const empty=total-available;
+  document.getElementById('allStockTotal').textContent=total;
+  document.getElementById('allStockAvailable').textContent=available;
+  document.getElementById('allStockEmpty').textContent=empty;
+}
+
+function setAllStockCategory(category){
+  allStockCategory=category;
+  document.querySelectorAll('#allStockCategoryFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.category===category);});
+  const wrap=document.getElementById('allStockSeriesWrap');
+  if(wrap) wrap.style.display=category==='DEVICE'?'block':'none';
+  if(category!=='DEVICE') allStockSeries='ALL';
+  document.querySelectorAll('#allStockSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===allStockSeries);});
+  renderAllStock();
+}
+
+function setAllStockSeries(series){
+  allStockSeries=series;
+  document.querySelectorAll('#allStockSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===series);});
+  renderAllStock();
+}
+
+function setAllStockStatus(status){
+  allStockStatus=status;
+  document.querySelectorAll('#allStockStatusFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.stock===status);});
+  renderAllStock();
+}
+
+function renderAllStock(){
+  const list=document.getElementById('allStockList');
+  if(!list) return;
+
+  let data=allStoreStockData.filter(function(item){
+    const catOk=allStockCategory==='ALL'||String(item.category).toUpperCase()===allStockCategory;
+    const seriesOk=allStockCategory!=='DEVICE'||allStockSeries==='ALL'||String(item.series).toUpperCase()===allStockSeries;
+    const qty=Number(item.stock)||0;
+    const statusOk=allStockStatus==='ALL'||(allStockStatus==='AVAILABLE'&&qty>0)||(allStockStatus==='EMPTY'&&qty<=0);
+    return catOk&&seriesOk&&statusOk;
+  });
+
+  data.sort(function(a,b){
+    const ae=Number(a.stock)<=0,be=Number(b.stock)<=0;
+    if(ae!==be) return ae?1:-1;
+    return String(a.materialDescription||'').localeCompare(String(b.materialDescription||''),'id',{sensitivity:'base',numeric:true});
+  });
+
+  if(!data.length){
+    list.innerHTML='<div class="state"><div class="stateIcon">📦</div><div class="stateTitle">Tidak ada stok</div><div class="stateText">Tidak ada produk sesuai filter.</div></div>';
+    return;
+  }
+
+  list.innerHTML=data.map(function(item){
+    const qty=Number(item.stock)||0;
+    const empty=qty<=0;
+    return '<div class="allStockCard '+(empty?'is-empty':'')+'">'+
+      '<div class="allStockInfo">'+
+        '<div class="allStockName">'+escapeHtml(item.materialDescription||'-')+'</div>'+
+        '<div class="allStockCode">'+escapeHtml(item.materialCode||'-')+'</div>'+
+        '<span class="seriesBadge">'+escapeHtml(item.category||'OTHER')+(item.category==='DEVICE'?' • '+escapeHtml(item.series||'OTHER'):'')+'</span>'+
+      '</div>'+
+      '<div class="allStockQty"><strong>'+formatNumber(qty)+'</strong><span>'+(empty?'EMPTY':'STOCK')+'</span></div>'+
+    '</div>';
+  }).join('');
+}
+
+
+/* =====================================================
+   ACCOUNT
+===================================================== */
+
+.accountCard{
+
+  padding:17px;
+
+  background:#ffffff;
+
+  border:
+    1px solid
+    #e5e9ef;
+
+  border-radius:16px;
+
+}
+
+
+.accountTop{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+}
+
+
+.avatar{
+
+  width:48px;
+  height:48px;
+
+  flex-shrink:0;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:13px;
+
+  background:#0b57d0;
+
+  color:#ffffff;
+
+  font-size:16px;
+
+  font-weight:900;
+
+}
+
+
+.accountName{
+
+  color:#172033;
+
+  font-size:14px;
+
+  font-weight:900;
+
+}
+
+
+.accountRole{
+
+  margin-top:4px;
+
+  color:#98a2b3;
+
+  font-size:10px;
+
+}
+
+
+.accountRows{
+
+  margin-top:17px;
+
+  border-top:
+    1px solid
+    #eef0f3;
+
+}
+
+
+.accountRow{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:15px;
+
+  min-height:43px;
+
+  border-bottom:
+    1px solid
+    #eef0f3;
+
+  font-size:10px;
+
+}
+
+
+.accountRow span:first-child{
+
+  color:#98a2b3;
+
+}
+
+
+.accountRow span:last-child{
+
+  color:#344054;
+
+  font-weight:900;
+
+  text-align:right;
+
+}
+
+
+.logout{
+
+  width:100%;
+
+  height:45px;
+
+  margin-top:16px;
+
+  border:
+    1px solid
+    #f1c5c7;
+
+  border-radius:11px;
+
+  background:#ffffff;
+
+  color:#d92d20;
+
+  font-size:11px;
+
+  font-weight:900;
+
+}
+
+
+/* =====================================================
+   BOTTOM NAV
+===================================================== */
+
+.bottom{
+
+  position:fixed;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  z-index:100;
+
+  height:
+    calc(
+      72px +
+      env(safe-area-inset-bottom)
+    );
+
+  padding:
+    5px
+    8px
+    env(safe-area-inset-bottom);
+
+  background:
+    rgba(255,255,255,.97);
+
+  backdrop-filter:blur(15px);
+
+  border-top:
+    1px solid
+    #e5e9ef;
+
+}
+
+
+.bottomInner{
+
+  width:100%;
+
+  max-width:520px;
+
+  height:65px;
+
+  margin:auto;
+
+  display:flex;
+
+}
+
+
+.nav{
+
+  flex:1;
+
+  border:0;
+
+  border-radius:12px;
+
+  background:transparent;
+
+  color:#98a2b3;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:4px;
+
+  font-size:10px;
+
+  font-weight:900;
+
+}
+
+
+.navIcon{
+
+  font-size:21px;
+
+  line-height:1;
+
+}
+
+
+.nav.active{
+
+  background:#edf4ff;
+
+  color:#0b57d0;
+
+}
+
+
+.sectionSub{
+  margin:-5px 0 10px;
+  color:#98a2b3;
+  font-size:9px;
+}
+
+.compareScroll{
+  width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  border:1px solid #e5e9ef;
+  border-radius:12px;
+  background:#fff;
+}
+
+.compareSeriesTable{
+  min-width:680px;
+  margin:0;
+}
+
+.compareSeriesTable th,
+.compareSeriesTable td{
+  white-space:nowrap;
+  text-align:center;
+}
+
+.compareSeriesTable th:first-child,
+.compareSeriesTable td:first-child{
+  text-align:left;
+  position:sticky;
+  left:0;
+  background:#fff;
+  z-index:2;
+}
+
+.compareQty{
+  font-size:11px;
+  font-weight:900;
+  color:#172033;
+}
+
+.comparePct{
+  margin-top:2px;
+  font-size:9px;
+  font-weight:900;
+  color:#0b57d0;
+}
+
+
+/* =====================================================
+   TABLET / DESKTOP
+===================================================== */
+
+@media(min-width:700px){
+
+  .main{
+
+    padding:
+      20px
+      22px
+      25px;
+
+  }
+
+
+  .productList{
+
+    display:grid;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0,1fr)
+      );
+
+  }
+
+
+  .storeList{
+
+    display:grid;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0,1fr)
+      );
+
+  }
+
+
+  .bottom{
+
+    position:static;
+
+    height:70px;
+
+    padding:5px;
+
+  }
+
+}
+
+
+/* =====================================================
+   LARGE DESKTOP
+===================================================== */
+
+@media(min-width:1100px){
+
+  .productList{
+
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0,1fr)
+      );
+
+  }
+
+
+  .storeList{
+
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0,1fr)
+      );
+
+  }
+
+}
+
+
+/* =====================================================
+   SMALL PHONE
+===================================================== */
+
+@media(max-width:360px){
+
+  .loginBox{
+
+    padding:
+      24px
+      17px
+      22px;
+
+  }
+
+
+  .header{
+
+    padding-left:11px;
+
+    padding-right:11px;
+
+  }
+
+
+  .main{
+
+    padding-left:10px;
+
+    padding-right:10px;
+
+  }
+
+
+  .product{
+
+    padding:14px;
+
+  }
+
+
+  .productName{
+
+    font-size:14px;
+
+  }
+
+
+  .stockNumber{
+
+    font-size:27px;
+
+  }
+
+
+  .loginMarqueeTrack span{
+
+    font-size:9px;
+
+  }
+
+}
+
+
+/* =====================================================
+   IOS SAFE AREA
+===================================================== */
+
+@supports(padding:max(0px)){
+
+  .main{
+
+    padding-bottom:
+      max(
+        88px,
+        calc(
+          88px +
+          env(safe-area-inset-bottom)
+        )
+      );
+
+  }
+
+}
+
+
+/* =====================================================
+   REGION / SERIES / OVERVIEW STOCK
+===================================================== */
+
+.allStockTop,.overviewTop{
+  margin-bottom:14px;
+}
+
+.pageHero{
+  background:#fff;
+  border:1px solid #e7ebf0;
+  border-radius:16px;
+  padding:15px;
+  box-shadow:0 6px 18px rgba(16,24,40,.05);
+}
+
+.pageHeroTitle{font-size:18px;font-weight:900;color:#172033;}
+.pageHeroSub{font-size:11px;color:#667085;margin-top:4px;}
+
+.stockStats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin:12px 0;
+}
+
+.stockStat{
+  background:#fff;
+  border:1px solid #e7ebf0;
+  border-radius:14px;
+  padding:11px 8px;
+  text-align:center;
+}
+.stockStatNumber{font-size:20px;font-weight:900;color:#172033;line-height:1.1;}
+.stockStatLabel{font-size:9px;color:#667085;font-weight:800;margin-top:4px;}
+.stockStat.available .stockStatNumber{color:#16a34a;}
+.stockStat.empty .stockStatNumber{color:#d92d20;}
+
+.filterLabel{font-size:10px;font-weight:900;color:#667085;margin:12px 0 7px;text-transform:uppercase;letter-spacing:.3px;}
+.filterRow{display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none;}
+.filterRow::-webkit-scrollbar{display:none;}
+.filterBtn{flex:0 0 auto;height:36px;padding:0 13px;border:1px solid #dfe5ec;border-radius:18px;background:#fff;color:#667085;font-size:11px;font-weight:900;}
+.filterBtn.active{background:#0b57d0;color:#fff;border-color:#0b57d0;}
+
+.allStockList{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.allStockCard{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  min-height:76px;padding:12px 13px;background:#fff;border:1px solid #e7ebf0;border-radius:14px;
+  box-shadow:0 4px 12px rgba(16,24,40,.04);
+}
+.allStockCard.is-empty{background:#fffafa;border-color:#f4d2d2;}
+.allStockInfo{min-width:0;flex:1;}
+.allStockName{font-size:13px;font-weight:900;color:#172033;line-height:1.3;}
+.allStockCode{font-size:10px;color:#98a2b3;margin-top:4px;}
+.seriesBadge{display:inline-flex;margin-top:6px;padding:3px 7px;border-radius:8px;background:#edf4ff;color:#0b57d0;font-size:8px;font-weight:900;}
+.allStockQty{text-align:right;min-width:52px;}
+.allStockQty strong{display:block;font-size:22px;font-weight:900;color:#16a34a;line-height:1;}
+.allStockQty span{display:block;font-size:8px;font-weight:900;color:#16a34a;margin-top:4px;}
+.allStockCard.is-empty .allStockQty strong,.allStockCard.is-empty .allStockQty span{color:#d92d20;}
+
+.overviewFilterBox{margin-bottom:12px;}
+.overviewChart,.overviewSection{margin-top:14px;}
+.sectionTitle{font-size:13px;font-weight:900;color:#172033;margin-bottom:8px;}
+.regionRow,.seriesRow,.categoryRow2{background:#fff;border:1px solid #e7ebf0;border-radius:12px;padding:10px 11px;margin-bottom:7px;}
+.regionRowTop,.seriesRowTop{display:flex;justify-content:space-between;gap:8px;align-items:center;}
+.regionName,.seriesName{font-size:11px;font-weight:900;color:#172033;}
+.regionStock,.seriesStock{font-size:11px;font-weight:900;color:#0b57d0;}
+.barTrack{height:8px;background:#edf0f4;border-radius:8px;overflow:hidden;margin-top:8px;}
+.barFill{height:100%;background:#0b57d0;border-radius:8px;min-width:2px;}
+.regionMeta{font-size:9px;color:#98a2b3;margin-top:5px;}
+
+.compareTable{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid #e7ebf0;border-radius:12px;background:#fff;font-size:10px;}
+.compareTable th{background:#f5f7fa;color:#667085;text-align:left;font-size:9px;padding:9px 8px;}
+.compareTable td{padding:9px 8px;border-top:1px solid #eef1f4;color:#344054;font-weight:700;}
+.compareTable td:last-child{text-align:right;font-weight:900;color:#0b57d0;}
+
+@media(max-width:699px){
+  .main{width:100%;max-width:520px;margin:0 auto;padding-left:12px;padding-right:12px;}
+}
+
+@media(min-width:700px){
+  .main{max-width:1100px;margin:0 auto;}
+}
+
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+#historyView,
+#accountView{
+
+  display:none;
+
+}
+
+
+
+
+.historyList{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:9px;
+
+}
+
+
+.historyItem{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:11px;
+
+  min-height:60px;
+
+  padding:11px;
+
+  background:#ffffff;
+
+  border:
+    1px solid
+    #e5e9ef;
+
+  border-radius:14px;
+
+}
+
+
+.historyIcon{
+
+  width:39px;
+  height:39px;
+
+  flex-shrink:0;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:10px;
+
+  background:#edf4ff;
+
+  color:#0b57d0;
+
+  font-size:18px;
+
+}
+
+
+.historyKeyword{
+
+  color:#172033;
+
+  font-size:12px;
+
+  font-weight:900;
+
+}
+
+
+.historyDate{
+
+  margin-top:4px;
+
+  color:#98a2b3;
+
+  font-size:9px;
+
+}
+
+
+
+
+/* =====================================================
+   BACK TO SEARCH
+===================================================== */
+
+function backToSearch(){
+
+  showView('search');
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ===================================================
+     LOGIN PAGE
+=================================================== -->
+
+<div id="loginPage">
+
+  <div class="loginBox">
+
+
+    <div class="logo">
+      S
+    </div>
+
+
+    <div class="loginTitle">
+      Samsung Stock Finder
+    </div>
+
+
+    <div class="loginSubtitle">
+      Professional Stock Finder
+    </div>
+
+
+    <!-- RUNNING TEXT -->
+
+    <div class="loginMarquee">
+
+      <div
+        class="marqueeFade marqueeFadeLeft">
+      </div>
+
+      <div
+        class="marqueeFade marqueeFadeRight">
+      </div>
+
+      <div class="loginMarqueeTrack">
+
+        <span>
+          MILIK NASA MONO 2 BEKASI • JAKARTA TIMUR
+        </span>
+
+        <span>
+          MILIK NASA MONO 2 BEKASI • JAKARTA TIMUR
+        </span>
+
+        <span>
+          MILIK NASA MONO 2 BEKASI • JAKARTA TIMUR
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- LOGIN TABS -->
+
+    <div class="loginTabs">
+
+      <button
+        id="storeTab"
+        class="loginTab active"
+        onclick="setLoginMode('STORE')">
+
+        STORE
+
+      </button>
+
+
+      <button
+        id="nasaTab"
+        class="loginTab"
+        onclick="setLoginMode('NASA')">
+
+        NASA
+
+      </button>
+
+    </div>
+
+
+    <!-- LOGIN CODE -->
+
+    <div class="field">
+
+      <label
+        id="loginLabel"
+        class="fieldLabel">
+
+        Store Code
+
+      </label>
+
+
+      <input
+        id="loginCode"
+        class="input"
+        type="text"
+        autocomplete="username"
+        placeholder="Masukkan store code"
+        onkeydown="loginEnter(event)"
+      >
+
+    </div>
+
+
+    <!-- PASSWORD -->
+
+    <div
+      id="passwordField"
+      class="field"
+      style="display:none;">
+
+      <label class="fieldLabel">
+        Password
+      </label>
+
+
+      <div class="passwordBox">
+
+        <input
+          id="password"
+          class="input"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Masukkan password"
+          onkeydown="loginEnter(event)"
+        >
+
+
+        <button
+          class="eye"
+          onclick="togglePassword()">
+
+          ◉
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- LOGIN -->
+
+    <button
+      id="loginButton"
+      class="loginButton"
+      onclick="login()">
+
+      Masuk
+
+    </button>
+
+
+    <div
+      id="loginError"
+      class="loginError">
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ===================================================
+     APP PAGE
+=================================================== -->
+
+<div id="appPage">
+
+  <div class="app">
+
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+      <div class="headerRow">
+
+        <div>
+
+          <div class="headerTitle">
+            Samsung Stock Finder
+          </div>
+
+          <div
+            id="headerSub"
+            class="headerSub">
+
+            Stock Finder
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="userBadge"
+          class="badge">
+
+          STORE
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+
+      <!-- SEARCH VIEW -->
+
+      <section id="searchView">
+
+
+        <!-- SEARCH -->
+
+        <div class="searchWrap">
+
+          <span class="searchIcon">
+            ⌕
+          </span>
+
+
+          <input
+            id="searchInput"
+            type="search"
+            inputmode="search"
+            autocomplete="off"
+            placeholder="Cari produk atau material..."
+            oninput="handleSearch()"
+            onkeydown="searchEnter(event)"
+          >
+
+
+          <button
+            id="clearButton"
+            class="clearButton"
+            onclick="clearSearch()">
+
+            ×
+
+          </button>
+
+        </div>
+
+
+        <!-- CATEGORY -->
+
+        <div class="category">
+
+          <button
+            class="categoryBtn active"
+            data-category="ALL"
+            onclick="setCategory('ALL')">
+
+            ALL
+
+          </button>
+
+
+          <button
+            class="categoryBtn"
+            data-category="DEVICE"
+            onclick="setCategory('DEVICE')">
+
+            DEVICE
+
+          </button>
+
+
+          <button
+            class="categoryBtn"
+            data-category="ACC"
+            onclick="setCategory('ACC')">
+
+            ACC
+
+          </button>
+
+
+          <button
+            class="categoryBtn"
+            data-category="OTHER"
+            onclick="setCategory('OTHER')">
+
+            OTHER
+
+          </button>
+
+        </div>
+
+
+        <!-- QUICK SEARCH -->
+
+        <div class="quick">
+
+          <div class="label">
+            QUICK SEARCH
+          </div>
+
+
+          <div class="quickList">
+
+            <button
+              class="quickBtn"
+              onclick="quickSearch('Fold')">
+
+              Fold
+
+            </button>
+
+
+            <button
+              class="quickBtn"
+              onclick="quickSearch('Flip')">
+
+              Flip
+
+            </button>
+
+
+            <button
+              class="quickBtn"
+              onclick="quickSearch('S26')">
+
+              S26
+
+            </button>
+
+
+            <button
+              class="quickBtn"
+              onclick="quickSearch('S25')">
+
+              S25
+
+            </button>
+
+
+            <button
+              class="quickBtn"
+              onclick="quickSearch('A57')">
+
+              A57
+
+            </button>
+
+
+            <button
+              class="quickBtn"
+              onclick="quickSearch('A37')">
+
+              A37
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- RESULT HEADER -->
+
+        <div
+          id="resultHeader"
+          class="resultHeader">
+
+          <div class="resultTitle">
+            Hasil Pencarian
+          </div>
+
+
+          <div
+            id="resultCount"
+            class="resultCount">
+
+            0 produk
+
+          </div>
+
+        </div>
+
+
+        <!-- PRODUCT LIST -->
+
+        <div
+          id="productList"
+          class="productList">
+
+          <div class="state">
+
+            <div class="stateIcon">
+              🔎
+            </div>
+
+
+            <div class="stateTitle">
+              Cari produk
+            </div>
+
+
+            <div class="stateText">
+              Masukkan nama produk
+              atau material code.
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           DETAIL VIEW
+      ================================================= -->
+
+      <section id="detailView">
+
+
+        <button
+          class="back"
+          onclick="backToSearch()">
+
+          ← Kembali
+
+        </button>
+
+
+        <div
+          id="detailProduct"
+          class="detailProduct">
+        </div>
+
+
+        <div
+          class="resultHeader"
+          style="display:flex;margin-top:14px;">
+
+          <div class="resultTitle">
+            Stock Store
+          </div>
+
+
+          <div
+            id="storeCount"
+            class="resultCount">
+
+            0 store
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="storeList"
+          class="storeList">
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           HISTORY
+      ================================================= -->
+
+      <section id="historyView">
+
+
+        <div
+          class="resultHeader"
+          style="display:flex;margin-top:2px;">
+
+          <div class="resultTitle">
+            Search History
+          </div>
+
+        </div>
+
+
+        <div
+          id="historyList"
+          class="historyList">
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           ALL STOCK - STORE ONLY
+      ================================================= -->
+
+      <section id="allStockView" style="display:none;">
+
+        <div class="allStockTop">
+          <div class="pageHero">
+            <div class="pageHeroTitle">📦 All Stock</div>
+            <div id="allStockStoreInfo" class="pageHeroSub">Seluruh stok produk di store Anda</div>
+          </div>
+        </div>
+
+        <div class="stockStats">
+          <div class="stockStat">
+            <div id="allStockTotal" class="stockStatNumber">0</div>
+            <div class="stockStatLabel">TOTAL SKU</div>
+          </div>
+          <div class="stockStat available">
+            <div id="allStockAvailable" class="stockStatNumber">0</div>
+            <div class="stockStatLabel">AVAILABLE</div>
+          </div>
+          <div class="stockStat empty">
+            <div id="allStockEmpty" class="stockStatNumber">0</div>
+            <div class="stockStatLabel">OUT OF STOCK</div>
+          </div>
+        </div>
+
+        <div class="filterLabel">Category</div>
+        <div id="allStockCategoryFilters" class="filterRow">
+          <button class="filterBtn active" data-category="ALL" onclick="setAllStockCategory('ALL')">ALL</button>
+          <button class="filterBtn" data-category="DEVICE" onclick="setAllStockCategory('DEVICE')">DEVICE</button>
+          <button class="filterBtn" data-category="ACC" onclick="setAllStockCategory('ACC')">ACC</button>
+          <button class="filterBtn" data-category="OTHER" onclick="setAllStockCategory('OTHER')">OTHER</button>
+        </div>
+
+        <div id="allStockSeriesWrap" style="display:none;">
+          <div class="filterLabel">Series</div>
+          <div id="allStockSeriesFilters" class="filterRow">
+            <button class="filterBtn active" data-series="ALL" onclick="setAllStockSeries('ALL')">ALL</button>
+            <button class="filterBtn" data-series="SERIES A" onclick="setAllStockSeries('SERIES A')">SERIES A</button>
+            <button class="filterBtn" data-series="SERIES S" onclick="setAllStockSeries('SERIES S')">SERIES S</button>
+            <button class="filterBtn" data-series="SERIES Z" onclick="setAllStockSeries('SERIES Z')">SERIES Z</button>
+            <button class="filterBtn" data-series="SERIES TAB" onclick="setAllStockSeries('SERIES TAB')">SERIES TAB</button>
+          </div>
+        </div>
+
+        <div class="filterLabel">Stock Status</div>
+        <div id="allStockStatusFilters" class="filterRow">
+          <button class="filterBtn active" data-stock="ALL" onclick="setAllStockStatus('ALL')">ALL</button>
+          <button class="filterBtn" data-stock="AVAILABLE" onclick="setAllStockStatus('AVAILABLE')">AVAILABLE</button>
+          <button class="filterBtn" data-stock="EMPTY" onclick="setAllStockStatus('EMPTY')">OUT OF STOCK</button>
+        </div>
+
+        <div id="allStockList" class="allStockList">
+          <div class="state"><div class="loading"></div><div class="stateTitle">Memuat semua stock...</div></div>
+        </div>
+
+      </section>
+
+      <!-- =================================================
+           OVERVIEW STOCK - NASA ONLY
+      ================================================= -->
+
+      <section id="overviewView" style="display:none;">
+
+        <div class="overviewTop">
+          <div class="pageHero">
+            <div class="pageHeroTitle">📊 Overview Stock</div>
+            <div class="pageHeroSub">Compare stock berdasarkan region, category dan series</div>
+          </div>
+        </div>
+
+        <div class="overviewFilterBox">
+          <div class="filterLabel">Region</div>
+          <div id="overviewRegionFilters" class="filterRow">
+            <button class="filterBtn active" data-region="ALL" onclick="setOverviewRegion('ALL')">ALL REGION</button>
+          </div>
+
+          <div class="filterLabel">Category</div>
+          <div id="overviewCategoryFilters" class="filterRow">
+            <button class="filterBtn active" data-category="ALL" onclick="setOverviewCategory('ALL')">ALL</button>
+            <button class="filterBtn" data-category="DEVICE" onclick="setOverviewCategory('DEVICE')">DEVICE</button>
+            <button class="filterBtn" data-category="ACC" onclick="setOverviewCategory('ACC')">ACC</button>
+            <button class="filterBtn" data-category="OTHER" onclick="setOverviewCategory('OTHER')">OTHER</button>
+          </div>
+
+          <div id="overviewSeriesWrap">
+            <div class="filterLabel">Series</div>
+            <div id="overviewSeriesFilters" class="filterRow">
+              <button class="filterBtn active" data-series="ALL" onclick="setOverviewSeries('ALL')">ALL</button>
+              <button class="filterBtn" data-series="SERIES A" onclick="setOverviewSeries('SERIES A')">SERIES A</button>
+              <button class="filterBtn" data-series="SERIES S" onclick="setOverviewSeries('SERIES S')">SERIES S</button>
+              <button class="filterBtn" data-series="SERIES Z" onclick="setOverviewSeries('SERIES Z')">SERIES Z</button>
+              <button class="filterBtn" data-series="SERIES TAB" onclick="setOverviewSeries('SERIES TAB')">SERIES TAB</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="stockStats">
+          <div class="stockStat"><div id="overviewSku" class="stockStatNumber">0</div><div class="stockStatLabel">TOTAL SKU</div></div>
+          <div class="stockStat available"><div id="overviewStock" class="stockStatNumber">0</div><div class="stockStatLabel">TOTAL STOCK</div></div>
+          <div class="stockStat empty"><div id="overviewEmpty" class="stockStatNumber">0</div><div class="stockStatLabel">EMPTY SKU</div></div>
+        </div>
+
+        <div class="overviewSection">
+          <div class="sectionTitle">Stock by Region</div>
+          <div id="overviewRegions"><div class="state"><div class="loading"></div><div class="stateTitle">Memuat overview...</div></div></div>
+        </div>
+
+        <div class="overviewSection">
+          <div class="sectionTitle">Compare Series Antar Region</div>
+          <div class="sectionSub">% = kontribusi series terhadap total stock di masing-masing region</div>
+          <div id="overviewCompareSeries"><div class="state"><div class="stateText">Belum ada data.</div></div></div>
+        </div>
+
+        <div class="overviewSection">
+          <div class="sectionTitle">Stock by Series</div>
+          <div id="overviewSeries"><div class="state"><div class="stateText">Belum ada data.</div></div></div>
+        </div>
+
+        <div class="overviewSection">
+          <div class="sectionTitle">Top Product Stock</div>
+          <div id="overviewProducts"><div class="state"><div class="stateText">Belum ada data.</div></div></div>
+        </div>
+
+      </section>
+
+      <!-- =================================================
+           ACCOUNT
+      ================================================= -->
+
+      <section id="accountView">
+
+
+        <div
+          class="resultHeader"
+          style="display:flex;margin-top:2px;">
+
+          <div class="resultTitle">
+            Account
+          </div>
+
+        </div>
+
+
+        <div
+          id="accountCard"
+          class="accountCard">
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- =================================================
+         BOTTOM NAV
+    ================================================= -->
+
+    <nav class="bottom">
+      <div class="bottomInner">
+        <button id="navSearch" class="nav active" onclick="showView('search')">
+          <span class="navIcon">⌕</span>Search
+        </button>
+        <button id="navAllStock" class="nav" style="display:none;" onclick="showView('allStock')">
+          <span class="navIcon">▣</span>All Stock
+        </button>
+        <button id="navOverview" class="nav" style="display:none;" onclick="showView('overview')">
+          <span class="navIcon">▥</span>Overview
+        </button>
+        <button id="navHistory" class="nav" onclick="showView('history')">
+          <span class="navIcon">◷</span>History
+        </button>
+        <button id="navAccount" class="nav" onclick="showView('account')">
+          <span class="navIcon">◯</span>Account
+        </button>
+      </div>
+    </nav>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+let currentUser = null;
+
+let loginMode = 'STORE';
+
+let currentCategory = 'ALL';
+
+let searchTimer = null;
+
+
+/* =====================================================
+   LOGIN MODE
+===================================================== */
+
+function setLoginMode(mode){
+
+  loginMode = mode;
+
+
+  document
+    .getElementById('storeTab')
+    .classList.toggle(
+      'active',
+      mode === 'STORE'
+    );
+
+
+  document
+    .getElementById('nasaTab')
+    .classList.toggle(
+      'active',
+      mode === 'NASA'
+    );
+
+
+  document
+    .getElementById('passwordField')
+    .style.display =
+      mode === 'NASA'
+        ? 'block'
+        : 'none';
+
+
+  document
+    .getElementById('loginLabel')
+    .textContent =
+      mode === 'NASA'
+        ? 'NASA Login Code'
+        : 'Store Code';
+
+
+  document
+    .getElementById('loginCode')
+    .placeholder =
+      mode === 'NASA'
+        ? 'Masukkan login code'
+        : 'Masukkan store code';
+
+}
+
+
+/* =====================================================
+   PASSWORD
+===================================================== */
+
+function togglePassword(){
+
+  const input =
+    document.getElementById(
+      'password'
+    );
+
+
+  input.type =
+    input.type === 'password'
+      ? 'text'
+      : 'password';
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+function login(){
+
+  const code =
+    document
+      .getElementById('loginCode')
+      .value
+      .trim();
+
+
+  const password =
+    document
+      .getElementById('password')
+      .value;
+
+
+  if(!code){
+
+    showLoginError(
+      'Store code / login code wajib diisi.'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    loginMode === 'NASA' &&
+    !password
+  ){
+
+    showLoginError(
+      'Password wajib diisi.'
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      'loginButton'
+    );
+
+
+  button.disabled = true;
+
+  button.textContent =
+    'Memproses...';
+
+
+  apiCall('loginUser', {loginCode: code, password: password}, function(user){
+    button.disabled = false;
+    button.textContent = 'Masuk';
+    if(!user){
+      showLoginError('Login gagal. Periksa login code dan password.');
+      return;
+    }
+    currentUser = user;
+    openApp();
+  }, function(error){
+    button.disabled = false;
+    button.textContent = 'Masuk';
+    showLoginError(error && error.message ? error.message : 'Terjadi kesalahan.');
+  });
+
+}
+
+
+/* =====================================================
+   ENTER LOGIN
+===================================================== */
+
+function loginEnter(event){
+
+  if(
+    event.key === 'Enter'
+  ){
+
+    login();
+
+  }
+
+}
+
+
+/* =====================================================
+   LOGIN ERROR
+===================================================== */
+
+function showLoginError(message){
+
+  const box =
+    document.getElementById(
+      'loginError'
+    );
+
+
+  box.textContent =
+    message;
+
+
+  box.style.display =
+    'block';
+
+}
+
+
+/* =====================================================
+   OPEN APP
+===================================================== */
+
+function openApp(){
+
+  document
+    .getElementById('loginPage')
+    .style.display =
+      'none';
+
+
+  document
+    .getElementById('appPage')
+    .style.display =
+      'block';
+
+
+  const role =
+    currentUser.role ||
+    'STORE';
+
+
+  const storeCode =
+    currentUser.storeCode ||
+    'ALL';
+
+
+  const storeName =
+    currentUser.storeName ||
+    'NASA';
+
+
+  document
+    .getElementById('userBadge')
+    .textContent =
+      role === 'NASA'
+        ? 'NASA'
+        : storeCode;
+
+
+  document
+    .getElementById('headerSub')
+    .textContent =
+      role === 'NASA'
+        ? 'All Store Stock'
+        : storeName;
+
+  document.getElementById('navAllStock').style.display = role === 'STORE' ? 'flex' : 'none';
+  document.getElementById('navOverview').style.display = role === 'NASA' ? 'flex' : 'none';
+  document.getElementById('navHistory').style.display = 'flex';
+
+  if(role === 'STORE') {
+    showView('search');
+  } else {
+    showView('overview');
+  }
+
+}
+
+
+/* =====================================================
+   SEARCH INPUT
+===================================================== */
+
+function handleSearch(){
+
+  const input =
+    document.getElementById(
+      'searchInput'
+    );
+
+
+  const keyword =
+    input.value.trim();
+
+
+  document
+    .getElementById('clearButton')
+    .style.display =
+      keyword
+        ? 'block'
+        : 'none';
+
+
+  clearTimeout(
+    searchTimer
+  );
+
+
+  if(!keyword){
+
+    renderEmpty();
+
+    return;
+
+  }
+
+
+  searchTimer =
+    setTimeout(
+      performSearch,
+      350
+    );
+
+}
+
+
+/* =====================================================
+   SEARCH ENTER
+===================================================== */
+
+function searchEnter(event){
+
+  if(
+    event.key === 'Enter'
+  ){
+
+    event.preventDefault();
+
+    clearTimeout(
+      searchTimer
+    );
+
+    performSearch();
+
+  }
+
+}
+
+
+/* =====================================================
+   PERFORM SEARCH
+===================================================== */
+
+function performSearch(){
+
+  const keyword =
+    document
+      .getElementById('searchInput')
+      .value
+      .trim();
+
+
+  if(!keyword){
+
+    renderEmpty();
+
+    return;
+
+  }
+
+
+  showLoading();
+
+
+  apiCall('searchProducts', {keyword: keyword, category: currentCategory, user: currentUser}, function(products){
+    renderProducts(Array.isArray(products) ? products : []);
+  }, function(error){
+    showError(error && error.message ? error.message : 'Gagal mencari stock.');
+  });
+
+}
+
+
+/* =====================================================
+   CATEGORY
+===================================================== */
+
+function setCategory(category){
+
+  currentCategory =
+    category;
+
+
+  document
+    .querySelectorAll(
+      '.categoryBtn'
+    )
+    .forEach(
+      function(btn){
+
+        btn.classList.toggle(
+          'active',
+          btn.dataset.category ===
+            category
+        );
+
+      }
+    );
+
+
+  const keyword =
+    document
+      .getElementById('searchInput')
+      .value
+      .trim();
+
+
+  if(keyword){
+
+    performSearch();
+
+  }
+
+}
+
+
+/* =====================================================
+   QUICK SEARCH
+===================================================== */
+
+function quickSearch(keyword){
+
+  document
+    .getElementById('searchInput')
+    .value =
+      keyword;
+
+
+  document
+    .getElementById('clearButton')
+    .style.display =
+      'block';
+
+
+  showView('search');
+
+
+  performSearch();
+
+}
+
+
+/* =====================================================
+   CLEAR SEARCH
+===================================================== */
+
+function clearSearch(){
+
+  document
+    .getElementById('searchInput')
+    .value =
+      '';
+
+
+  document
+    .getElementById('clearButton')
+    .style.display =
+      'none';
+
+
+  renderEmpty();
+
+
+  document
+    .getElementById('searchInput')
+    .focus();
+
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+function renderEmpty(){
+
+  document
+    .getElementById('resultHeader')
+    .style.display =
+      'none';
+
+
+  document
+    .getElementById('productList')
+    .innerHTML = `
+
+      <div class="state">
+
+        <div class="stateIcon">
+          🔎
+        </div>
+
+        <div class="stateTitle">
+          Cari produk
+        </div>
+
+        <div class="stateText">
+          Masukkan nama produk
+          atau material code.
+        </div>
+
+      </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+function showLoading(){
+
+  document
+    .getElementById('resultHeader')
+    .style.display =
+      'none';
+
+
+  document
+    .getElementById('productList')
+    .innerHTML = `
+
+      <div class="state">
+
+        <div class="loading"></div>
+
+        <div class="stateTitle">
+          Mencari stock...
+        </div>
+
+        <div class="stateText">
+          Mohon tunggu sebentar.
+        </div>
+
+      </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function showError(message){
+
+  document
+    .getElementById('productList')
+    .innerHTML = `
+
+      <div class="state">
+
+        <div class="stateIcon">
+          ⚠️
+        </div>
+
+        <div class="stateTitle">
+          Terjadi kesalahan
+        </div>
+
+        <div class="stateText">
+          ${escapeHtml(message)}
+        </div>
+
+      </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   RENDER PRODUCTS
+===================================================== */
+
+function renderProducts(products){
+
+  const list =
+    document.getElementById(
+      'productList'
+    );
+
+
+  document
+    .getElementById('resultHeader')
+    .style.display =
+      'flex';
+
+
+  document
+    .getElementById('resultCount')
+    .textContent =
+      products.length +
+      ' produk';
+
+
+  if(!products.length){
+
+    list.innerHTML = `
+
+      <div class="state">
+
+        <div class="stateIcon">
+          📦
+        </div>
+
+        <div class="stateTitle">
+          Produk tidak ditemukan
+        </div>
+
+        <div class="stateText">
+          Coba nama produk,
+          material code,
+          warna atau memory.
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    products
+      .map(
+        renderProduct
+      )
+      .join('');
+
+}
+
+
+/* =====================================================
+   RENDER PRODUCT
+===================================================== */
+
+function renderProduct(product){
+
+  const name =
+    product.materialDescription ||
+    '-';
+
+
+  const code =
+    product.materialCode ||
+    '';
+
+
+  const category =
+    product.category ||
+    'OTHER';
+
+
+  /* NASA */
+
+  if(
+    currentUser.role === 'NASA'
+  ){
+
+    return `
+
+      <div
+        class="product"
+        onclick="viewStock('${escapeJs(code)}')">
+
+        <div class="productTop">
+
+          <div class="productInfo">
+
+            <div class="productName">
+              ${escapeHtml(name)}
+            </div>
+
+
+            <div class="meta">
+
+              <span class="tag">
+                ${escapeHtml(category)}
+              </span>
+
+            </div>
+
+
+            <div class="code">
+              ${escapeHtml(code)}
+            </div>
+
+          </div>
+
+
+          <div class="arrow">
+            →
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  /* STORE */
+
+  const stock =
+    Number(
+      product.stock || 0
+    );
+
+
+  const stockClass =
+    stock > 0
+      ? ''
+      : 'empty';
+
+
+  return `
+
+    <div class="product">
+
+      <div class="productTop">
+
+        <div class="productInfo">
+
+          <div class="productName">
+            ${escapeHtml(name)}
+          </div>
+
+
+          <div class="meta">
+
+            <span class="tag">
+              ${escapeHtml(category)}
+            </span>
+
+          </div>
+
+
+          <div class="code">
+            ${escapeHtml(code)}
+          </div>
+
+        </div>
+
+
+        <div class="stock">
+
+          <div class="stockLabel">
+            STOCK
+          </div>
+
+
+          <div
+            class="stockNumber ${stockClass}">
+
+            ${formatNumber(stock)}
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      ${
+        product.lastUpdate
+          ? `
+
+            <div class="update">
+
+              <span>
+                ↻
+              </span>
+
+              <span>
+                Update stock
+              </span>
+
+              <strong>
+                ${escapeHtml(
+                  product.lastUpdate
+                )}
+              </strong>
+
+            </div>
+
+          `
+          : ''
+      }
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   NASA VIEW STOCK
+===================================================== */
+
+function viewStock(materialCode){
+
+  showView('detail');
+
+
+  document
+    .getElementById('detailProduct')
+    .innerHTML = `
+
+      <div class="state">
+
+        <div class="loading"></div>
+
+        <div class="stateTitle">
+          Mengambil stock store...
+        </div>
+
+      </div>
+
+  `;
+
+
+  document
+    .getElementById('storeList')
+    .innerHTML =
+      '';
+
+
+  apiCall('getStockByMaterial', {materialCode: materialCode, user: currentUser}, function(data){
+    renderStock(data);
+  }, function(error){
+    document.getElementById('storeList').innerHTML = `
+      <div class="state">
+        <div class="stateIcon">⚠️</div>
+        <div class="stateTitle">Gagal mengambil stock</div>
+        <div class="stateText">${escapeHtml(error && error.message ? error.message : 'Terjadi kesalahan.')}</div>
+      </div>`;
+  });
+
+}
+
+
+/* =====================================================
+   RENDER STOCK
+===================================================== */
+
+function renderStock(data){
+
+  const product =
+    data.product ||
+    {};
+
+
+  const stores =
+    Array.isArray(data.stores)
+      ? data.stores
+      : [];
+
+
+  document
+    .getElementById('detailProduct')
+    .innerHTML = `
+
+      <div class="detailName">
+
+        ${escapeHtml(
+          product.materialDescription ||
+          '-'
+        )}
+
+      </div>
+
+
+      <div class="detailCode">
+
+        Material:
+        ${escapeHtml(
+          product.materialCode ||
+          '-'
+        )}
+
+      </div>
+
+      <div class="detailCode">
+        ${escapeHtml(product.category || 'OTHER')} ${product.category === 'DEVICE' ? '• ' + escapeHtml(product.series || 'OTHER') : ''}
+      </div>
+
+    `;
+
+
+  document
+    .getElementById('storeCount')
+    .textContent =
+      stores.length +
+      ' store';
+
+
+  if(!stores.length){
+
+    document
+      .getElementById('storeList')
+      .innerHTML = `
+
+        <div class="state">
+
+          <div class="stateIcon">
+            📦
+          </div>
+
+          <div class="stateTitle">
+            Tidak ada data store
+          </div>
+
+        </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  document
+    .getElementById('storeList')
+    .innerHTML =
+      stores
+        .map(
+          renderStore
+        )
+        .join('');
+
+}
+
+
+/* =====================================================
+   STORE CARD
+===================================================== */
+
+function renderStore(store){
+
+  const stock =
+    Number(
+      store.stock || 0
+    );
+
+
+  const name =
+    store.storeName ||
+    store.storeCode ||
+    '-';
+
+
+  const code =
+    store.storeCode ||
+    '-';
+
+
+  const pic =
+    store.picName ||
+    '-';
+
+
+  return `
+
+    <div class="storeCard">
+
+      <div class="storeTop">
+
+
+        <div class="storeIcon">
+          S
+        </div>
+
+
+        <div class="storeInfo">
+
+          <div class="storeName">
+            ${escapeHtml(name)}
+          </div>
+
+
+          <div class="storeCode">
+            ${escapeHtml(code)}
+          </div>
+
+          <div class="storeCode">
+            Region: ${escapeHtml(store.region || 'NO REGION')}
+          </div>
+
+        </div>
+
+
+        <div class="storeStock">
+
+          <div class="storeStockNumber">
+            ${formatNumber(stock)}
+          </div>
+
+
+          <div class="storeStockLabel">
+            STOCK
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="storeBottom">
+
+
+        <div class="storeInfoBottom">
+
+          PIC:
+
+          <strong>
+            ${escapeHtml(pic)}
+          </strong>
+
+
+          ${
+            store.lastUpdate
+              ? `
+
+                <div>
+
+                  Update:
+
+                  <strong>
+                    ${escapeHtml(
+                      store.lastUpdate
+                    )}
+                  </strong>
+
+                </div>
+
+              `
+              : ''
+          }
+
+        </div>
+
+
+        ${
+          store.whatsapp
+            ? `
+
+              <a
+                class="wa"
+                href="${escapeHtml(
+                  store.whatsapp
+                )}"
+                target="_blank"
+                rel="noopener">
+
+                WhatsApp
+
+              </a>
+
+            `
+            : ''
+        }
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   OVERVIEW STOCK - NASA
+===================================================== */
+
+let overviewRegion='ALL';
+let overviewCategory='ALL';
+let overviewSeries='ALL';
+
+function loadOverview(){
+  const box=document.getElementById('overviewRegions');
+  if(box){
+    box.innerHTML='<div class="state"><div class="loading"></div><div class="stateTitle">Memuat overview...</div><div class="stateText">Mengambil data stok NASA...</div></div>';
+  }
+
+  let finished=false;
+
+  const timer=setTimeout(function(){
+    if(finished) return;
+    if(box){
+      box.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Overview belum merespons</div><div class="stateText">Server belum mengembalikan data. Coba tekan Overview lagi.</div></div>';
+    }
+  },12000);
+
+  apiCall('getNASAOverview', {user: currentUser, filters:{region:overviewRegion, category:overviewCategory, series:overviewSeries}}, function(data){
+    finished=true;
+    clearTimeout(timer);
+    try { renderOverview(data); } catch(e) {
+      if(box) box.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Overview gagal ditampilkan</div><div class="stateText">'+escapeHtml(e && e.message ? e.message : 'Error saat render data.')+'</div></div>';
+    }
+  }, function(error){
+    finished=true;
+    clearTimeout(timer);
+    if(box) box.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Gagal mengambil overview</div><div class="stateText">'+escapeHtml(error && error.message ? error.message : 'Terjadi kesalahan pada server.')+'</div></div>';
+  });
+}
+
+function setOverviewRegion(region){
+  overviewRegion=region;
+  document.querySelectorAll('#overviewRegionFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.region===region);});
+  loadOverview();
+}
+function setOverviewCategory(category){
+  overviewCategory=category;
+  if(category!=='DEVICE') overviewSeries='ALL';
+  document.querySelectorAll('#overviewCategoryFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.category===category);});
+  document.querySelectorAll('#overviewSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===overviewSeries);});
+  loadOverview();
+}
+function setOverviewSeries(series){
+  overviewSeries=series;
+  document.querySelectorAll('#overviewSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===series);});
+  loadOverview();
+}
+
+function renderOverview(data){
+  data=data||{};
+  const summary=data.summary||{};
+  document.getElementById('overviewSku').textContent=formatNumber(summary.sku||0);
+  document.getElementById('overviewStock').textContent=formatNumber(summary.totalStock||0);
+  document.getElementById('overviewEmpty').textContent=formatNumber(summary.emptySku||0);
+
+  const regionFilters=document.getElementById('overviewRegionFilters');
+  const regions=Array.isArray(data.regions)?data.regions:[];
+  regionFilters.innerHTML='<button class="filterBtn '+(overviewRegion==='ALL'?'active':'')+'" data-region="ALL" onclick="setOverviewRegion(\'ALL\')">ALL REGION</button>'+
+    regions.map(function(r){
+      const active=String(r.region).toUpperCase()===String(overviewRegion).toUpperCase();
+      return '<button class="filterBtn '+(active?'active':'')+'" data-region="'+escapeHtml(r.region)+'" onclick="setOverviewRegion(\''+escapeJs(r.region)+'\')">'+escapeHtml(r.region)+'</button>';
+    }).join('');
+
+  const maxRegion=Math.max.apply(null,regions.map(function(r){return Number(r.stock)||0;}).concat([1]));
+  document.getElementById('overviewRegions').innerHTML=regions.length?regions.map(function(r){
+    const pct=Math.max(2,Math.round((Number(r.stock)||0)/maxRegion*100));
+    return '<div class="regionRow"><div class="regionRowTop"><div class="regionName">'+escapeHtml(r.region)+'</div><div class="regionStock">'+formatNumber(r.stock)+' unit</div></div><div class="barTrack"><div class="barFill" style="width:'+pct+'%"></div></div><div class="regionMeta">Available SKU: '+formatNumber(r.availableSku||0)+' • Empty SKU: '+formatNumber(r.emptySku||0)+'</div></div>';
+  }).join(''):'<div class="state"><div class="stateIcon">📊</div><div class="stateTitle">Belum ada data</div></div>';
+
+  const compareBox=document.getElementById('overviewCompareSeries');
+  const compare=Array.isArray(data.compareSeries)?data.compareSeries:[];
+  const compareRegions=Array.isArray(data.regions)?data.regions.map(function(r){return r.region;}):[];
+  const compareSeriesNames=Array.isArray(data.series)?data.series.map(function(x){return x.series;}):[];
+  if(compareBox){
+    if(!compare.length || !compareSeriesNames.length){
+      compareBox.innerHTML='<div class="state"><div class="stateText">Belum ada data compare series antar region.</div></div>';
+    }else{
+      let html='<div class="compareScroll"><table class="compareTable compareSeriesTable"><thead><tr><th>REGION</th>'+compareSeriesNames.map(function(sn){return '<th>'+escapeHtml(sn)+'</th>';}).join('')+'<th>TOTAL</th></tr></thead><tbody>';
+      compare.forEach(function(r){
+        html+='<tr><td><strong>'+escapeHtml(r.region)+'</strong></td>';
+        compareSeriesNames.forEach(function(sn){
+          const c=(r.series&&r.series[sn])?r.series[sn]:{stock:0,pct:0};
+          html+='<td><div class="compareQty">'+formatNumber(c.stock)+'</div><div class="comparePct">'+Number(c.pct||0).toFixed(1)+'%</div></td>';
+        });
+        html+='<td><strong>'+formatNumber(r.totalStock||0)+'</strong></td></tr>';
+      });
+      html+='</tbody></table></div>';
+      compareBox.innerHTML=html;
+    }
+  }
+
+  const series=Array.isArray(data.series)?data.series:[];
+  const maxSeries=Math.max.apply(null,series.map(function(x){return Number(x.stock)||0;}).concat([1]));
+  document.getElementById('overviewSeries').innerHTML=series.length?series.map(function(x){
+    const pct=Math.max(2,Math.round((Number(x.stock)||0)/maxSeries*100));
+    return '<div class="seriesRow"><div class="seriesRowTop"><div class="seriesName">'+escapeHtml(x.series)+'</div><div class="seriesStock">'+formatNumber(x.stock)+' unit</div></div><div class="barTrack"><div class="barFill" style="width:'+pct+'%"></div></div><div class="regionMeta">SKU: '+formatNumber(x.sku||0)+'</div></div>';
+  }).join(''):'<div class="state"><div class="stateText">Belum ada data series.</div></div>';
+
+  const products=Array.isArray(data.products)?data.products.slice(0,10):[];
+  document.getElementById('overviewProducts').innerHTML=products.length?'<table class="compareTable"><thead><tr><th>PRODUCT</th><th>CATEGORY</th><th>STOCK</th></tr></thead><tbody>'+products.map(function(x){return '<tr><td>'+escapeHtml(x.description||'-')+'</td><td>'+escapeHtml(x.category||'-')+'</td><td>'+formatNumber(x.stock||0)+'</td></tr>';}).join('')+'</tbody></table>':'<div class="state"><div class="stateText">Belum ada produk.</div></div>';
+}
+
+/* =====================================================
+   VIEW SWITCH
+===================================================== */
+
+function showView(view){
+
+  const views = ['search','detail','history','account','allStock','overview'];
+  views.forEach(function(v){
+    const el = document.getElementById(v + 'View');
+    if(el) el.style.display = v === view ? 'block' : 'none';
+  });
+
+  document.querySelectorAll('.nav').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+
+  const navMap = {
+    search:'navSearch',
+    allStock:'navAllStock',
+    overview:'navOverview',
+    history:'navHistory',
+    account:'navAccount'
+  };
+
+  if(navMap[view]) {
+    const nav = document.getElementById(navMap[view]);
+    if(nav) nav.classList.add('active');
+  }
+
+  if(view === 'history') loadHistory();
+  if(view === 'account') renderAccount();
+  if(view === 'allStock') loadAllStock();
+  if(view === 'overview') loadOverview();
+}
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+function loadHistory(){
+
+  const list =
+    document.getElementById(
+      'historyList'
+    );
+
+
+  list.innerHTML = `
+
+    <div class="state">
+
+      <div class="loading"></div>
+
+      <div class="stateTitle">
+        Memuat history...
+      </div>
+
+    </div>
+
+  `;
+
+
+  apiCall('getSearchHistory', {user: currentUser}, function(items){
+    renderHistory(Array.isArray(items) ? items : []);
+  }, function(){
+    renderHistory([]);
+  });
+
+}
+
+
+/* =====================================================
+   RENDER HISTORY
+===================================================== */
+
+function renderHistory(items){
+
+  const list =
+    document.getElementById(
+      'historyList'
+    );
+
+
+  if(!items.length){
+
+    list.innerHTML = `
+
+      <div class="state">
+
+        <div class="stateIcon">
+          ◷
+        </div>
+
+        <div class="stateTitle">
+          Belum ada history
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    items
+      .map(
+        function(item){
+
+          return `
+
+            <div
+              class="historyItem"
+              onclick="quickSearch('${escapeJs(
+                item.keyword
+              )}')">
+
+              <div class="historyIcon">
+                ⌕
+              </div>
+
+
+              <div>
+
+                <div class="historyKeyword">
+                  ${escapeHtml(
+                    item.keyword
+                  )}
+                </div>
+
+
+                <div class="historyDate">
+                  ${escapeHtml(
+                    item.date
+                  )}
+                </div>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join('');
+
+}
+
+
+/* =====================================================
+   ACCOUNT
+===================================================== */
+
+function renderAccount(){
+
+  const role =
+    currentUser.role ||
+    '-';
+
+
+  const storeCode =
+    currentUser.storeCode ||
+    'ALL';
+
+
+  const storeName =
+    currentUser.storeName ||
+    'NASA';
+
+
+  document
+    .getElementById('accountCard')
+    .innerHTML = `
+
+      <div class="accountTop">
+
+        <div class="avatar">
+
+          ${
+            role === 'NASA'
+              ? 'N'
+              : 'S'
+          }
+
+        </div>
+
+
+        <div>
+
+          <div class="accountName">
+            ${escapeHtml(
+              storeName
+            )}
+          </div>
+
+
+          <div class="accountRole">
+            ${escapeHtml(
+              role
+            )}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="accountRows">
+
+
+        <div class="accountRow">
+
+          <span>
+            Role
+          </span>
+
+          <span>
+            ${escapeHtml(role)}
+          </span>
+
+        </div>
+
+
+        <div class="accountRow">
+
+          <span>
+            Store Code
+          </span>
+
+          <span>
+            ${escapeHtml(storeCode)}
+          </span>
+
+        </div>
+
+
+        <div class="accountRow">
+
+          <span>
+            Region
+          </span>
+
+          <span>
+            ${escapeHtml(currentUser.region || (role === 'NASA' ? 'ALL REGION' : '-'))}
+          </span>
+
+        </div>
+
+
+        <div class="accountRow">
+
+          <span>
+            Access
+          </span>
+
+          <span>
+
+            ${
+              role === 'NASA'
+                ? 'ALL STORE'
+                : 'OWN STORE'
+            }
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="logout"
+        onclick="logout()">
+
+        Keluar
+
+      </button>
+
+    `;
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+  currentUser =
+    null;
+
+
+  document
+    .getElementById('appPage')
+    .style.display =
+      'none';
+
+
+  document
+    .getElementById('loginPage')
+    .style.display =
+      'flex';
+
+
+  document
+    .getElementById('loginCode')
+    .value =
+      '';
+
+
+  document
+    .getElementById('password')
+    .value =
+      '';
+
+
+  document
+    .getElementById('searchInput')
+    .value =
+      '';
+
+
+  renderEmpty();
+
+}
+
+
+/* =====================================================
+   FORMAT NUMBER
+===================================================== */
+
+function formatNumber(value){
+
+  return Number(
+    value || 0
+  ).toLocaleString(
+    'id-ID'
+  );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+  return String(
+    value ?? ''
+  )
+
+    .replace(
+      /&/g,
+      '&amp;'
+    )
+
+    .replace(
+      /</g,
+      '&lt;'
+    )
+
+    .replace(
+      />/g,
+      '&gt;'
+    )
+
+    .replace(
+      /"/g,
+      '&quot;'
+    )
+
+    .replace(
+      /'/g,
+      '&#039;'
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE JS
+===================================================== */
+
+function escapeJs(value){
+
+  return String(
+    value ?? ''
+  )
+
+    .replace(
+      /\\/g,
+      '\\\\'
+    )
+
+    .replace(
+      /'/g,
+      "\\'"
+    )
+
+    .replace(
+      /\r/g,
+      '\\r'
+    )
+
+    .replace(
+      /\n/g,
+      '\\n'
+    );
+
+}
+
+</script>
+
+</body>
+</html>
