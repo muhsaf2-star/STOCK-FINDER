@@ -2374,32 +2374,6 @@ function renderAllStock(){
 
 
 
-/* =====================================================
-   BACK TO SEARCH
-===================================================== */
-
-function backToSearch(){
-
-  const detail = document.getElementById('detailView');
-  const search = document.getElementById('searchView');
-
-  if(detail){
-    detail.style.display = 'none';
-  }
-
-  if(search){
-    search.style.display = 'block';
-  }
-
-  showView('search');
-
-  window.scrollTo({
-    top:0,
-    behavior:'instant'
-  });
-
-}
-
 </style>
 
 </head>
@@ -3104,6 +3078,83 @@ let currentCategory = 'ALL';
 
 let searchTimer = null;
 
+
+/* =====================================================
+   LOGIN SESSION
+   Login bertahan 30 hari di browser.
+   Password TIDAK disimpan.
+===================================================== */
+
+const LOGIN_SESSION_KEY = 'samsung_stock_finder_session_v1';
+const LOGIN_SESSION_HOURS = 1;
+const LOGIN_SESSION_MS = LOGIN_SESSION_HOURS * 60 * 60 * 1000;
+
+function saveLoginSession(user){
+
+  try{
+
+    const safeUser = {
+      role: user && user.role ? user.role : 'STORE',
+      storeCode: user && user.storeCode ? user.storeCode : 'ALL',
+      storeName: user && user.storeName ? user.storeName : 'NASA',
+      region: user && user.region ? user.region : ''
+    };
+
+    localStorage.setItem(
+      LOGIN_SESSION_KEY,
+      JSON.stringify({
+        user: safeUser,
+        expiresAt: Date.now() + LOGIN_SESSION_MS
+      })
+    );
+
+  }catch(error){
+    /* Jika browser memblokir localStorage, login tetap berjalan normal. */
+  }
+
+}
+
+function clearLoginSession(){
+
+  try{
+    localStorage.removeItem(LOGIN_SESSION_KEY);
+  }catch(error){}
+
+}
+
+function restoreLoginSession(){
+
+  try{
+
+    const raw =
+      localStorage.getItem(LOGIN_SESSION_KEY);
+
+    if(!raw){
+      return;
+    }
+
+    const session =
+      JSON.parse(raw);
+
+    if(!session || !session.user || !session.expiresAt){
+      clearLoginSession();
+      return;
+    }
+
+    if(Date.now() >= Number(session.expiresAt)){
+      clearLoginSession();
+      return;
+    }
+
+    currentUser = session.user;
+    openApp();
+
+  }catch(error){
+    clearLoginSession();
+  }
+}
+
+
 /* =====================================================
    GITHUB API BRIDGE
    GitHub Pages -> Apps Script Web App (JSONP)
@@ -3282,6 +3333,7 @@ function login(){
       return;
     }
     currentUser = user;
+    saveLoginSession(user);
     openApp();
   }, function(error){
     button.disabled = false;
@@ -4312,6 +4364,32 @@ function renderOverview(data){
 }
 
 /* =====================================================
+   BACK TO SEARCH
+===================================================== */
+
+function backToSearch(){
+
+  const detail = document.getElementById('detailView');
+  const search = document.getElementById('searchView');
+
+  if(detail){
+    detail.style.display = 'none';
+  }
+
+  if(search){
+    search.style.display = 'block';
+  }
+
+  showView('search');
+
+  window.scrollTo({
+    top:0,
+    behavior:'instant'
+  });
+
+}
+
+/* =====================================================
    VIEW SWITCH
 ===================================================== */
 
@@ -4604,6 +4682,8 @@ function renderAccount(){
 
 function logout(){
 
+  clearLoginSession();
+
   currentUser =
     null;
 
@@ -4727,6 +4807,10 @@ function escapeJs(value){
     );
 
 }
+
+document.addEventListener('DOMContentLoaded', function(){
+  restoreLoginSession();
+});
 
 </script>
 
