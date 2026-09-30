@@ -2494,6 +2494,338 @@ function renderAllStock(){
 
 
 
+
+/* =====================================================
+   THEME: GRADIENT BLUE GLASS — STOCK FINDER
+   Visual-only override. Existing functionality preserved.
+===================================================== */
+
+:root{
+  --g-blue:#0b57d0;
+  --g-blue2:#1688ff;
+  --g-purple:#7b3ff2;
+  --g-cyan:#2bc7ff;
+  --g-green:#22c984;
+  --g-red:#ff5d6c;
+  --g-ink:#13264a;
+  --g-muted:#6f7f9d;
+  --g-glass:rgba(255,255,255,.78);
+  --g-line:rgba(255,255,255,.68);
+}
+
+body{
+  color:var(--g-ink);
+  background:
+    radial-gradient(circle at 8% 8%, rgba(52,143,255,.16), transparent 28%),
+    radial-gradient(circle at 92% 18%, rgba(124,63,242,.13), transparent 25%),
+    linear-gradient(135deg,#f4f9ff 0%,#eef6ff 48%,#f8f3ff 100%);
+}
+
+.header{
+  background:
+    radial-gradient(circle at 78% -40%, rgba(161,102,255,.58), transparent 35%),
+    radial-gradient(circle at 20% 120%, rgba(38,194,255,.32), transparent 30%),
+    linear-gradient(120deg,#0879ed 0%,#1254d7 46%,#5630cc 100%);
+  border-bottom:1px solid rgba(255,255,255,.2);
+  box-shadow:0 10px 32px rgba(18,75,180,.20);
+  backdrop-filter:blur(18px);
+}
+
+.headerTitle{letter-spacing:-.65px;}
+.headerSub{opacity:.9;}
+
+.badge{
+  background:rgba(255,255,255,.16)!important;
+  border:1px solid rgba(255,255,255,.25)!important;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
+.main{
+  position:relative;
+}
+
+.pageHero{
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.88),rgba(255,255,255,.62));
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:
+    0 12px 34px rgba(52,93,155,.08),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  backdrop-filter:blur(16px);
+}
+
+.pageHeroTitle{
+  color:#12264b;
+}
+
+.pageHeroSub{
+  color:#71809c;
+}
+
+.overviewFilterBar{
+  background:rgba(255,255,255,.66);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 9px 28px rgba(48,82,140,.07);
+  backdrop-filter:blur(18px);
+}
+
+.overviewFilterOpen{
+  background:linear-gradient(135deg,#edf7ff,#f3edff);
+  border:1px solid rgba(111,154,229,.25);
+  color:#145bd5;
+  box-shadow:0 7px 20px rgba(40,103,210,.10);
+}
+
+.overviewFilterOpen span{
+  background:linear-gradient(135deg,#0b79ed,#7037e9);
+}
+
+.overviewFilterPanel{
+  background:
+    linear-gradient(180deg,rgba(249,252,255,.96),rgba(248,244,255,.97));
+  box-shadow:-20px 0 55px rgba(37,62,113,.18);
+}
+
+.checkChip span{
+  background:rgba(255,255,255,.75);
+  border-color:#dce7f7;
+}
+
+.checkChip input:checked+span{
+  background:linear-gradient(135deg,#e5f3ff,#eee7ff);
+  border-color:#6a8ef0;
+  color:#245ed6;
+  box-shadow:0 6px 18px rgba(63,103,218,.12);
+}
+
+.filterApplyBtn{
+  background:linear-gradient(135deg,#087cf0,#6838e8);
+  box-shadow:0 8px 20px rgba(54,91,213,.22);
+}
+
+.stockStats{
+  gap:12px;
+}
+
+.stockStat,
+.overviewCard{
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.88),rgba(255,255,255,.64));
+  border:1px solid rgba(255,255,255,.92);
+  box-shadow:
+    0 12px 32px rgba(55,84,135,.075),
+    inset 0 1px 0 rgba(255,255,255,.95);
+  backdrop-filter:blur(18px);
+}
+
+.stockStat{
+  min-height:92px;
+}
+
+.stockStat:after{
+  background:linear-gradient(135deg,rgba(40,139,255,.10),rgba(86,72,236,.02));
+}
+
+.stockStat.available:after{
+  background:linear-gradient(135deg,rgba(37,204,135,.12),rgba(37,204,135,.02));
+}
+
+.stockStat.empty:after{
+  background:linear-gradient(135deg,rgba(255,93,108,.12),rgba(255,93,108,.02));
+}
+
+.stockStatNumber{
+  color:#14284c;
+}
+
+.stockStat.available .stockStatNumber{
+  color:#16a86c;
+}
+
+.stockStat.empty .stockStatNumber{
+  color:#ef3e4d;
+}
+
+.stockStatLabel{
+  color:#7887a2;
+}
+
+.overviewCardTitle,
+.sectionTitle{
+  color:#14284c;
+}
+
+.overviewCardSub,
+.sectionSub{
+  color:#8190a9;
+}
+
+.chartBadge{
+  background:rgba(255,255,255,.72);
+  border-color:#dce6f4;
+  box-shadow:0 4px 12px rgba(39,73,128,.06);
+}
+
+.regionProQty{
+  background:linear-gradient(90deg,#087cf0,#633bea);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.regionProTrack{
+  background:rgba(215,225,240,.62);
+  height:10px;
+}
+
+.regionProFill{
+  background:linear-gradient(90deg,#1295ff 0%,#286eea 48%,#7b3ff2 100%);
+  box-shadow:0 2px 9px rgba(56,110,227,.22);
+}
+
+.regionProMeta{
+  color:#8090aa;
+}
+
+.donut:after{
+  background:rgba(255,255,255,.92);
+}
+
+.donutTotal{
+  color:#14284c;
+}
+
+.legendName{
+  color:#405273;
+}
+
+.legendValue{
+  color:#172b50;
+}
+
+.compareScroll{
+  border-color:rgba(205,219,238,.72);
+  background:rgba(255,255,255,.52);
+}
+
+.compareBarTrack{
+  background:rgba(218,227,241,.62);
+}
+
+.proTable th{
+  color:#8492aa;
+  border-bottom-color:#e5ebf4;
+}
+
+.proTable td{
+  color:#405273;
+  border-bottom-color:rgba(226,233,243,.72);
+}
+
+.productCell{
+  color:#14284c!important;
+}
+
+.seriesMini{
+  background:linear-gradient(135deg,#e6f3ff,#eee7ff);
+  color:#245ed6;
+}
+
+.stockCell{
+  color:#1268dd!important;
+}
+
+.stockPctBar{
+  background:#e2eaf5;
+}
+
+.stockPctFill{
+  background:linear-gradient(90deg,#168eff,#7540e8);
+}
+
+.viewAll{
+  color:#286be0;
+}
+
+.bottom{
+  background:rgba(255,255,255,.82)!important;
+  border-top:1px solid rgba(214,224,239,.75)!important;
+  box-shadow:0 -10px 30px rgba(38,67,116,.08)!important;
+  backdrop-filter:blur(20px);
+}
+
+.nav{
+  color:#8b98ad;
+}
+
+.nav.active{
+  background:linear-gradient(135deg,#e7f4ff,#eee8ff);
+  color:#245ed6;
+}
+
+.logo{
+  background:linear-gradient(135deg,#0789f7,#6339e9);
+  box-shadow:0 12px 25px rgba(48,94,218,.22);
+}
+
+#loginPage{
+  background:
+    radial-gradient(circle at 15% 15%,rgba(25,144,255,.28),transparent 30%),
+    radial-gradient(circle at 88% 22%,rgba(124,63,242,.24),transparent 30%),
+    linear-gradient(135deg,#eef8ff 0%,#f2f5ff 48%,#faf4ff 100%);
+}
+
+.loginBox{
+  background:rgba(255,255,255,.78);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:
+    0 24px 70px rgba(50,82,140,.16),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  backdrop-filter:blur(22px);
+}
+
+.loginTitle{
+  color:#13264a;
+}
+
+.loginSubtitle{
+  color:#7e8ca5;
+}
+
+/* Mobile: glass becomes lighter and more compact */
+@media(max-width:699px){
+  body{
+    background:
+      radial-gradient(circle at 10% 0%,rgba(52,143,255,.13),transparent 28%),
+      radial-gradient(circle at 100% 22%,rgba(124,63,242,.10),transparent 25%),
+      #f5f8fd;
+  }
+
+  .pageHero{
+    border-radius:22px;
+    padding:15px 15px;
+  }
+
+  .pageHeroTitle{font-size:18px;}
+
+  .overviewFilterBar{
+    border-radius:18px;
+  }
+
+  .stockStats{
+    gap:7px;
+  }
+
+  .stockStat{
+    min-height:78px;
+    border-radius:17px;
+  }
+
+  .overviewCard{
+    border-radius:20px;
+    padding:14px;
+  }
+}
 </style>
 
 </head>
