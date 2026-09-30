@@ -2375,74 +2375,6 @@ function backToSearch(){
 
 </style>
 
-
-<style id="pro-ui-overrides">
-:root{--blue:#0b57d0;--blue2:#1677ff;--bg:#f4f7fb;--card:#fff;--text:#162033;--muted:#7b879b;--line:#e7ecf3;--green:#18a957;--red:#e53935;--orange:#f59e0b;--purple:#7655d8;}
-body{background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-#appPage{background:var(--bg)}
-.app{max-width:1180px;margin:0 auto;min-height:100dvh;background:var(--bg)}
-.header{position:sticky;top:0;z-index:30;background:linear-gradient(135deg,#0756d7,#1475ef);box-shadow:0 4px 18px rgba(11,87,208,.22);border:0}
-.headerRow{max-width:1180px;margin:auto;padding:18px 22px 17px;min-height:78px}
-.headerTitle{font-size:20px;font-weight:800;letter-spacing:-.3px;color:#fff}
-.headerSub{font-size:12px;font-weight:600;color:rgba(255,255,255,.78);margin-top:4px}
-.badge{background:rgba(255,255,255,.16)!important;color:#fff!important;border:1px solid rgba(255,255,255,.18);font-weight:800!important;padding:9px 13px!important;border-radius:999px!important}
-.main{padding:18px 18px 104px;max-width:1180px;margin:auto}
-.searchWrap{background:#fff!important;border:1px solid #e4eaf2!important;border-radius:18px!important;box-shadow:0 5px 18px rgba(20,35,60,.06)!important;min-height:60px!important;padding:0 18px!important}
-.searchWrap input{font-size:16px!important;font-weight:500}
-.searchIcon{color:var(--blue)!important;font-size:22px!important}
-.category{display:flex;gap:10px;overflow-x:auto;padding:14px 1px 5px;scrollbar-width:none}
-.category::-webkit-scrollbar,.quickList::-webkit-scrollbar,.filterRow::-webkit-scrollbar{display:none}
-.categoryBtn,.filterBtn,.quickBtn{border:1px solid #e1e7f0!important;background:#fff!important;color:#637087!important;border-radius:999px!important;font-weight:800!important;min-height:42px;padding:0 18px!important;box-shadow:0 2px 8px rgba(30,45,70,.04)}
-.categoryBtn.active,.filterBtn.active{background:var(--blue)!important;color:#fff!important;border-color:var(--blue)!important;box-shadow:0 6px 14px rgba(11,87,208,.2)!important}
-.quick{background:transparent!important;margin-top:12px!important}
-.label,.filterLabel{font-size:11px!important;letter-spacing:.6px;font-weight:900!important;color:#8590a2!important;margin:12px 2px 8px!important}
-.quickList{display:flex;gap:9px;overflow-x:auto;padding:2px 1px 5px}
-.quickBtn{border-radius:13px!important;min-height:40px!important;padding:0 15px!important;color:#34435c!important}
-.resultHeader{margin:22px 2px 10px!important;align-items:center}
-.resultTitle{font-size:18px!important;font-weight:850!important;letter-spacing:-.3px}
-.resultCount{font-size:12px!important;color:var(--muted)!important;font-weight:700}
-.productCard,.storeCard,.historyCard,.detailProduct,.accountCard,.overviewSection,.overviewFilterBox,.allStockTop{background:#fff!important;border:1px solid var(--line)!important;border-radius:18px!important;box-shadow:0 5px 18px rgba(20,35,60,.055)!important}
-.productCard,.storeCard,.historyCard{margin-bottom:10px!important;padding:15px!important}
-.productCard:hover,.storeCard:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(20,35,60,.08)!important}
-.allStockTop,.overviewTop{margin-bottom:12px}
-.pageHero{padding:18px 18px!important}
-.pageHeroTitle{font-size:20px!important;font-weight:850!important;color:#152238!important}
-.pageHeroSub{font-size:12px!important;color:var(--muted)!important;margin-top:4px}
-.stockStats{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px!important;margin:12px 0 18px!important}
-.stockStat{background:#fff!important;border:1px solid var(--line)!important;border-radius:16px!important;box-shadow:0 4px 14px rgba(20,35,60,.045)!important;padding:15px 12px!important}
-.stockStatNumber{font-size:25px!important;font-weight:900!important;line-height:1!important}
-.stockStatLabel{font-size:10px!important;color:var(--muted)!important;font-weight:800!important;margin-top:7px!important;letter-spacing:.4px}
-.stockStat.available .stockStatNumber{color:var(--green)!important}.stockStat.empty .stockStatNumber{color:var(--red)!important}
-.filterRow{display:flex;gap:8px;overflow-x:auto;padding:1px 1px 5px}
-.filterBtn{min-height:38px!important;padding:0 14px!important;font-size:12px!important}
-.overviewFilterBox{padding:14px!important;margin-bottom:14px!important}
-.overviewSection{padding:16px!important;margin:12px 0!important}
-.sectionTitle{font-size:16px!important;font-weight:850!important;margin-bottom:4px!important}.sectionSub{font-size:11px!important;color:var(--muted)!important;margin-bottom:12px!important}
-.compareTable{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--line);border-radius:14px;font-size:12px;background:#fff}
-.compareTable th{background:#f4f7fb;color:#6e7b90;font-size:10px;letter-spacing:.4px;padding:11px 10px;text-align:left}.compareTable td{padding:11px 10px;border-top:1px solid var(--line);font-weight:650}.compareTable td:last-child{text-align:right;font-weight:900}
-.state{padding:46px 18px!important}.stateIcon{font-size:38px!important}.stateTitle{font-size:17px!important;font-weight:850!important}.stateText{font-size:12px!important;color:var(--muted)!important}
-.bottom{position:fixed!important;left:0;right:0;bottom:0;z-index:50;background:rgba(255,255,255,.96)!important;border-top:1px solid #e5eaf1!important;box-shadow:0 -6px 20px rgba(20,35,60,.06)!important;backdrop-filter:blur(14px)}
-.bottomInner{max-width:620px;margin:auto;display:flex;justify-content:space-around;padding:7px 8px calc(7px + env(safe-area-inset-bottom))!important}
-.nav{border:0!important;background:transparent!important;color:#8a95a7!important;font-size:11px!important;font-weight:800!important;min-width:76px!important;padding:7px 8px!important;border-radius:14px!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:4px!important}
-.navIcon{font-size:22px!important;line-height:1!important}.nav.active{color:var(--blue)!important;background:#edf4ff!important}
-.back{border:0!important;background:#fff!important;border:1px solid var(--line)!important;border-radius:12px!important;padding:10px 13px!important;font-weight:800!important;color:#536178!important}
-#loginPage{background:radial-gradient(circle at 50% 0,#eaf2ff 0,#f7f9fc 45%,#eef2f7 100%)!important}
-.loginBox{width:min(430px,calc(100vw - 28px))!important;border:1px solid #e7edf5!important;border-radius:28px!important;box-shadow:0 18px 50px rgba(23,45,80,.13)!important;padding:30px!important}
-.logo{width:66px!important;height:66px!important;border-radius:20px!important;background:linear-gradient(135deg,#0756d7,#1675ee)!important;box-shadow:0 10px 25px rgba(11,87,208,.22)!important;font-size:32px!important}
-.loginTitle{font-size:24px!important;font-weight:900!important;letter-spacing:-.7px}.loginSubtitle{font-size:12px!important;color:#8b95a8!important}
-.loginTabs{background:#f1f4f8!important;border-radius:15px!important;padding:4px!important}.loginTab{border-radius:12px!important;font-weight:850!important}.loginTab.active{background:#fff!important;color:var(--blue)!important;box-shadow:0 3px 10px rgba(30,45,70,.08)!important}
-.input{border:1px solid #dce4ee!important;border-radius:14px!important;background:#fff!important;min-height:54px!important;font-size:16px!important}.input:focus{border-color:#4e8bea!important;box-shadow:0 0 0 4px rgba(11,87,208,.08)!important}
-.loginButton{min-height:54px!important;border-radius:15px!important;background:linear-gradient(135deg,#0756d7,#1675ee)!important;box-shadow:0 8px 18px rgba(11,87,208,.2)!important;font-weight:850!important}
-@media(max-width:700px){.main{padding:12px 12px 98px}.headerRow{padding:15px 15px 14px;min-height:70px}.headerTitle{font-size:18px}.stockStats{gap:8px}.stockStat{padding:13px 9px}.stockStatNumber{font-size:22px}.stockStatLabel{font-size:9px}.nav{min-width:64px!important}.navIcon{font-size:21px!important}}
-@media(min-width:701px){.main{padding-top:22px}.productList,.storeList,.historyList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.productCard,.storeCard,.historyCard{margin-bottom:0!important}}
-
-.moduleGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 16px}
-.moduleTile{min-height:112px;border:0;border-radius:18px;color:#fff;text-align:left;padding:16px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 20px rgba(20,35,60,.08);transition:.18s;cursor:pointer}
-.moduleTile:active{transform:scale(.98)}
-.moduleTile b{font-size:15px;line-height:1.1}.moduleTile small{font-size:10px;opacity:.82;line-height:1.3}.moduleIcon{font-size:25px;font-weight:900;align-self:flex-start}.tileBlue{background:linear-gradient(145deg,#0b57d0,#2683ff)}.tileTeal{background:linear-gradient(145deg,#0a9f9b,#14c6bf)}.tileOrange{background:linear-gradient(145deg,#f59e0b,#ffbd3e)}.tilePurple{background:linear-gradient(145deg,#6d4bd8,#8b68ef)}.tileGreen{background:linear-gradient(145deg,#159957,#35bb6e)}.tileSlate{background:linear-gradient(145deg,#657287,#8995a8)}
-@media(max-width:700px){.moduleGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.moduleTile{min-height:105px;padding:14px}.moduleTile b{font-size:14px}}
-</style>
-
 </head>
 
 
@@ -2668,14 +2600,6 @@ body{background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,-app
 
       <section id="searchView">
 
-        <div class="moduleGrid">
-          <button class="moduleTile tileBlue" onclick="showView('allStock')"><span class="moduleIcon">▣</span><b>All Stock</b><small>Lihat seluruh stok</small></button>
-          <button class="moduleTile tileTeal" onclick="setCategory('DEVICE');document.getElementById('searchInput').focus()"><span class="moduleIcon">▥</span><b>Device</b><small>Series A • S • Z • Tab</small></button>
-          <button class="moduleTile tileOrange" onclick="setCategory('ACC');document.getElementById('searchInput').focus()"><span class="moduleIcon">◉</span><b>Accessory</b><small>ACC &amp; spare item</small></button>
-          <button class="moduleTile tilePurple" onclick="setCategory('OTHER');document.getElementById('searchInput').focus()"><span class="moduleIcon">◆</span><b>Other</b><small>Non-device item</small></button>
-          <button class="moduleTile tileGreen" onclick="showView('history')"><span class="moduleIcon">◷</span><b>History</b><small>Riwayat pencarian</small></button>
-          <button class="moduleTile tileSlate" onclick="showView('account')"><span class="moduleIcon">●</span><b>Account</b><small>Store &amp; login</small></button>
-        </div>
 
         <!-- SEARCH -->
 
