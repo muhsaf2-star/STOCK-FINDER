@@ -2193,6 +2193,96 @@ button{
 .filterApplyBtn{border:0;background:#0b57d0;color:#fff;box-shadow:0 6px 16px rgba(11,87,208,.2);}
 @media(max-width:699px){.overviewFilterPanel{width:100%;max-width:none;border-radius:22px 22px 0 0;top:auto;bottom:0;height:auto;max-height:88vh;padding:17px 14px 16px;}.overviewFilterBackdrop{background:rgba(15,23,42,.35)}.overviewFilterBar{padding:10px 11px}.overviewFilterSummary{max-width:55vw;}.multiFilterGrid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 
+.allStockList{
+  display:grid;
+  gap:9px;
+  margin-top:12px;
+}
+
+.allStockCard{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:13px 14px;
+  min-height:70px;
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(255,255,255,.94);
+  border-radius:17px;
+  box-shadow:0 8px 24px rgba(55,84,135,.07),inset 0 1px 0 rgba(255,255,255,.95);
+  backdrop-filter:blur(14px);
+}
+
+.allStockCard.is-empty{
+  opacity:.76;
+}
+
+.allStockInfo{
+  min-width:0;
+  flex:1;
+}
+
+.allStockName{
+  color:#14284c;
+  font-size:13px;
+  line-height:1.35;
+  font-weight:850;
+  word-break:break-word;
+}
+
+.allStockCode{
+  color:#8a98ae;
+  font-size:10px;
+  font-weight:750;
+  margin-top:3px;
+}
+
+.seriesBadge{
+  display:inline-flex;
+  align-items:center;
+  margin-top:6px;
+  min-height:21px;
+  padding:0 8px;
+  border-radius:11px;
+  background:#edf4ff;
+  color:#2868d8;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.15px;
+}
+
+.allStockQty{
+  flex:0 0 58px;
+  text-align:right;
+}
+
+.allStockQty strong{
+  display:block;
+  color:#14284c;
+  font-size:20px;
+  line-height:1;
+  font-weight:950;
+}
+
+.allStockQty span{
+  display:block;
+  margin-top:4px;
+  color:#16a86c;
+  font-size:8px;
+  font-weight:950;
+}
+
+.allStockCard.is-empty .allStockQty strong{color:#9aa7b9;}
+.allStockCard.is-empty .allStockQty span{color:#ef3e4d;}
+
+@media(max-width:699px){
+  .allStockList{gap:7px;margin-top:10px;}
+  .allStockCard{padding:11px 12px;border-radius:15px;min-height:66px;}
+  .allStockName{font-size:12px;}
+  .allStockQty{flex-basis:52px;}
+  .allStockQty strong{font-size:18px;}
+}
+
 .stockStats{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -3626,6 +3716,7 @@ function loadAllStock(){
     if(allStoreStockData.length && allStoreStockData[0].region){
       currentUser.region = allStoreStockData[0].region;
       document.getElementById('headerSub').textContent = (currentUser.storeName || '-') + ' • ' + currentUser.region;
+      if(info) info.textContent = (currentUser.storeCode || '-') + ' • ' + (currentUser.storeName || '-') + ' • ' + currentUser.region;
     }
     updateAllStockSummary();
     renderAllStock();
