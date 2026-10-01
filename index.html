@@ -1623,20 +1623,29 @@ function loadAllStock(){
 
   const region = currentUser && currentUser.region ? currentUser.region : 'Region belum tersedia';
   const info = document.getElementById('allStockStoreInfo');
-  if(info) info.textContent = (currentUser.storeCode || '-') + ' • ' + (currentUser.storeName || '-') + ' • ' + region;
+  if(info) info.textContent = (currentUser && currentUser.storeCode || '-') + ' • ' + (currentUser && currentUser.storeName || '-') + ' • ' + region;
 
   list.innerHTML = '<div class="state"><div class="loading"></div><div class="stateTitle">Memuat semua stock...</div><div class="stateText">Mengambil data store Anda.</div></div>';
+
+  if(!currentUser || String(currentUser.role || '').toUpperCase() !== 'STORE'){
+    list.innerHTML = '<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Session STORE tidak ditemukan</div><div class="stateText">Silakan logout lalu login kembali menggunakan Store Code.</div><button class="retryBtn" onclick="loadAllStock()">Coba Lagi</button></div>';
+    return;
+  }
 
   apiCall('getAllStoreStock', {user: currentUser}, function(data){
     allStoreStockData = Array.isArray(data) ? data : [];
     if(allStoreStockData.length && allStoreStockData[0].region){
       currentUser.region = allStoreStockData[0].region;
-      document.getElementById('headerSub').textContent = (currentUser.storeName || '-') + ' • ' + currentUser.region;
+      const hs=document.getElementById('headerSub');
+      if(hs) hs.textContent = (currentUser.storeName || '-') + ' • ' + currentUser.region;
+      if(info) info.textContent = (currentUser.storeCode || '-') + ' • ' + (currentUser.storeName || '-') + ' • ' + currentUser.region;
     }
     updateAllStockSummary();
     renderAllStock();
   }, function(error){
-    list.innerHTML = '<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Gagal mengambil stock</div><div class="stateText">'+escapeHtml(error && error.message ? error.message : 'Terjadi kesalahan.')+'</div></div>';
+    allStoreStockData = [];
+    updateAllStockSummary();
+    list.innerHTML = '<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Gagal mengambil stock</div><div class="stateText">'+escapeHtml(error && error.message ? error.message : 'Terjadi kesalahan.')+'</div><button class="retryBtn" onclick="loadAllStock()">Coba Lagi</button></div>';
   });
 }
 
@@ -1644,30 +1653,32 @@ function updateAllStockSummary(){
   const total=allStoreStockData.length;
   const available=allStoreStockData.filter(function(x){return Number(x.stock)>0;}).length;
   const empty=total-available;
-  document.getElementById('allStockTotal').textContent=total;
-  document.getElementById('allStockAvailable').textContent=available;
-  document.getElementById('allStockEmpty').textContent=empty;
+  const a=document.getElementById('allStockTotal'); if(a) a.textContent=total;
+  const b=document.getElementById('allStockAvailable'); if(b) b.textContent=available;
+  const c=document.getElementById('allStockEmpty'); if(c) c.textContent=empty;
 }
 
 function setAllStockCategory(category){
-  allStockCategory=category;
-  document.querySelectorAll('#allStockCategoryFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.category===category);});
+  allStockCategory=String(category||'ALL').toUpperCase();
+  document.querySelectorAll('#allStockCategoryFilters .filterBtn').forEach(function(b){
+    b.classList.toggle('active', String(b.dataset.category||'').toUpperCase()===allStockCategory);
+  });
   const wrap=document.getElementById('allStockSeriesWrap');
-  if(wrap) wrap.style.display=category==='DEVICE'?'block':'none';
-  if(category!=='DEVICE') allStockSeries='ALL';
-  document.querySelectorAll('#allStockSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===allStockSeries);});
+  if(wrap) wrap.style.display=allStockCategory==='DEVICE'?'block':'none';
+  if(allStockCategory!=='DEVICE') allStockSeries='ALL';
+  document.querySelectorAll('#allStockSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',String(b.dataset.series||'').toUpperCase()===allStockSeries.toUpperCase());});
   renderAllStock();
 }
 
 function setAllStockSeries(series){
-  allStockSeries=series;
-  document.querySelectorAll('#allStockSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===series);});
+  allStockSeries=String(series||'ALL').toUpperCase();
+  document.querySelectorAll('#allStockSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',String(b.dataset.series||'').toUpperCase()===allStockSeries);});
   renderAllStock();
 }
 
 function setAllStockStatus(status){
-  allStockStatus=status;
-  document.querySelectorAll('#allStockStatusFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.stock===status);});
+  allStockStatus=String(status||'ALL').toUpperCase();
+  document.querySelectorAll('#allStockStatusFilters .filterBtn').forEach(function(b){b.classList.toggle('active',String(b.dataset.stock||'').toUpperCase()===allStockStatus);});
   renderAllStock();
 }
 
@@ -1676,8 +1687,10 @@ function renderAllStock(){
   if(!list) return;
 
   let data=allStoreStockData.filter(function(item){
-    const catOk=allStockCategory==='ALL'||String(item.category).toUpperCase()===allStockCategory;
-    const seriesOk=allStockCategory!=='DEVICE'||allStockSeries==='ALL'||String(item.series).toUpperCase()===allStockSeries;
+    const cat=String(item.category||'OTHER').trim().toUpperCase();
+    const series=String(item.series||'OTHER').trim().toUpperCase();
+    const catOk=allStockCategory==='ALL'||cat===allStockCategory;
+    const seriesOk=allStockCategory!=='DEVICE'||allStockSeries==='ALL'||series===allStockSeries;
     const qty=Number(item.stock)||0;
     const statusOk=allStockStatus==='ALL'||(allStockStatus==='AVAILABLE'&&qty>0)||(allStockStatus==='EMPTY'&&qty<=0);
     return catOk&&seriesOk&&statusOk;
@@ -1690,24 +1703,37 @@ function renderAllStock(){
   });
 
   if(!data.length){
-    list.innerHTML='<div class="state"><div class="stateIcon">📦</div><div class="stateTitle">Tidak ada stok</div><div class="stateText">Tidak ada produk sesuai filter.</div></div>';
+    list.innerHTML=allStoreStockData.length
+      ? '<div class="state"><div class="stateIcon">📦</div><div class="stateTitle">Tidak ada stok</div><div class="stateText">Tidak ada produk sesuai filter.</div></div>'
+      : '<div class="state"><div class="stateIcon">📦</div><div class="stateTitle">Data stock kosong</div><div class="stateText">Belum ada data produk yang dikembalikan untuk store ini.</div><button class="retryBtn" onclick="loadAllStock()">Refresh Stock</button></div>';
     return;
   }
 
   list.innerHTML=data.map(function(item){
     const qty=Number(item.stock)||0;
     const empty=qty<=0;
+    const cat=String(item.category||'OTHER').toUpperCase();
+    const series=String(item.series||'OTHER').toUpperCase();
     return '<div class="allStockCard '+(empty?'is-empty':'')+'">'+
       '<div class="allStockInfo">'+
         '<div class="allStockName">'+escapeHtml(item.materialDescription||'-')+'</div>'+
         '<div class="allStockCode">'+escapeHtml(item.materialCode||'-')+'</div>'+
-        '<span class="seriesBadge">'+escapeHtml(item.category||'OTHER')+(item.category==='DEVICE'?' • '+escapeHtml(item.series||'OTHER'):'')+'</span>'+
+        '<span class="seriesBadge">'+escapeHtml(cat)+(cat==='DEVICE'?' • '+escapeHtml(series):'')+'</span>'+
       '</div>'+
       '<div class="allStockQty"><strong>'+formatNumber(qty)+'</strong><span>'+(empty?'EMPTY':'STOCK')+'</span></div>'+
     '</div>';
   }).join('');
 }
 
+// Event delegation: filter tetap berfungsi meskipun browser/GitHub gagal menjalankan inline onclick.
+document.addEventListener('click', function(e){
+  const btn=e.target.closest && e.target.closest('#allStockCategoryFilters .filterBtn');
+  if(btn){ e.preventDefault(); setAllStockCategory(btn.dataset.category); return; }
+  const sb=e.target.closest && e.target.closest('#allStockSeriesFilters .filterBtn');
+  if(sb){ e.preventDefault(); setAllStockSeries(sb.dataset.series); return; }
+  const tb=e.target.closest && e.target.closest('#allStockStatusFilters .filterBtn');
+  if(tb){ e.preventDefault(); setAllStockStatus(tb.dataset.stock); return; }
+});
 
 /* =====================================================
    ACCOUNT
@@ -2224,6 +2250,7 @@ function renderAllStock(){
 .filterRow::-webkit-scrollbar{display:none;}
 .filterBtn{flex:0 0 auto;height:36px;padding:0 13px;border:1px solid #dfe5ec;border-radius:18px;background:#fff;color:#667085;font-size:11px;font-weight:900;}
 .filterBtn.active{background:#0b57d0;color:#fff;border-color:#0b57d0;}
+.retryBtn{margin-top:12px;height:38px;padding:0 16px;border:0;border-radius:10px;background:#0b57d0;color:#fff;font-size:11px;font-weight:900;cursor:pointer;}
 
 .allStockList{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
 .allStockCard{
@@ -2242,6 +2269,44 @@ function renderAllStock(){
 .allStockCard.is-empty .allStockQty strong,.allStockCard.is-empty .allStockQty span{color:#d92d20;}
 
 .overviewFilterBox{margin-bottom:12px;}
+
+/* =====================================================
+   OVERVIEW VISUAL CHARTS
+===================================================== */
+.overviewChartsGrid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;margin-top:14px;}
+.chartCard{background:#fff;border:1px solid #e5e9ef;border-radius:16px;padding:14px;box-shadow:0 5px 18px rgba(16,24,40,.04);}
+.chartTitle{font-size:13px;font-weight:900;color:#172033;margin-bottom:3px;}
+.chartSub{font-size:10px;color:#98a2b3;margin-bottom:12px;}
+.hBarRow{margin:10px 0 13px;}
+.hBarTop{display:flex;justify-content:space-between;gap:10px;font-size:11px;font-weight:800;color:#344054;}
+.hBarTrack{height:12px;margin-top:6px;background:#edf1f6;border-radius:999px;overflow:hidden;}
+.hBarFill{height:100%;border-radius:999px;background:linear-gradient(90deg,#0b57d0,#4b8df8);}
+.hBarMeta{font-size:9px;color:#98a2b3;margin-top:4px;}
+.donutWrap{display:flex;align-items:center;justify-content:center;gap:18px;min-height:190px;}
+.donut{width:150px;height:150px;border-radius:50%;background:conic-gradient(#0b57d0 0 25%,#35a853 25% 50%,#f9ab00 50% 75%,#ea4335 75% 100%);position:relative;flex:none;}
+.donut::after{content:'';position:absolute;inset:37px;background:#fff;border-radius:50%;}
+.donutCenter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:2;}
+.donutCenter strong{font-size:19px;color:#172033;}
+.donutCenter span{font-size:9px;color:#98a2b3;font-weight:800;}
+.legend{display:flex;flex-direction:column;gap:9px;min-width:125px;}
+.legendItem{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;font-weight:800;color:#475467;}
+.legendLeft{display:flex;align-items:center;gap:6px;min-width:0;}
+.legendDot{width:9px;height:9px;border-radius:50%;flex:none;}
+.legendValue{color:#172033;white-space:nowrap;}
+.topProductChart{display:flex;flex-direction:column;gap:10px;}
+.topProductRow{display:grid;grid-template-columns:25px minmax(0,1fr) 48px;gap:7px;align-items:center;}
+.topRank{font-size:10px;font-weight:900;color:#98a2b3;text-align:center;}
+.topProductName{min-width:0;font-size:10px;font-weight:800;color:#344054;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topProductBar{height:7px;background:#edf1f6;border-radius:999px;overflow:hidden;margin-top:4px;}
+.topProductFill{height:100%;background:#0b57d0;border-radius:999px;}
+.topProductQty{font-size:10px;font-weight:900;color:#0b57d0;text-align:right;}
+@media(max-width:760px){
+  .overviewChartsGrid{grid-template-columns:1fr;}
+  .donutWrap{min-height:165px;}
+  .donut{width:125px;height:125px;}
+  .donut::after{inset:31px;}
+}
+
 .overviewChart,.overviewSection{margin-top:14px;}
 .sectionTitle{font-size:13px;font-weight:900;color:#172033;margin-bottom:8px;}
 .regionRow,.seriesRow,.categoryRow2{background:#fff;border:1px solid #e7ebf0;border-radius:12px;padding:10px 11px;margin-bottom:7px;}
@@ -2975,6 +3040,19 @@ function renderAllStock(){
           <div class="stockStat empty"><div id="overviewEmpty" class="stockStatNumber">0</div><div class="stockStatLabel">EMPTY SKU</div></div>
         </div>
 
+        <div id="overviewVisualCharts" class="overviewChartsGrid">
+          <div class="chartCard">
+            <div class="chartTitle">Stock by Region</div>
+            <div class="chartSub">Total unit berdasarkan region</div>
+            <div id="regionChart"><div class="state"><div class="loading"></div></div></div>
+          </div>
+          <div class="chartCard">
+            <div class="chartTitle">Stock by Series</div>
+            <div class="chartSub">Komposisi total stock</div>
+            <div id="seriesChart"><div class="state"><div class="loading"></div></div></div>
+          </div>
+        </div>
+
         <div class="overviewSection">
           <div class="sectionTitle">Stock by Region</div>
           <div id="overviewRegions"><div class="state"><div class="loading"></div><div class="stateTitle">Memuat overview...</div></div></div>
@@ -3122,6 +3200,10 @@ function apiCall(action, params, onSuccess, onFailure){
     if(onFailure) onFailure({message:'Tidak dapat terhubung ke Apps Script API.'});
   };
 
+  // Cache-buster penting karena Apps Script / browser kadang menyimpan response lama.
+  query.set('_ts', String(Date.now()));
+  script.async = true;
+  script.charset = 'UTF-8';
   script.src = API_URL + (API_URL.indexOf('?') >= 0 ? '&' : '?') + query.toString();
   document.head.appendChild(script);
 }
@@ -4254,18 +4336,48 @@ function renderOverview(data){
       return '<button class="filterBtn '+(active?'active':'')+'" data-region="'+escapeHtml(r.region)+'" onclick="setOverviewRegion(\''+escapeJs(r.region)+'\')">'+escapeHtml(r.region)+'</button>';
     }).join('');
 
+  /* REGION BAR CHART */
   const maxRegion=Math.max.apply(null,regions.map(function(r){return Number(r.stock)||0;}).concat([1]));
+  const regionChart=document.getElementById('regionChart');
+  if(regionChart){
+    regionChart.innerHTML=regions.length?regions.map(function(r){
+      const pct=Math.max(2,Math.round((Number(r.stock)||0)/maxRegion*100));
+      return '<div class="hBarRow"><div class="hBarTop"><span>'+escapeHtml(r.region)+'</span><strong>'+formatNumber(r.stock)+' unit</strong></div><div class="hBarTrack"><div class="hBarFill" style="width:'+pct+'%"></div></div><div class="hBarMeta">Available SKU '+formatNumber(r.availableSku||0)+' • Empty SKU '+formatNumber(r.emptySku||0)+'</div></div>';
+    }).join(''):'<div class="state"><div class="stateText">Belum ada data region.</div></div>';
+  }
+
+  /* SERIES DONUT */
+  const series=Array.isArray(data.series)?data.series:[];
+  const totalSeries=series.reduce(function(a,x){return a+(Number(x.stock)||0);},0);
+  const seriesColors=['#0b57d0','#35a853','#f9ab00','#ea4335','#7b61ff','#00a6a6'];
+  const seriesChart=document.getElementById('seriesChart');
+  if(seriesChart){
+    if(!series.length || !totalSeries){
+      seriesChart.innerHTML='<div class="state"><div class="stateText">Belum ada data series.</div></div>';
+    }else{
+      let cursor=0, stops=[];
+      series.forEach(function(x,i){
+        const pct=(Number(x.stock)||0)/totalSeries*100;
+        stops.push(seriesColors[i%seriesColors.length]+' '+cursor+'% '+(cursor+pct)+'%');
+        cursor+=pct;
+      });
+      const donutStyle='background:conic-gradient('+stops.join(',')+');';
+      seriesChart.innerHTML='<div class="donutWrap"><div class="donut" style="'+donutStyle+'"><div class="donutCenter"><strong>'+formatNumber(totalSeries)+'</strong><span>UNIT</span></div></div><div class="legend">'+series.slice(0,6).map(function(x,i){const pct=totalSeries?(Number(x.stock)||0)/totalSeries*100:0;return '<div class="legendItem"><div class="legendLeft"><span class="legendDot" style="background:'+seriesColors[i%seriesColors.length]+'"></span><span>'+escapeHtml(x.series)+'</span></div><span class="legendValue">'+pct.toFixed(1)+'%</span></div>';}).join('')+'</div></div>';
+    }
+  }
+
+  /* REGION DETAIL BARS */
   document.getElementById('overviewRegions').innerHTML=regions.length?regions.map(function(r){
     const pct=Math.max(2,Math.round((Number(r.stock)||0)/maxRegion*100));
     return '<div class="regionRow"><div class="regionRowTop"><div class="regionName">'+escapeHtml(r.region)+'</div><div class="regionStock">'+formatNumber(r.stock)+' unit</div></div><div class="barTrack"><div class="barFill" style="width:'+pct+'%"></div></div><div class="regionMeta">Available SKU: '+formatNumber(r.availableSku||0)+' • Empty SKU: '+formatNumber(r.emptySku||0)+'</div></div>';
   }).join(''):'<div class="state"><div class="stateIcon">📊</div><div class="stateTitle">Belum ada data</div></div>';
 
+  /* SERIES COMPARISON TABLE */
   const compareBox=document.getElementById('overviewCompareSeries');
   const compare=Array.isArray(data.compareSeries)?data.compareSeries:[];
-  const compareRegions=Array.isArray(data.regions)?data.regions.map(function(r){return r.region;}):[];
-  const compareSeriesNames=Array.isArray(data.series)?data.series.map(function(x){return x.series;}):[];
+  const compareSeriesNames=['SERIES A','SERIES S','SERIES Z','SERIES TAB'];
   if(compareBox){
-    if(!compare.length || !compareSeriesNames.length){
+    if(!compare.length){
       compareBox.innerHTML='<div class="state"><div class="stateText">Belum ada data compare series antar region.</div></div>';
     }else{
       let html='<div class="compareScroll"><table class="compareTable compareSeriesTable"><thead><tr><th>REGION</th>'+compareSeriesNames.map(function(sn){return '<th>'+escapeHtml(sn)+'</th>';}).join('')+'<th>TOTAL</th></tr></thead><tbody>';
@@ -4282,15 +4394,11 @@ function renderOverview(data){
     }
   }
 
-  const series=Array.isArray(data.series)?data.series:[];
-  const maxSeries=Math.max.apply(null,series.map(function(x){return Number(x.stock)||0;}).concat([1]));
-  document.getElementById('overviewSeries').innerHTML=series.length?series.map(function(x){
-    const pct=Math.max(2,Math.round((Number(x.stock)||0)/maxSeries*100));
-    return '<div class="seriesRow"><div class="seriesRowTop"><div class="seriesName">'+escapeHtml(x.series)+'</div><div class="seriesStock">'+formatNumber(x.stock)+' unit</div></div><div class="barTrack"><div class="barFill" style="width:'+pct+'%"></div></div><div class="regionMeta">SKU: '+formatNumber(x.sku||0)+'</div></div>';
-  }).join(''):'<div class="state"><div class="stateText">Belum ada data series.</div></div>';
-
+  /* TOP PRODUCTS BAR CHART */
   const products=Array.isArray(data.products)?data.products.slice(0,10):[];
-  document.getElementById('overviewProducts').innerHTML=products.length?'<table class="compareTable"><thead><tr><th>PRODUCT</th><th>CATEGORY</th><th>STOCK</th></tr></thead><tbody>'+products.map(function(x){return '<tr><td>'+escapeHtml(x.description||'-')+'</td><td>'+escapeHtml(x.category||'-')+'</td><td>'+formatNumber(x.stock||0)+'</td></tr>';}).join('')+'</tbody></table>':'<div class="state"><div class="stateText">Belum ada produk.</div></div>';
+  const productChart=document.getElementById('overviewProducts');
+  const maxProduct=Math.max.apply(null,products.map(function(x){return Number(x.stock)||0;}).concat([1]));
+  productChart.innerHTML=products.length?'<div class="topProductChart">'+products.map(function(x,i){const pct=Math.max(2,Math.round((Number(x.stock)||0)/maxProduct*100));return '<div class="topProductRow"><div class="topRank">'+(i+1)+'</div><div><div class="topProductName" title="'+escapeHtml(x.description||'-')+'">'+escapeHtml(x.description||'-')+'</div><div class="topProductBar"><div class="topProductFill" style="width:'+pct+'%"></div></div></div><div class="topProductQty">'+formatNumber(x.stock||0)+'</div></div>';}).join('')+'</div>':'<div class="state"><div class="stateText">Belum ada produk.</div></div>';
 }
 
 /* =====================================================
