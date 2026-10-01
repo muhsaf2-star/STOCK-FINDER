@@ -1654,107 +1654,6 @@ button{
 
 
 /* =====================================================
-   ALL STOCK - STORE
-===================================================== */
-
-let allStoreStockData = [];
-let allStockCategory = 'ALL';
-let allStockSeries = 'ALL';
-let allStockStatus = 'ALL';
-
-function loadAllStock(){
-  const list = document.getElementById('allStockList');
-  if(!list) return;
-
-  const region = currentUser && currentUser.region ? currentUser.region : 'Region belum tersedia';
-  const info = document.getElementById('allStockStoreInfo');
-  if(info) info.textContent = (currentUser.storeCode || '-') + ' • ' + (currentUser.storeName || '-') + ' • ' + region;
-
-  list.innerHTML = '<div class="state"><div class="loading"></div><div class="stateTitle">Memuat semua stock...</div><div class="stateText">Mengambil data store Anda.</div></div>';
-
-  apiCall('getAllStoreStock', {user: currentUser}, function(data){
-    allStoreStockData = Array.isArray(data) ? data : [];
-    if(allStoreStockData.length && allStoreStockData[0].region){
-      currentUser.region = allStoreStockData[0].region;
-      document.getElementById('headerSub').textContent = (currentUser.storeName || '-') + ' • ' + currentUser.region;
-    }
-    updateAllStockSummary();
-    renderAllStock();
-  }, function(error){
-    list.innerHTML = '<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Gagal mengambil stock</div><div class="stateText">'+escapeHtml(error && error.message ? error.message : 'Terjadi kesalahan.')+'</div></div>';
-  });
-}
-
-function updateAllStockSummary(){
-  const total=allStoreStockData.length;
-  const available=allStoreStockData.filter(function(x){return Number(x.stock)>0;}).length;
-  const empty=total-available;
-  document.getElementById('allStockTotal').textContent=total;
-  document.getElementById('allStockAvailable').textContent=available;
-  document.getElementById('allStockEmpty').textContent=empty;
-}
-
-function setAllStockCategory(category){
-  allStockCategory=category;
-  document.querySelectorAll('#allStockCategoryFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.category===category);});
-  const wrap=document.getElementById('allStockSeriesWrap');
-  if(wrap) wrap.style.display=category==='DEVICE'?'block':'none';
-  if(category!=='DEVICE') allStockSeries='ALL';
-  document.querySelectorAll('#allStockSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===allStockSeries);});
-  renderAllStock();
-}
-
-function setAllStockSeries(series){
-  allStockSeries=series;
-  document.querySelectorAll('#allStockSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===series);});
-  renderAllStock();
-}
-
-function setAllStockStatus(status){
-  allStockStatus=status;
-  document.querySelectorAll('#allStockStatusFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.stock===status);});
-  renderAllStock();
-}
-
-function renderAllStock(){
-  const list=document.getElementById('allStockList');
-  if(!list) return;
-
-  let data=allStoreStockData.filter(function(item){
-    const catOk=allStockCategory==='ALL'||String(item.category).toUpperCase()===allStockCategory;
-    const seriesOk=allStockCategory!=='DEVICE'||allStockSeries==='ALL'||String(item.series).toUpperCase()===allStockSeries;
-    const qty=Number(item.stock)||0;
-    const statusOk=allStockStatus==='ALL'||(allStockStatus==='AVAILABLE'&&qty>0)||(allStockStatus==='EMPTY'&&qty<=0);
-    return catOk&&seriesOk&&statusOk;
-  });
-
-  data.sort(function(a,b){
-    const ae=Number(a.stock)<=0,be=Number(b.stock)<=0;
-    if(ae!==be) return ae?1:-1;
-    return String(a.materialDescription||'').localeCompare(String(b.materialDescription||''),'id',{sensitivity:'base',numeric:true});
-  });
-
-  if(!data.length){
-    list.innerHTML='<div class="state"><div class="stateIcon">📦</div><div class="stateTitle">Tidak ada stok</div><div class="stateText">Tidak ada produk sesuai filter.</div></div>';
-    return;
-  }
-
-  list.innerHTML=data.map(function(item){
-    const qty=Number(item.stock)||0;
-    const empty=qty<=0;
-    return '<div class="allStockCard '+(empty?'is-empty':'')+'">'+
-      '<div class="allStockInfo">'+
-        '<div class="allStockName">'+escapeHtml(item.materialDescription||'-')+'</div>'+
-        '<div class="allStockCode">'+escapeHtml(item.materialCode||'-')+'</div>'+
-        '<span class="seriesBadge">'+escapeHtml(item.category||'OTHER')+(item.category==='DEVICE'?' • '+escapeHtml(item.series||'OTHER'):'')+'</span>'+
-      '</div>'+
-      '<div class="allStockQty"><strong>'+formatNumber(qty)+'</strong><span>'+(empty?'EMPTY':'STOCK')+'</span></div>'+
-    '</div>';
-  }).join('');
-}
-
-
-/* =====================================================
    ACCOUNT
 ===================================================== */
 
@@ -3702,6 +3601,108 @@ body{
 ===================================================== */
 
 let currentUser = null;
+
+/* =====================================================
+   ALL STOCK - STORE
+===================================================== */
+
+let allStoreStockData = [];
+let allStockCategory = 'ALL';
+let allStockSeries = 'ALL';
+let allStockStatus = 'ALL';
+
+function loadAllStock(){
+  const list = document.getElementById('allStockList');
+  if(!list) return;
+
+  const region = currentUser && currentUser.region ? currentUser.region : 'Region belum tersedia';
+  const info = document.getElementById('allStockStoreInfo');
+  if(info) info.textContent = (currentUser.storeCode || '-') + ' • ' + (currentUser.storeName || '-') + ' • ' + region;
+
+  list.innerHTML = '<div class="state"><div class="loading"></div><div class="stateTitle">Memuat semua stock...</div><div class="stateText">Mengambil data store Anda.</div></div>';
+
+  apiCall('getAllStoreStock', {user: currentUser}, function(data){
+    allStoreStockData = Array.isArray(data) ? data : [];
+    if(allStoreStockData.length && allStoreStockData[0].region){
+      currentUser.region = allStoreStockData[0].region;
+      document.getElementById('headerSub').textContent = (currentUser.storeName || '-') + ' • ' + currentUser.region;
+    }
+    updateAllStockSummary();
+    renderAllStock();
+  }, function(error){
+    list.innerHTML = '<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Gagal mengambil stock</div><div class="stateText">'+escapeHtml(error && error.message ? error.message : 'Terjadi kesalahan.')+'</div></div>';
+  });
+}
+
+function updateAllStockSummary(){
+  const total=allStoreStockData.length;
+  const available=allStoreStockData.filter(function(x){return Number(x.stock)>0;}).length;
+  const empty=total-available;
+  document.getElementById('allStockTotal').textContent=total;
+  document.getElementById('allStockAvailable').textContent=available;
+  document.getElementById('allStockEmpty').textContent=empty;
+}
+
+function setAllStockCategory(category){
+  allStockCategory=category;
+  document.querySelectorAll('#allStockCategoryFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.category===category);});
+  const wrap=document.getElementById('allStockSeriesWrap');
+  if(wrap) wrap.style.display=category==='DEVICE'?'block':'none';
+  if(category!=='DEVICE') allStockSeries='ALL';
+  document.querySelectorAll('#allStockSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===allStockSeries);});
+  renderAllStock();
+}
+
+function setAllStockSeries(series){
+  allStockSeries=series;
+  document.querySelectorAll('#allStockSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===series);});
+  renderAllStock();
+}
+
+function setAllStockStatus(status){
+  allStockStatus=status;
+  document.querySelectorAll('#allStockStatusFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.stock===status);});
+  renderAllStock();
+}
+
+function renderAllStock(){
+  const list=document.getElementById('allStockList');
+  if(!list) return;
+
+  let data=allStoreStockData.filter(function(item){
+    const catOk=allStockCategory==='ALL'||String(item.category).toUpperCase()===allStockCategory;
+    const seriesOk=allStockCategory!=='DEVICE'||allStockSeries==='ALL'||String(item.series).toUpperCase()===allStockSeries;
+    const qty=Number(item.stock)||0;
+    const statusOk=allStockStatus==='ALL'||(allStockStatus==='AVAILABLE'&&qty>0)||(allStockStatus==='EMPTY'&&qty<=0);
+    return catOk&&seriesOk&&statusOk;
+  });
+
+  data.sort(function(a,b){
+    const ae=Number(a.stock)<=0,be=Number(b.stock)<=0;
+    if(ae!==be) return ae?1:-1;
+    return String(a.materialDescription||'').localeCompare(String(b.materialDescription||''),'id',{sensitivity:'base',numeric:true});
+  });
+
+  if(!data.length){
+    list.innerHTML='<div class="state"><div class="stateIcon">📦</div><div class="stateTitle">Tidak ada stok</div><div class="stateText">Tidak ada produk sesuai filter.</div></div>';
+    return;
+  }
+
+  list.innerHTML=data.map(function(item){
+    const qty=Number(item.stock)||0;
+    const empty=qty<=0;
+    return '<div class="allStockCard '+(empty?'is-empty':'')+'">'+
+      '<div class="allStockInfo">'+
+        '<div class="allStockName">'+escapeHtml(item.materialDescription||'-')+'</div>'+
+        '<div class="allStockCode">'+escapeHtml(item.materialCode||'-')+'</div>'+
+        '<span class="seriesBadge">'+escapeHtml(item.category||'OTHER')+(item.category==='DEVICE'?' • '+escapeHtml(item.series||'OTHER'):'')+'</span>'+
+      '</div>'+
+      '<div class="allStockQty"><strong>'+formatNumber(qty)+'</strong><span>'+(empty?'EMPTY':'STOCK')+'</span></div>'+
+    '</div>';
+  }).join('');
+}
+
+
 
 let loginMode = 'STORE';
 
