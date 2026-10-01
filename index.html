@@ -2241,7 +2241,7 @@ function renderAllStock(){
 .allStockQty span{display:block;font-size:8px;font-weight:900;color:#16a34a;margin-top:4px;}
 .allStockCard.is-empty .allStockQty strong,.allStockCard.is-empty .allStockQty span{color:#d92d20;}
 
-.overviewFilterBox{margin-bottom:12px;}
+.overviewFilterBox{margin-bottom:12px;}\n.filterHint{display:inline-flex;align-items:center;margin-left:6px;padding:2px 7px;border-radius:999px;background:#edf4ff;color:#0b57d0;font-size:9px;font-weight:900;}
 .overviewChart,.overviewSection{margin-top:14px;}
 .sectionTitle{font-size:13px;font-weight:900;color:#172033;margin-bottom:8px;}
 .regionRow,.seriesRow,.categoryRow2{background:#fff;border:1px solid #e7ebf0;border-radius:12px;padding:10px 11px;margin-bottom:7px;}
@@ -2369,10 +2369,50 @@ function renderAllStock(){
 
 function backToSearch(){
 
+  const detail = document.getElementById('detailView');
+  const search = document.getElementById('searchView');
+
+  if(detail){
+    detail.style.display = 'none';
+  }
+
+  if(search){
+    search.style.display = 'block';
+  }
+
   showView('search');
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'instant'
+  });
 
 }
 
+
+
+/* FIX: BACK BUTTON TOUCH / CLICK */
+.back{
+  position:relative;
+  z-index:100;
+  pointer-events:auto !important;
+  cursor:pointer;
+  touch-action:manipulation;
+  display:inline-flex;
+  align-items:center;
+  min-height:48px;
+  padding:0 8px;
+  margin-bottom:10px;
+  border:0;
+  background:transparent;
+  color:#0b57d0;
+  font-size:15px;
+  font-weight:900;
+}
+.back:active{
+  transform:scale(.97);
+  opacity:.7;
+}
 </style>
 
 </head>
@@ -2808,8 +2848,10 @@ function backToSearch(){
 
 
         <button
+          type="button"
           class="back"
-          onclick="backToSearch()">
+          id="backButton"
+          onclick="event.preventDefault(); event.stopPropagation(); backToSearch();">
 
           ← Kembali
 
@@ -2950,15 +2992,15 @@ function backToSearch(){
         </div>
 
         <div class="overviewFilterBox">
-          <div class="filterLabel">Region</div>
+          <div class="filterLabel">Region <span id="overviewRegionHint" class="filterHint">2 region</span></div>
           <div id="overviewRegionFilters" class="filterRow">
-            <button class="filterBtn active" data-region="ALL" onclick="setOverviewRegion('ALL')">ALL REGION</button>
+            <button class="filterBtn" data-region="ALL" onclick="setOverviewRegion('ALL')">ALL REGION</button>
           </div>
 
           <div class="filterLabel">Category</div>
           <div id="overviewCategoryFilters" class="filterRow">
-            <button class="filterBtn active" data-category="ALL" onclick="setOverviewCategory('ALL')">ALL</button>
-            <button class="filterBtn" data-category="DEVICE" onclick="setOverviewCategory('DEVICE')">DEVICE</button>
+            <button class="filterBtn" data-category="ALL" onclick="setOverviewCategory('ALL')">ALL</button>
+            <button class="filterBtn active" data-category="DEVICE" onclick="setOverviewCategory('DEVICE')">DEVICE</button>
             <button class="filterBtn" data-category="ACC" onclick="setOverviewCategory('ACC')">ACC</button>
             <button class="filterBtn" data-category="OTHER" onclick="setOverviewCategory('OTHER')">OTHER</button>
           </div>
@@ -3253,7 +3295,6 @@ function login(){
       return;
     }
     currentUser = user;
-    saveLoginSession(user);
     openApp();
   }, function(error){
     button.disabled = false;
@@ -4179,9 +4220,32 @@ function renderStore(store){
    OVERVIEW STOCK - NASA
 ===================================================== */
 
-let overviewRegion='ALL';
-let overviewCategory='ALL';
+let overviewRegions=['REGION 1','REGION 5'];
+let overviewCategory='DEVICE';
 let overviewSeries='ALL';
+
+function normalizeOverviewRegions(value){
+  if(Array.isArray(value)){
+    return value.map(function(x){return String(x||'').trim().toUpperCase();}).filter(Boolean);
+  }
+  const s=String(value||'').trim().toUpperCase();
+  return s && s!=='ALL' ? [s] : [];
+}
+
+function updateOverviewRegionUI(){
+  const selected=overviewRegions.map(function(x){return String(x).toUpperCase();});
+  document.querySelectorAll('#overviewRegionFilters .filterBtn').forEach(function(b){
+    const region=String(b.dataset.region||'').toUpperCase();
+    b.classList.toggle('active',
+      region==='ALL' ? selected.length===0 : selected.indexOf(region)>=0
+    );
+  });
+
+  const hint=document.getElementById('overviewRegionHint');
+  if(hint){
+    hint.textContent=selected.length ? selected.length+' region' : 'ALL REGION';
+  }
+}
 
 function loadOverview(){
   const box=document.getElementById('overviewRegions');
@@ -4198,7 +4262,14 @@ function loadOverview(){
     }
   },12000);
 
-  apiCall('getNASAOverview', {user: currentUser, filters:{region:overviewRegion, category:overviewCategory, series:overviewSeries}}, function(data){
+  apiCall('getNASAOverview', {
+    user: currentUser,
+    filters:{
+      region:overviewRegions,
+      category:overviewCategory,
+      series:overviewSeries
+    }
+  }, function(data){
     finished=true;
     clearTimeout(timer);
     try { renderOverview(data); } catch(e) {
@@ -4212,20 +4283,48 @@ function loadOverview(){
 }
 
 function setOverviewRegion(region){
-  overviewRegion=region;
-  document.querySelectorAll('#overviewRegionFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.region===region);});
+  const r=String(region||'').trim().toUpperCase();
+
+  if(r==='ALL'){
+    overviewRegions=[];
+  }else{
+    const i=overviewRegions.indexOf(r);
+    if(i>=0){
+      overviewRegions.splice(i,1);
+    }else{
+      overviewRegions.push(r);
+    }
+
+    // Jangan biarkan filter kosong tanpa sengaja.
+    // Jika semua region di-uncheck, otomatis kembali ke ALL.
+    if(!overviewRegions.length){
+      overviewRegions=[];
+    }
+  }
+
+  updateOverviewRegionUI();
   loadOverview();
 }
+
 function setOverviewCategory(category){
-  overviewCategory=category;
-  if(category!=='DEVICE') overviewSeries='ALL';
-  document.querySelectorAll('#overviewCategoryFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.category===category);});
-  document.querySelectorAll('#overviewSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===overviewSeries);});
+  overviewCategory=String(category||'ALL').trim().toUpperCase();
+  if(overviewCategory!=='DEVICE') overviewSeries='ALL';
+
+  document.querySelectorAll('#overviewCategoryFilters .filterBtn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.category===overviewCategory);
+  });
+  document.querySelectorAll('#overviewSeriesFilters .filterBtn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.series===overviewSeries);
+  });
+
   loadOverview();
 }
+
 function setOverviewSeries(series){
-  overviewSeries=series;
-  document.querySelectorAll('#overviewSeriesFilters .filterBtn').forEach(function(b){b.classList.toggle('active',b.dataset.series===series);});
+  overviewSeries=String(series||'ALL').trim().toUpperCase();
+  document.querySelectorAll('#overviewSeriesFilters .filterBtn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.series===overviewSeries);
+  });
   loadOverview();
 }
 
@@ -4238,11 +4337,17 @@ function renderOverview(data){
 
   const regionFilters=document.getElementById('overviewRegionFilters');
   const regions=Array.isArray(data.regions)?data.regions:[];
-  regionFilters.innerHTML='<button class="filterBtn '+(overviewRegion==='ALL'?'active':'')+'" data-region="ALL" onclick="setOverviewRegion(\'ALL\')">ALL REGION</button>'+
-    regions.map(function(r){
-      const active=String(r.region).toUpperCase()===String(overviewRegion).toUpperCase();
-      return '<button class="filterBtn '+(active?'active':'')+'" data-region="'+escapeHtml(r.region)+'" onclick="setOverviewRegion(\''+escapeJs(r.region)+'\')">'+escapeHtml(r.region)+'</button>';
+  const regionOptions=Array.isArray(data.regionOptions)?data.regionOptions:regions.map(function(r){return r.region;});
+
+  regionFilters.innerHTML=
+    '<button class="filterBtn '+(overviewRegions.length===0?'active':'')+'" data-region="ALL" onclick="setOverviewRegion(\'ALL\')">ALL REGION</button>'+
+    regionOptions.map(function(name){
+      const region=String(name||'').trim();
+      const active=overviewRegions.indexOf(region.toUpperCase())>=0;
+      return '<button class="filterBtn '+(active?'active':'')+'" data-region="'+escapeHtml(region)+'" onclick="setOverviewRegion(\''+escapeJs(region)+'\')">'+escapeHtml(region)+'</button>';
     }).join('');
+
+  updateOverviewRegionUI();
 
   const maxRegion=Math.max.apply(null,regions.map(function(r){return Number(r.stock)||0;}).concat([1]));
   document.getElementById('overviewRegions').innerHTML=regions.length?regions.map(function(r){
@@ -4576,8 +4681,6 @@ function renderAccount(){
 
 function logout(){
 
-  clearLoginSession();
-
   currentUser =
     null;
 
@@ -4701,56 +4804,6 @@ function escapeJs(value){
     );
 
 }
-
-
-/* =====================================================
-   LOGIN SESSION - 1 HOUR
-   Hanya menyimpan user session, bukan password.
-   Session otomatis hilang setelah 60 menit.
-===================================================== */
-const LOGIN_SESSION_KEY = 'samsung_stock_finder_session_v1';
-const LOGIN_SESSION_MS = 60 * 60 * 1000;
-
-function saveLoginSession(user){
-  try{
-    localStorage.setItem(LOGIN_SESSION_KEY, JSON.stringify({
-      user: user,
-      savedAt: Date.now()
-    }));
-  }catch(e){}
-}
-
-function clearLoginSession(){
-  try{
-    localStorage.removeItem(LOGIN_SESSION_KEY);
-  }catch(e){}
-}
-
-function restoreLoginSession(){
-  try{
-    const raw = localStorage.getItem(LOGIN_SESSION_KEY);
-    if(!raw) return false;
-
-    const session = JSON.parse(raw);
-    const savedAt = Number(session && session.savedAt || 0);
-    const user = session && session.user;
-
-    if(!savedAt || !user || (Date.now() - savedAt) >= LOGIN_SESSION_MS){
-      clearLoginSession();
-      return false;
-    }
-
-    currentUser = user;
-    openApp();
-    return true;
-  }catch(e){
-    clearLoginSession();
-    return false;
-  }
-}
-
-
-restoreLoginSession();
 
 </script>
 
