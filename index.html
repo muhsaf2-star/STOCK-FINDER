@@ -1619,6 +1619,40 @@ button{
 
 
 
+
+/* =====================================================
+   STORE DASHBOARD
+===================================================== */
+
+.storeDashTop{margin-bottom:13px;}
+.storeDashGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:13px 0;}
+.storeDashStat{position:relative;overflow:hidden;min-height:82px;background:#fff;border:1px solid #e5eaf1;border-radius:18px;padding:13px 14px;box-shadow:0 6px 20px rgba(16,24,40,.045);}
+.storeDashStat:after{content:"";position:absolute;right:-25px;bottom:-28px;width:100px;height:70px;border-radius:50%;background:#eef5ff;}
+.storeDashStat.green:after{background:#e9f9ef;}
+.storeDashStat.red:after{background:#fff0f0;}
+.storeDashStatNumber{position:relative;z-index:1;font-size:24px;font-weight:950;color:#172033;line-height:1.05;}
+.storeDashStat.green .storeDashStatNumber{color:#16a34a;}
+.storeDashStat.red .storeDashStatNumber{color:#d92d20;}
+.storeDashStatLabel{position:relative;z-index:1;font-size:9px;color:#667085;font-weight:850;margin-top:6px;text-transform:uppercase;letter-spacing:.3px;}
+.storeDashCard{background:#fff;border:1px solid #e5eaf1;border-radius:20px;padding:16px;box-shadow:0 7px 22px rgba(16,24,40,.045);margin-bottom:12px;}
+.storeDashCardTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:950;color:#172033;}
+.storeDashCardSub{font-size:9px;color:#98a2b3;margin-top:4px;margin-bottom:13px;}
+.storeSeriesList{display:flex;flex-direction:column;gap:13px;}
+.storeSeriesItem{min-width:0;}
+.storeSeriesTop{display:flex;justify-content:space-between;align-items:end;gap:8px;}
+.storeSeriesName{font-size:12px;font-weight:950;color:#172033;}
+.storeSeriesQty{font-size:16px;font-weight:950;color:#0b57d0;}
+.storeSeriesPct{font-size:9px;color:#667085;font-weight:850;margin-left:4px;}
+.storeSeriesTrack{height:9px;background:#edf1f6;border-radius:10px;overflow:hidden;margin-top:7px;}
+.storeSeriesFill{height:100%;border-radius:10px;background:linear-gradient(90deg,#0b57d0,#4f8df7);}
+.storeSeriesMeta{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px;font-size:8px;color:#98a2b3;font-weight:750;}
+.storeDashEmpty{padding:30px 12px;text-align:center;color:#98a2b3;font-size:11px;}
+
+@media(max-width:699px){
+  .storeDashGrid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+
+
 /* =====================================================
    ALL STOCK - STORE
 ===================================================== */
@@ -3306,6 +3340,79 @@ body{
 
 
       <!-- =================================================
+           STORE DASHBOARD - STORE ONLY
+      ================================================= -->
+
+      <section id="storeDashboardView" style="display:none;">
+
+        <div class="storeDashTop">
+          <div class="pageHero">
+            <div class="pageHeroTitle">📊 Store Dashboard</div>
+            <div id="storeDashStoreInfo" class="pageHeroSub">Dashboard stock store Anda</div>
+          </div>
+        </div>
+
+        <div class="storeDashGrid">
+          <div class="storeDashStat">
+            <div id="storeDashTotalSku" class="storeDashStatNumber">0</div>
+            <div class="storeDashStatLabel">TOTAL SKU</div>
+          </div>
+          <div class="storeDashStat">
+            <div id="storeDashTotalStock" class="storeDashStatNumber">0</div>
+            <div class="storeDashStatLabel">TOTAL STOCK</div>
+          </div>
+          <div class="storeDashStat green">
+            <div id="storeDashAvailable" class="storeDashStatNumber">0</div>
+            <div class="storeDashStatLabel">AVAILABLE</div>
+          </div>
+          <div class="storeDashStat red">
+            <div id="storeDashEmpty" class="storeDashStatNumber">0</div>
+            <div class="storeDashStatLabel">OUT OF STOCK</div>
+          </div>
+        </div>
+
+        <div class="storeDashCard">
+          <div class="storeDashCardTitle">Filter Stock</div>
+
+          <div class="filterLabel">Category</div>
+          <div id="storeDashCategoryFilters" class="filterRow">
+            <button class="filterBtn active" data-category="ALL" onclick="setStoreDashCategory('ALL')">ALL</button>
+            <button class="filterBtn" data-category="DEVICE" onclick="setStoreDashCategory('DEVICE')">DEVICE</button>
+            <button class="filterBtn" data-category="ACC" onclick="setStoreDashCategory('ACC')">ACC</button>
+            <button class="filterBtn" data-category="OTHER" onclick="setStoreDashCategory('OTHER')">OTHER</button>
+          </div>
+
+          <div id="storeDashSeriesWrap" style="display:none;">
+            <div class="filterLabel">Series</div>
+            <div id="storeDashSeriesFilters" class="filterRow">
+              <button class="filterBtn active" data-series="ALL" onclick="setStoreDashSeries('ALL')">ALL</button>
+              <button class="filterBtn" data-series="SERIES A" onclick="setStoreDashSeries('SERIES A')">SERIES A</button>
+              <button class="filterBtn" data-series="SERIES S" onclick="setStoreDashSeries('SERIES S')">SERIES S</button>
+              <button class="filterBtn" data-series="SERIES Z" onclick="setStoreDashSeries('SERIES Z')">SERIES Z</button>
+              <button class="filterBtn" data-series="SERIES TAB" onclick="setStoreDashSeries('SERIES TAB')">SERIES TAB</button>
+            </div>
+          </div>
+
+          <div class="filterLabel">Stock Status</div>
+          <div id="storeDashStatusFilters" class="filterRow">
+            <button class="filterBtn active" data-stock="ALL" onclick="setStoreDashStatus('ALL')">ALL</button>
+            <button class="filterBtn" data-stock="AVAILABLE" onclick="setStoreDashStatus('AVAILABLE')">AVAILABLE</button>
+            <button class="filterBtn" data-stock="EMPTY" onclick="setStoreDashStatus('EMPTY')">OUT OF STOCK</button>
+          </div>
+        </div>
+
+        <div class="storeDashCard">
+          <div class="storeDashCardTitle">Stock by Series</div>
+          <div id="storeDashSeriesSub" class="storeDashCardSub">Breakdown stock berdasarkan filter</div>
+          <div id="storeDashSeriesList" class="storeSeriesList">
+            <div class="storeDashEmpty">Belum ada data.</div>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
            HISTORY
       ================================================= -->
 
@@ -3564,6 +3671,9 @@ body{
       <div class="bottomInner">
         <button id="navSearch" class="nav active" onclick="showView('search')">
           <span class="navIcon">⌕</span>Search
+        </button>
+        <button id="navStoreDashboard" class="nav" style="display:none;" onclick="showView('storeDashboard')">
+          <span class="navIcon">▥</span>Dashboard
         </button>
         <button id="navAllStock" class="nav" style="display:none;" onclick="showView('allStock')">
           <span class="navIcon">▣</span>All Stock
@@ -3952,6 +4062,7 @@ function openApp(){
         ? 'All Store Stock'
         : storeName;
 
+  document.getElementById('navStoreDashboard').style.display = role === 'STORE' ? 'flex' : 'none';
   document.getElementById('navAllStock').style.display = role === 'STORE' ? 'flex' : 'none';
   document.getElementById('navOverview').style.display = role === 'NASA' ? 'flex' : 'none';
   document.getElementById('navHistory').style.display = 'flex';
@@ -5075,7 +5186,7 @@ function backToSearch(){
 
 function showView(view){
 
-  const views = ['search','detail','history','account','allStock','overview'];
+  const views = ['search','detail','storeDashboard','history','account','allStock','overview'];
   views.forEach(function(v){
     const el = document.getElementById(v + 'View');
     if(el) el.style.display = v === view ? 'block' : 'none';
@@ -5087,6 +5198,7 @@ function showView(view){
 
   const navMap = {
     search:'navSearch',
+    storeDashboard:'navStoreDashboard',
     allStock:'navAllStock',
     overview:'navOverview',
     history:'navHistory',
@@ -5100,6 +5212,7 @@ function showView(view){
 
   if(view === 'history') loadHistory();
   if(view === 'account') renderAccount();
+  if(view === 'storeDashboard') loadStoreDashboard();
   if(view === 'allStock') loadAllStock();
   if(view === 'overview') loadOverview();
 }
@@ -5491,6 +5604,148 @@ function escapeJs(value){
 document.addEventListener('DOMContentLoaded', function(){
   restoreLoginSession();
 });
+
+/* =====================================================
+   STORE DASHBOARD - STORE ONLY
+===================================================== */
+
+let storeDashboardData = [];
+let storeDashCategory = 'ALL';
+let storeDashSeries = 'ALL';
+let storeDashStatus = 'ALL';
+
+function loadStoreDashboard(){
+  const list=document.getElementById('storeDashSeriesList');
+  if(!list) return;
+
+  const info=document.getElementById('storeDashStoreInfo');
+  if(info) info.textContent=(currentUser.storeCode||'-')+' • '+(currentUser.storeName||'-')+' • '+(currentUser.region||'Region belum tersedia');
+
+  list.innerHTML='<div class="state"><div class="loading"></div><div class="stateTitle">Memuat dashboard...</div><div class="stateText">Mengambil data stock store Anda.</div></div>';
+
+  if(Array.isArray(storeDashboardData) && storeDashboardData.length){
+    renderStoreDashboard();
+    return;
+  }
+
+  apiCall('getAllStoreStock',{user:currentUser},function(data){
+    storeDashboardData=Array.isArray(data)?data:[];
+    if(storeDashboardData.length && storeDashboardData[0].region){
+      currentUser.region=allStoreStockData[0].region;
+      const headerSub=document.getElementById('headerSub');
+      if(headerSub) headerSub.textContent=(currentUser.storeName||'-')+' • '+currentUser.region;
+    }
+    renderStoreDashboard();
+  },function(error){
+    list.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Gagal mengambil stock</div><div class="stateText">'+escapeHtml(error&&error.message?error.message:'Terjadi kesalahan.')+'</div></div>';
+  });
+}
+
+function setStoreDashCategory(category){
+  storeDashCategory=category;
+  document.querySelectorAll('#storeDashCategoryFilters .filterBtn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.category===category);
+  });
+  const wrap=document.getElementById('storeDashSeriesWrap');
+  if(wrap) wrap.style.display=category==='DEVICE'?'block':'none';
+  if(category!=='DEVICE') storeDashSeries='ALL';
+  document.querySelectorAll('#storeDashSeriesFilters .filterBtn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.series===storeDashSeries);
+  });
+  renderStoreDashboard();
+}
+
+function setStoreDashSeries(series){
+  storeDashSeries=series;
+  document.querySelectorAll('#storeDashSeriesFilters .filterBtn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.series===series);
+  });
+  renderStoreDashboard();
+}
+
+function setStoreDashStatus(status){
+  storeDashStatus=status;
+  document.querySelectorAll('#storeDashStatusFilters .filterBtn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.stock===status);
+  });
+  renderStoreDashboard();
+}
+
+function renderStoreDashboard(){
+  const list=document.getElementById('storeDashSeriesList');
+  if(!list) return;
+
+  let data=(Array.isArray(storeDashboardData)?storeDashboardData:[]).filter(function(item){
+    const category=String(item.category||'OTHER').toUpperCase();
+    const series=String(item.series||'OTHER').toUpperCase();
+    const qty=Number(item.stock)||0;
+    const catOk=storeDashCategory==='ALL'||category===storeDashCategory;
+    const seriesOk=storeDashCategory!=='DEVICE'||storeDashSeries==='ALL'||series===storeDashSeries;
+    const statusOk=storeDashStatus==='ALL'||(storeDashStatus==='AVAILABLE'&&qty>0)||(storeDashStatus==='EMPTY'&&qty<=0);
+    return catOk&&seriesOk&&statusOk;
+  });
+
+  const totalSku=data.length;
+  const totalStock=data.reduce(function(sum,item){return sum+(Number(item.stock)||0);},0);
+  const available=data.filter(function(item){return Number(item.stock)>0;}).length;
+  const empty=totalSku-available;
+
+  document.getElementById('storeDashTotalSku').textContent=formatNumber(totalSku);
+  document.getElementById('storeDashTotalStock').textContent=formatNumber(totalStock);
+  document.getElementById('storeDashAvailable').textContent=formatNumber(available);
+  document.getElementById('storeDashEmpty').textContent=formatNumber(empty);
+
+  const info=document.getElementById('storeDashStoreInfo');
+  if(info) info.textContent=(currentUser.storeCode||'-')+' • '+(currentUser.storeName||'-')+' • '+(currentUser.region||'Region belum tersedia');
+
+  const grouped={};
+  data.forEach(function(item){
+    const key=String(item.series||'OTHER').trim().toUpperCase()||'OTHER';
+    if(!grouped[key]) grouped[key]={series:key,stock:0,sku:0,availableSku:0,emptySku:0};
+    const qty=Number(item.stock)||0;
+    grouped[key].stock+=qty;
+    grouped[key].sku+=1;
+    if(qty>0) grouped[key].availableSku+=1;
+    else grouped[key].emptySku+=1;
+  });
+
+  const order=['SERIES A','SERIES S','SERIES Z','SERIES TAB','ACC','OTHER'];
+  const rows=Object.keys(grouped).map(function(k){return grouped[k];}).sort(function(a,b){
+    const ai=order.indexOf(a.series), bi=order.indexOf(b.series);
+    if(ai!==-1||bi!==-1) return (ai===-1?999:ai)-(bi===-1?999:bi);
+    return a.series.localeCompare(b.series,'id');
+  });
+
+  const sub=document.getElementById('storeDashSeriesSub');
+  if(sub) sub.textContent=(storeDashCategory==='ALL'?'Semua category':storeDashCategory)+(storeDashCategory==='DEVICE'&&storeDashSeries!=='ALL'?' • '+storeDashSeries:'')+' • '+(storeDashStatus==='ALL'?'Semua status':storeDashStatus==='EMPTY'?'Out of Stock':'Available');
+
+  if(!rows.length){
+    list.innerHTML='<div class="storeDashEmpty">Tidak ada stock sesuai filter.</div>';
+    return;
+  }
+
+  const maxStock=Math.max.apply(null,rows.map(function(x){return Number(x.stock)||0;}).concat([1]));
+  const totalSeriesStock=rows.reduce(function(sum,x){return sum+(Number(x.stock)||0);},0);
+
+  list.innerHTML=rows.map(function(item){
+    const qty=Number(item.stock)||0;
+    const pct=totalSeriesStock>0?qty/totalSeriesStock*100:0;
+    const width=qty>0?Math.max(2,Math.round(qty/maxStock*100)):0;
+    return '<div class="storeSeriesItem">'+
+      '<div class="storeSeriesTop">'+
+        '<div class="storeSeriesName">'+escapeHtml(item.series)+'</div>'+
+        '<div><span class="storeSeriesQty">'+formatNumber(qty)+'</span><span class="storeSeriesPct">unit • '+pct.toFixed(1)+'%</span></div>'+
+      '</div>'+
+      '<div class="storeSeriesTrack"><div class="storeSeriesFill" style="width:'+width+'%"></div></div>'+
+      '<div class="storeSeriesMeta">'+
+        '<span>SKU: '+formatNumber(item.sku)+'</span>'+
+        '<span>Available: '+formatNumber(item.availableSku)+'</span>'+
+        '<span>Empty: '+formatNumber(item.emptySku)+'</span>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
 
 </script>
 
