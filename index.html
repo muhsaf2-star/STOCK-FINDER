@@ -2425,119 +2425,6 @@ button{
 /* =====================================================
    VS STORE - STORE ONLY
 ===================================================== */
-function initVSStore(){
-  if(!currentUser || currentUser.role !== 'STORE') return;
-  const sub=document.getElementById('vsStoreSub');
-  if(sub) sub.textContent='Store Anda: '+(currentUser.storeCode||'-')+' • tampilkan produk dengan stock 0–3 • filter '+vsStoreCategory+'.';
-}
-
-function vsStoreEnter(event){
-  if(event.key==='Enter'){
-    event.preventDefault();
-    loadVSStore();
-  }
-}
-
-function parseVSStoreCodes(){
-  const input=document.getElementById('vsStoreInput');
-  if(!input) return [];
-  const own=String(currentUser && currentUser.storeCode || '').trim().toUpperCase();
-  const seen={};
-  return input.value.split(',').map(function(x){return String(x||'').trim().toUpperCase();})
-    .filter(function(x){if(!x||x===own||seen[x]) return false; seen[x]=true; return true;});
-}
-
-function setVSStoreCategory(category){
-  const allowed=['ALL','DEVICE','ACC','OTHER'];
-  const next=String(category||'ALL').toUpperCase();
-  vsStoreCategory=allowed.indexOf(next)>=0 ? next : 'ALL';
-
-  document.querySelectorAll('#vsStoreCategoryFilters .vsFilterBtn').forEach(function(btn){
-    btn.classList.toggle('active', btn.getAttribute('data-vs-category')===vsStoreCategory);
-  });
-
-  const sub=document.getElementById('vsStoreSub');
-  if(sub && currentUser){
-    sub.textContent='Store Anda: '+(currentUser.storeCode||'-')+' • tampilkan produk dengan stock 0–3 • filter '+vsStoreCategory+'.';
-  }
-
-  if(lastVSStoreCodes.length){
-    loadVSStore();
-  }
-}
-
-let lastVSStoreCodes=[];
-
-function loadVSStore(){
-  if(!currentUser || String(currentUser.role||'').toUpperCase()!=='STORE') return;
-  const codes=parseVSStoreCodes();
-  lastVSStoreCodes=codes.slice();
-  const list=document.getElementById('vsStoreList');
-  if(!codes.length){
-    lastVSStoreCodes=[];
-    list.innerHTML='<div class="state"><div class="stateIcon">⇄</div><div class="stateTitle">Store pembanding belum diisi</div><div class="stateText">Masukkan minimal 1 store code lain, misalnya S001, S002.</div></div>';
-    document.getElementById('vsLowSku').textContent='0';
-    document.getElementById('vsFoundSku').textContent='0';
-    document.getElementById('vsCheckedStores').textContent='0';
-    return;
-  }
-  list.innerHTML='<div class="state"><div class="loading"></div><div class="stateTitle">Membandingkan stock...</div><div class="stateText">Mengambil data store pembanding.</div></div>';
-  apiCall('getVSStoreStock',{user:currentUser,compareStores:codes,category:vsStoreCategory},function(data){renderVSStore(data||{});},function(err){
-    list.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Gagal membandingkan stock</div><div class="stateText">'+escapeHtml(err&&err.message?err.message:'Terjadi kesalahan pada server.')+'</div></div>';
-  });
-}
-
-function renderVSStore(data){
-  const list=document.getElementById('vsStoreList');
-
-  // GS mengembalikan rows + compareStores.
-  // Normalisasi di sini supaya kompatibel dengan format lama maupun baru.
-  const items=Array.isArray(data.rows) ? data.rows : (Array.isArray(data.items) ? data.items : []);
-  const stores=Array.isArray(data.compareStores) ? data.compareStores : (Array.isArray(data.stores) ? data.stores : []);
-
-  document.getElementById('vsLowSku').textContent=String(data.needCheck != null ? data.needCheck : items.length);
-  document.getElementById('vsCheckedStores').textContent=String(stores.length);
-
-  let found=0;
-  items.forEach(function(item){
-    const other=Array.isArray(item.stores)?item.stores:[];
-    if(other.some(function(st){return Number(st.stock||0)>0;})) found++;
-  });
-  document.getElementById('vsFoundSku').textContent=String(data.availableElsewhere != null ? data.availableElsewhere : found);
-
-  if(!items.length){
-    list.innerHTML='<div class="state"><div class="stateIcon">✓</div><div class="stateTitle">Tidak ada stock kritis</div><div class="stateText">Semua produk di store Anda memiliki stock lebih dari 3, atau belum ada data.</div></div>';
-    return;
-  }
-
-  list.innerHTML=items.map(function(item){
-    const own=Number(item.ownStock)||0;
-    const other=Array.isArray(item.stores)?item.stores.slice().sort(function(a,b){return Number(b.stock||0)-Number(a.stock||0);}):[];
-    const available=other.filter(function(st){return Number(st.stock||0)>0;});
-    const best=available.length?available[0]:null;
-
-    return '<div class="vsCard">'+
-      '<div class="vsCardTop"><div class="vsProduct">'+
-      '<div class="vsProductName">'+escapeHtml(item.description || item.materialDescription || '-')+'</div>'+
-      '<div class="vsProductCode">'+escapeHtml(item.materialCode||'-')+'</div>'+
-      '</div><div class="vsOwn"><div class="vsOwnNumber">'+own+'</div><div class="vsOwnLabel">STOCK '+escapeHtml(currentUser.storeCode||'SAYA')+'</div></div></div>'+
-      '<div class="vsStores">'+
-      (best?'<div class="vsBest">BEST OPTION • '+escapeHtml(best.code || best.storeCode || '-')+' • '+Number(best.stock||0)+' STOCK</div>':'')+
-      (other.length?other.map(function(st){
-        const code=st.code || st.storeCode || '-';
-        const name=st.name || st.storeName || code;
-        return '<div class="vsStoreRow"><div class="vsStoreName"><strong>'+escapeHtml(code)+' • '+escapeHtml(name)+'</strong><span>'+escapeHtml(st.region||'NO REGION')+'</span></div><div class="vsStoreQty"><strong>'+Number(st.stock||0)+'</strong><span>STOCK</span></div></div>';
-      }).join(''):'<div class="vsNoStock">Tidak ada store pembanding yang tersedia.</div>')+
-      '</div></div>';
-  }).join('');
-}
-
-// Pastikan fungsi VS Store benar-benar tersedia sebagai fungsi global
-// untuk onclick dari HTML GitHub Pages.
-window.setVSStoreCategory = setVSStoreCategory;
-window.loadVSStore = loadVSStore;
-window.vsStoreEnter = vsStoreEnter;
-
 /* =====================================================
    HISTORY
 ===================================================== */
@@ -3896,6 +3783,127 @@ body{
 
 let currentUser = null;
 let vsStoreCategory = 'ALL';
+
+/* =====================================================
+   VS STORE - STORE ONLY
+   FIX: fungsi VS Store harus berada di dalam <script>,
+   bukan di dalam <style>.
+===================================================== */
+
+function initVSStore(){
+  if(!currentUser || currentUser.role !== 'STORE') return;
+  const sub=document.getElementById('vsStoreSub');
+  if(sub) sub.textContent='Store Anda: '+(currentUser.storeCode||'-')+' • tampilkan produk dengan stock 0–3 • filter '+vsStoreCategory+'.';
+}
+
+function vsStoreEnter(event){
+  if(event.key==='Enter'){
+    event.preventDefault();
+    loadVSStore();
+  }
+}
+
+function parseVSStoreCodes(){
+  const input=document.getElementById('vsStoreInput');
+  if(!input) return [];
+  const own=String(currentUser && currentUser.storeCode || '').trim().toUpperCase();
+  const seen={};
+  return input.value.split(',').map(function(x){return String(x||'').trim().toUpperCase();})
+    .filter(function(x){if(!x||x===own||seen[x]) return false; seen[x]=true; return true;});
+}
+
+function setVSStoreCategory(category){
+  const allowed=['ALL','DEVICE','ACC','OTHER'];
+  const next=String(category||'ALL').toUpperCase();
+  vsStoreCategory=allowed.indexOf(next)>=0 ? next : 'ALL';
+
+  document.querySelectorAll('#vsStoreCategoryFilters .vsFilterBtn').forEach(function(btn){
+    btn.classList.toggle('active', btn.getAttribute('data-vs-category')===vsStoreCategory);
+  });
+
+  const sub=document.getElementById('vsStoreSub');
+  if(sub && currentUser){
+    sub.textContent='Store Anda: '+(currentUser.storeCode||'-')+' • tampilkan produk dengan stock 0–3 • filter '+vsStoreCategory+'.';
+  }
+
+  if(lastVSStoreCodes.length){
+    loadVSStore();
+  }
+}
+
+let lastVSStoreCodes=[];
+
+function loadVSStore(){
+  if(!currentUser || String(currentUser.role||'').toUpperCase()!=='STORE') return;
+  const codes=parseVSStoreCodes();
+  lastVSStoreCodes=codes.slice();
+  const list=document.getElementById('vsStoreList');
+  if(!codes.length){
+    lastVSStoreCodes=[];
+    list.innerHTML='<div class="state"><div class="stateIcon">⇄</div><div class="stateTitle">Store pembanding belum diisi</div><div class="stateText">Masukkan minimal 1 store code lain, misalnya S001, S002.</div></div>';
+    document.getElementById('vsLowSku').textContent='0';
+    document.getElementById('vsFoundSku').textContent='0';
+    document.getElementById('vsCheckedStores').textContent='0';
+    return;
+  }
+  list.innerHTML='<div class="state"><div class="loading"></div><div class="stateTitle">Membandingkan stock...</div><div class="stateText">Mengambil data store pembanding.</div></div>';
+  apiCall('getVSStoreStock',{user:currentUser,compareStores:codes,category:vsStoreCategory},function(data){renderVSStore(data||{});},function(err){
+    list.innerHTML='<div class="state"><div class="stateIcon">⚠️</div><div class="stateTitle">Gagal membandingkan stock</div><div class="stateText">'+escapeHtml(err&&err.message?err.message:'Terjadi kesalahan pada server.')+'</div></div>';
+  });
+}
+
+function renderVSStore(data){
+  const list=document.getElementById('vsStoreList');
+
+  // GS mengembalikan rows + compareStores.
+  // Normalisasi di sini supaya kompatibel dengan format lama maupun baru.
+  const items=Array.isArray(data.rows) ? data.rows : (Array.isArray(data.items) ? data.items : []);
+  const stores=Array.isArray(data.compareStores) ? data.compareStores : (Array.isArray(data.stores) ? data.stores : []);
+
+  document.getElementById('vsLowSku').textContent=String(data.needCheck != null ? data.needCheck : items.length);
+  document.getElementById('vsCheckedStores').textContent=String(stores.length);
+
+  let found=0;
+  items.forEach(function(item){
+    const other=Array.isArray(item.stores)?item.stores:[];
+    if(other.some(function(st){return Number(st.stock||0)>0;})) found++;
+  });
+  document.getElementById('vsFoundSku').textContent=String(data.availableElsewhere != null ? data.availableElsewhere : found);
+
+  if(!items.length){
+    list.innerHTML='<div class="state"><div class="stateIcon">✓</div><div class="stateTitle">Tidak ada stock kritis</div><div class="stateText">Semua produk di store Anda memiliki stock lebih dari 3, atau belum ada data.</div></div>';
+    return;
+  }
+
+  list.innerHTML=items.map(function(item){
+    const own=Number(item.ownStock)||0;
+    const other=Array.isArray(item.stores)?item.stores.slice().sort(function(a,b){return Number(b.stock||0)-Number(a.stock||0);}):[];
+    const available=other.filter(function(st){return Number(st.stock||0)>0;});
+    const best=available.length?available[0]:null;
+
+    return '<div class="vsCard">'+
+      '<div class="vsCardTop"><div class="vsProduct">'+
+      '<div class="vsProductName">'+escapeHtml(item.description || item.materialDescription || '-')+'</div>'+
+      '<div class="vsProductCode">'+escapeHtml(item.materialCode||'-')+'</div>'+
+      '</div><div class="vsOwn"><div class="vsOwnNumber">'+own+'</div><div class="vsOwnLabel">STOCK '+escapeHtml(currentUser.storeCode||'SAYA')+'</div></div></div>'+
+      '<div class="vsStores">'+
+      (best?'<div class="vsBest">BEST OPTION • '+escapeHtml(best.code || best.storeCode || '-')+' • '+Number(best.stock||0)+' STOCK</div>':'')+
+      (other.length?other.map(function(st){
+        const code=st.code || st.storeCode || '-';
+        const name=st.name || st.storeName || code;
+        return '<div class="vsStoreRow"><div class="vsStoreName"><strong>'+escapeHtml(code)+' • '+escapeHtml(name)+'</strong><span>'+escapeHtml(st.region||'NO REGION')+'</span></div><div class="vsStoreQty"><strong>'+Number(st.stock||0)+'</strong><span>STOCK</span></div></div>';
+      }).join(''):'<div class="vsNoStock">Tidak ada store pembanding yang tersedia.</div>')+
+      '</div></div>';
+  }).join('');
+}
+
+// Pastikan fungsi VS Store benar-benar tersedia sebagai fungsi global
+// untuk onclick dari HTML GitHub Pages.
+window.setVSStoreCategory = setVSStoreCategory;
+window.loadVSStore = loadVSStore;
+window.vsStoreEnter = vsStoreEnter;
+
+
 
 /* =====================================================
    ALL STOCK - STORE
