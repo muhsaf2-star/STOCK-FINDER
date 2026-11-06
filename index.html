@@ -2400,6 +2400,9 @@ function backToSearch(){
 }
 .vsButton:active{transform:scale(.98);}
 .vsHint{margin-top:7px;color:#98a2b3;font-size:9px;line-height:1.4;}
+.vsCategoryFilter{display:flex;gap:6px;margin-top:12px;}
+.vsFilterBtn{flex:1;height:32px;border:1px solid #dbe3ef;border-radius:9px;background:#fff;color:#475467;font-size:10px;font-weight:900;cursor:pointer;}
+.vsFilterBtn.active{background:#0b57d0;border-color:#0b57d0;color:#fff;box-shadow:0 3px 8px rgba(11,87,208,.15);}
 .vsSummary{
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:8px;margin:12px 0;
@@ -3007,6 +3010,11 @@ function backToSearch(){
 
             <div class="vsHint">
               Bisa multiple store. Pisahkan dengan koma. Store Anda otomatis tidak ikut dibandingkan.
+            </div>
+            <div class="vsCategoryFilter" role="group" aria-label="Filter kategori VS Store">
+              <button type="button" class="vsFilterBtn active" data-vs-filter="ALL" onclick="setVSStoreFilter('ALL')">ALL</button>
+              <button type="button" class="vsFilterBtn" data-vs-filter="DEVICE" onclick="setVSStoreFilter('DEVICE')">DEVICE</button>
+              <button type="button" class="vsFilterBtn" data-vs-filter="ACC" onclick="setVSStoreFilter('ACC')">ACC</button>
             </div>
           </div>
         </div>
@@ -4235,6 +4243,15 @@ function renderStore(store){
 ===================================================== */
 let vsStoreCodes = [];
 let vsStoreData = [];
+let vsStoreCategoryFilter = 'ALL';
+
+function setVSStoreFilter(category){
+  vsStoreCategoryFilter = String(category || 'ALL').toUpperCase();
+  document.querySelectorAll('[data-vs-filter]').forEach(function(btn){
+    btn.classList.toggle('active', btn.getAttribute('data-vs-filter') === vsStoreCategoryFilter);
+  });
+  if(vsStoreData && Array.isArray(vsStoreData.items)) renderVSStore(vsStoreData);
+}
 
 function initVSStore(){
   const input = document.getElementById('vsStoreInput');
@@ -4292,7 +4309,13 @@ function loadVSStore(){
 
 function renderVSStore(data){
   const list = document.getElementById('vsStoreList');
-  const items = Array.isArray(data.items) ? data.items : [];
+  const allItems = Array.isArray(data.items) ? data.items : [];
+  const items = allItems.filter(function(item){
+    const cat=String(item.category || '').trim().toUpperCase();
+    if(vsStoreCategoryFilter === 'ALL') return true;
+    if(vsStoreCategoryFilter === 'ACC') return cat === 'ACC' || cat === 'ACCESSORIES';
+    return cat === vsStoreCategoryFilter;
+  });
   const stores = Array.isArray(data.stores) ? data.stores : [];
 
   document.getElementById('vsLowSku').textContent = formatNumber(items.length);
@@ -4305,7 +4328,7 @@ function renderVSStore(data){
   document.getElementById('vsFoundSku').textContent = formatNumber(found);
 
   if(!items.length){
-    list.innerHTML = '<div class="state"><div class="stateIcon">✓</div><div class="stateTitle">Tidak ada stock kritis</div><div class="stateText">Semua produk di store Anda memiliki stock lebih dari 3, atau belum ada data.</div></div>';
+    list.innerHTML = '<div class="state"><div class="stateIcon">✓</div><div class="stateTitle">Tidak ada produk pada filter ini</div><div class="stateText">Coba pilih kategori ALL atau bandingkan store kembali.</div></div>';
     return;
   }
 
