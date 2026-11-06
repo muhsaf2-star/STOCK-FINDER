@@ -1626,9 +1626,14 @@ function apiCall(action, params, onSuccess, onFailure){
   query.set('data', JSON.stringify(params || {}));
   const script = document.createElement('script');
   let done = false;
+  const timeoutId = setTimeout(function(){
+    cleanup();
+    if(onFailure) onFailure({message:'Login timeout: Apps Script tidak mengirim respons. Cek deployment Web App dan akses Anyone.'});
+  }, 15000);
   const cleanup = function(){
     if(done) return;
     done = true;
+    clearTimeout(timeoutId);
     try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
     if(script.parentNode) script.parentNode.removeChild(script);
   };
