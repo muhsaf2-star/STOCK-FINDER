@@ -2363,15 +2363,7 @@ function renderAllStock(){
 
 
 
-/* =====================================================
-   BACK TO SEARCH
-===================================================== */
 
-function backToSearch(){
-
-  showView('search');
-
-}
 
 
 /* =====================================================
@@ -2453,6 +2445,71 @@ function backToSearch(){
 .vsNoStock{
   padding:9px;border-radius:10px;background:#f8f9fb;color:#98a2b3;
   font-size:9px;font-weight:800;text-align:center;
+}
+
+
+/* =====================================================
+   MOBILE COMPACT - Finder Stock + VS Store
+   Desktop layout stays unchanged
+===================================================== */
+@media(max-width:699px){
+  .main{padding:10px 9px 86px;}
+  .productList{gap:6px;}
+  .product{padding:10px;border-radius:12px;box-shadow:0 2px 7px rgba(16,24,40,.035);}
+  .productTop{gap:8px;}
+  .productName{font-size:12px;line-height:1.3;}
+  .meta{gap:4px;margin-top:5px;}
+  .tag{min-height:18px;padding:0 6px;font-size:8px;border-radius:5px;}
+  .code{margin-top:5px;font-size:9px;line-height:1.25;}
+  .stock{min-width:48px;}
+  .stockNumber{font-size:23px;margin-top:2px;}
+  .stockLabel{font-size:7px;letter-spacing:.4px;}
+  .detailProduct{padding:12px;border-radius:12px;}
+  .detailName{font-size:14px;line-height:1.35;}
+  .detailCode{margin-top:5px;font-size:9px;}
+  .storeList{gap:6px;}
+  .storeCard{padding:10px;border-radius:12px;box-shadow:0 2px 7px rgba(16,24,40,.035);}
+  .storeTop{gap:8px;}
+  .storeIcon{width:34px;height:34px;border-radius:9px;font-size:13px;}
+  .storeName{font-size:11px;line-height:1.25;}
+  .storeCode{font-size:8px;margin-top:2px;}
+  .storeStockNumber{font-size:21px;}
+  .storeBottom{margin-top:7px;padding-top:7px;gap:7px;}
+  .storeInfoBottom{font-size:9px;line-height:1.3;}
+  .wa{min-height:34px;padding:0 10px;font-size:9px;}
+  .vsTop{margin-bottom:8px;}
+  .vsStoreBox{padding:10px;border-radius:12px;}
+  .vsStoreTitle{font-size:15px;}
+  .vsStoreSub{font-size:9px;}
+  .vsInputRow{gap:5px;margin-top:8px;}
+  .vsInput{height:37px;padding:0 9px;font-size:11px;border-radius:9px;}
+  .vsButton{height:37px;padding:0 10px;font-size:10px;border-radius:9px;}
+  .vsHint{font-size:8px;margin-top:5px;}
+  .vsCategoryFilter{gap:5px;margin-top:8px;}
+  .vsFilterBtn{height:29px;font-size:9px;border-radius:8px;}
+  .vsTypeSearchRow{gap:5px;margin-top:6px;}
+  .vsTypeSearch,.vsSearchClear{height:32px;font-size:10px;border-radius:8px;}
+  .vsSummary{gap:5px;margin:8px 0;}
+  .vsSummaryCard{padding:7px 4px;border-radius:10px;}
+  .vsSummaryNumber{font-size:17px;}
+  .vsSummaryLabel{font-size:7px;margin-top:3px;}
+  .vsList{gap:5px;}
+  .vsCard{padding:9px;border-radius:11px;box-shadow:0 2px 7px rgba(16,24,40,.035);}
+  .vsCardTop{gap:6px;}
+  .vsProductName{font-size:11px;line-height:1.25;}
+  .vsProductCode{font-size:8px;margin-top:3px;}
+  .vsOwn{padding:4px 6px;border-radius:8px;}
+  .vsOwnNumber{font-size:17px;}
+  .vsOwnLabel{font-size:6px;margin-top:2px;}
+  .vsStores{margin-top:6px;padding-top:5px;}
+  .vsStoreRow{gap:6px;padding:5px 0;}
+  .vsStoreName strong{font-size:9px;}
+  .vsStoreName span{font-size:7px;margin-top:1px;}
+  .vsStoreQty{min-width:34px;}
+  .vsStoreQty strong{font-size:14px;}
+  .vsStoreQty span{font-size:6px;margin-top:2px;}
+  .vsBest{margin-top:4px;padding:3px 5px;font-size:7px;border-radius:6px;}
+  .vsNoStock{padding:6px;font-size:8px;}
 }
 
 </style>
@@ -3184,6 +3241,17 @@ function backToSearch(){
 
 
 <script>
+
+/* =====================================================
+   BACK TO SEARCH
+===================================================== */
+
+function backToSearch(){
+
+  showView('search');
+
+}
+
 
 /* =====================================================
    GITHUB API BRIDGE
